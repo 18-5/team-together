@@ -1,34 +1,33 @@
-import React, { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React from 'react';
+import { Outlet, Link } from 'react-router-dom'
+import Logo from './assets/logo.svg'
+import './App.scss'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container h-100">
+      <div className='row h-100 py-3'>
+        <nav className="col-4 d-flex flex-column justify-content-between">
+          <div className="nav nav-pills flex-column">
+            <Link to={`/`} className="nav-link fs-5 pb-4">
+              <img src={Logo} alt="Team Together" />
+            </Link>
+            <Link to={`explore`} className="nav-link active fs-5">둘러보기</Link>
+            <Link to={`search`} className="nav-link fs-5">검색</Link>
+            <Link to={`projects`} className="nav-link fs-5">내 프로젝트</Link>
+            <Link to={`messages`} className="nav-link fs-5">쪽지</Link>
+            <Link to={`nofitications`} className="nav-link fs-5">알림</Link>
+          </div>
+          <div className="nav flex-column">
+            <Link to={`profile`} className="nav-link">프로필</Link>
+          </div>
+        </nav>
+        <div className="col-8">
+          <Outlet />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
-  )
+  );
 }
 
 export default App
