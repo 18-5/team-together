@@ -3,6 +3,7 @@ import avatarPlaceholder from '../assets/avatar-placeholder.png'
 import Avatar from '../common/Avatar'
 
 function Profile() {
+  // The process of loading profile of current session is required.
   const name = "정대용"
   const username = "@daeyongjeong"
   const description = "간단한 자기 소개 글"
@@ -13,6 +14,7 @@ function Profile() {
   const email = "daeyong.jeong.18@gmail.com"
   const github = "@daeyongjeong"
 
+  // Should be rewritten as a react-bootstrap component
   return (
     <div className="row align-items-center">
       <div className="col" >
