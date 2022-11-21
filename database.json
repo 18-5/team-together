@@ -1,7 +1,7 @@
 {
-    "host": "localhost", 
-    "user": "root", 
-    "password": "P6a8r2k3@*", 
-    "port": "3306", 
-    "database": "teamther_test"
+    "host": "데이터 베이스 서버 주소", 
+    "user": "계정 이름", 
+    "password": "계정 비밀번호", 
+    "port": "데이터 베이스 포트", 
+    "database": "사용하려는 데이터 베이스 이름"
 }
