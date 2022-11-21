@@ -1,7 +1,7 @@
 {
-    "host": "localhost", 
-    "user": "root", 
-    "password": "P6a8r2k3@*", 
-    "port": "3306", 
-    "database": "teamther_test"
+    "host": "db 주소", 
+    "user": "user 이름", 
+    "password": "user 비번", 
+    "port": "사용하는 포트", 
+    "database": "사용할 데이터베이스"
 }
