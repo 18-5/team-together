@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, NavLink } from 'react-router-dom'
 import Logo from './assets/logo.svg'
 import './App.scss'
 
@@ -12,12 +12,13 @@ function App() {
             <Link to={`/`} className="nav-link fs-5 pb-4">
               <img src={Logo} alt="Team Together" />
             </Link>
-            <Link to={`explore`} className="nav-link active fs-5">둘러보기</Link>
-            <Link to={`search`} className="nav-link fs-5">검색</Link>
-            <Link to={`projects`} className="nav-link fs-5">내 프로젝트</Link>
-            <Link to={`messages`} className="nav-link fs-5">쪽지</Link>
-            <Link to={`notifications`} className="nav-link fs-5">알림</Link>
-            <Link to={`connection-test`} className="nav-link fs-5">Connection Test</Link>
+            <NavLink to={`/`} className="nav-link fs-5">홈</NavLink>
+            <NavLink to={`explore`} className="nav-link fs-5">둘러보기</NavLink>
+            <NavLink to={`search`} className="nav-link fs-5">검색</NavLink>
+            <NavLink to={`projects`} className="nav-link fs-5">내 프로젝트</NavLink>
+            <NavLink to={`messages`} className="nav-link fs-5">쪽지</NavLink>
+            <NavLink to={`notifications`} className="nav-link fs-5">알림</NavLink>
+            <NavLink to={`connection-test`} className="nav-link fs-5">Connection Test</NavLink>
           </div>
           <div className="nav flex-column">
             <Link to={`profile`} className="nav-link">프로필</Link>
