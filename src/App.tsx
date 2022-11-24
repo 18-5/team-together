@@ -17,6 +17,7 @@ function App() {
             <Link to={`projects`} className="nav-link fs-5">내 프로젝트</Link>
             <Link to={`messages`} className="nav-link fs-5">쪽지</Link>
             <Link to={`notifications`} className="nav-link fs-5">알림</Link>
+            <Link to={`connection-test`} className="nav-link fs-5">Connection Test</Link>
           </div>
           <div className="nav flex-column">
             <Link to={`profile`} className="nav-link">프로필</Link>

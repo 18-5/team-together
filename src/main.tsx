@@ -13,7 +13,7 @@ import './index.scss'
 import ProfileEditPage from './profile/ProfileEditPage';
 import ExplorePage from './ExplorePage';
 import ErrorPage from './ErrorPage';
-import APIServerTest from './APIServerTest';
+import ConnectionTestPage from './ConnectionTestPage';
 
 const router = createBrowserRouter([
   {
@@ -58,8 +58,8 @@ const router = createBrowserRouter([
             element: <MyProjectsPage />
           },
           {
-            path: "apitest",
-            element: <APIServerTest />
+            path: "connection-test",
+            element: <ConnectionTestPage />
           }
         ]
       }
