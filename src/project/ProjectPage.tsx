@@ -1,39 +1,28 @@
 import React from "react"
-import avatarPlaceholder from '../assets/avatar-placeholder.png'
-import Avatar from '../common/Avatar'
 import Stack from 'react-bootstrap/Stack';
 import { Tabs, Tab, Button } from "react-bootstrap";
 import axios from "axios";
 import ProjectInterface from "./ProjectInterface";
 
-export async function getProfile(userid: string) {
-  await axios.get('/api/users/' + userid)
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-}
-
 const sampleProjectData: ProjectInterface = {
   id: 1,
   name: "Teamther",
   description: "프로젝트 팀 매칭 서비스",
+  post: null,
   status: "모집 중",
   dueDate: new Date('2022-11-28'),
   intake: 4,
   leader: 1,
   members: [2, 3, 4],
-  applicants: [5, 6]
+  applicants: [5, 6],
+  tags: null
 }
 
 const data: ProjectInterface = sampleProjectData
 
-
-
 function ProjectPage() {
   const dday = Math.floor((data.dueDate.getTime() - Date.now()) / (1000 * 3600 * 24)) + 1
+  
   const getStatus = () => {
     if (data.status == "모집 중") {
       if (dday < 0) {
@@ -43,6 +32,7 @@ function ProjectPage() {
       return data.status;
     }
   }
+  
   const projectStatus = getStatus();
 
   return (

@@ -5,7 +5,7 @@ import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Projects from './my-projects/Projects';
+import Projects from './project/Projects';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 

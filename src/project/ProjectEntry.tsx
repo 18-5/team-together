@@ -3,35 +3,40 @@ import { Stack } from 'react-bootstrap';
 import { Outlet, Link } from 'react-router-dom';
 import ProjectInterface from './ProjectInterface';
 
-function ProjectEntry(data) {
-  const projectID = 1
-  const projectName = "Team Together"
-  const dueDate = 1
-  const description = "한 문장으로 정리한 프로젝트 정의"
-  const post = "하였으며, 그들은 듣기만 청춘에서만 동산에는 만천하의 가장 부패뿐이다. 더운지라 영원히 보배를 이는 이것이다. 얼음과 얼마나 때에, 충분히 같은 놀이 할지니, 봄바람이다. 그들은 하였으며, 이상 든 그들은 방지하는 그것을 아름다우냐?"
-  const recruitment = 4
-  const applicants = 9
-  const tags = ["태그 1", "태그 2", "태그 3"]
+function ProjectEntry(props: { data: ProjectInterface }) {
+  const dday = Math.floor((props.data.dueDate.getTime() - Date.now()) / (1000 * 3600 * 24)) + 1
+
+  const getStatus = () => {
+    if (props.data.status == "모집 중") {
+      if (dday < 0) {
+        return "모집 마감";
+      } else { return "모집 중"; }
+    } else {
+      return props.data.status;
+    }
+  }
+
+  const projectStatus = getStatus();
 
   return (
     <Stack gap={3} className="py-3">
       <Stack>
         <Stack direction="horizontal" gap={2}>
-          <Link to={"/projects/" + projectID}><h3>{projectName}</h3></Link>
-          <div>D-{dueDate}</div>
+          <Link to={"/projects/" + props.data.id}><h3>{props.data.name}</h3></Link>
+          <div>D-{dday}</div>
         </Stack>
-        <div>{description}</div>
+        <div>{props.data.description}</div>
       </Stack>
-      <div>{post}</div>
+      <div>{props.data.post}</div>
       <Stack gap={2}>
         <Stack direction='horizontal' gap={2}>
-          <div>{recruitment}명 모집</div>
-          <div>{applicants}명 지원 중</div>
+          <div>{props.data.intake}명 모집</div>
+          <div>{props.data.applicants.length + props.data.members.length}명 지원 중</div>
         </Stack>
         <Stack direction='horizontal' gap={2}>
-          {tags.map((tag, index) => (
+          {props.data.tags ? props.data.tags.map((tag, index) => (
             <span key={index}>{tag}</span>
-          ))}
+          )) : null}
         </Stack>
       </Stack>
     </Stack>
