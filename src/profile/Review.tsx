@@ -4,14 +4,10 @@ import Badge from 'react-bootstrap/Badge';
 import { Col, Container, Row } from "react-bootstrap";
 import ReviewInterface from "./ReviewInterface";
 
-function ReviewSection(reviews: [ReviewInterface]) {
+function Review(props: { data: ReviewInterface[] }) {
   return (
     <div>
-      <Stack gap={5}>
-        {reviews.map((review, index) => (
-          <ProjectEntry data={project} key={index} />
-        ))}
-      </Stack>
+
     </div>
   )
 }

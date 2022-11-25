@@ -14,7 +14,7 @@ function ExplorePage() {
         hi
       </Tab>
       <Tab eventKey="profile" title="Profile">
-        <ProjectEntry/>
+
       </Tab>
       <Tab eventKey="contact" title="Contact" disabled>
         gdf

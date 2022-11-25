@@ -3,11 +3,12 @@ import Button from 'react-bootstrap/Button'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
-import Projects from "../my-projects/Projects"
+import Projects from "../project/Projects"
 import ProfileData from "./ProfileInterface";
 import ReviewInterface from "./ReviewInterface";
 import Profile from "./Profile";
 import About from "./About";
+import Review from "./Review";
 
 const sampleProfileData: ProfileData = {
   name: "정대용",
@@ -21,7 +22,7 @@ const sampleProfileData: ProfileData = {
   github: "@daeyongjeong"
 }
 
-const sampleReviewData: [ReviewInterface] = [
+const sampleReviewData: ReviewInterface[] = [
   {
     rating: 3,
     username: "dgu1234",
@@ -60,7 +61,7 @@ function ProfilePage() {
             <Projects />
           </Tab>
           <Tab eventKey="contact" title="리뷰">
-            <Projects />
+            <Review data={sampleReviewData} />
           </Tab>
         </Tabs>
       </Stack>
