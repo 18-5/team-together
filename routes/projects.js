@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 // 프로젝트 생성
-router.post('/', (req, res) => {
+router.post('/api/projects/', (req, res) => {
     let sql = "INSERT INTO project VALUES (?, ?, ?, NOW());";
     let id = req.body.projectId;
     console.log(id);
@@ -49,8 +49,11 @@ router.get('/', (req, res) => {
 // :project-id 프로젝트
 // *진행 중*
 router.get('/:project-id', (req, res) => {
+    let { projectId } = req.params;
+    console.log(projectId);
+
     connection.query(
-        "SELECT * FROM project;", 
+        "SELECT * FROM project WHERE projectId = ?;", projectId, 
         (err, rows, fields) => {
             console.log(rows);
             res.send(rows);
@@ -60,7 +63,7 @@ router.get('/:project-id', (req, res) => {
 
 // :project-id 프로젝트 수정
 // *진행 중*
-router.put('/:project-id', (req, res) => {
+router.put('/api/projects/:project-id', (req, res) => {
     connection.query(
         "SELECT * FROM project;", 
         (err, rows, fields) => {
@@ -72,7 +75,7 @@ router.put('/:project-id', (req, res) => {
 
 // 프로젝트 멤버
 // *진행 중*
-router.get('/:project-id/members', (req, res) => {
+router.get('/api/projects/:project-id/members', (req, res) => {
     connection.query(
         "SELECT * FROM project;", 
         (err, rows, fields) => {
@@ -84,7 +87,7 @@ router.get('/:project-id/members', (req, res) => {
 
 // 프로젝트 리더
 // *진행 중*
-router.get('/:project-id/members/leader', (req, res) => {
+router.get('/api/projects/:project-id/members/leader', (req, res) => {
     connection.query(
         "SELECT * FROM project;", 
         (err, rows, fields) => {
@@ -96,7 +99,7 @@ router.get('/:project-id/members/leader', (req, res) => {
 
 // 모든 프로젝트 지원자
 // *진행 중*
-router.get('/:project-id/applicants', (req, res) => {
+router.get('/api/projects/:project-id/applicants', (req, res) => {
     connection.query(
         "SELECT * FROM project;", 
         (err, rows, fields) => {
@@ -108,7 +111,7 @@ router.get('/:project-id/applicants', (req, res) => {
 
 // 프로젝트 지원자 생성
 // *진행 중*
-router.post('/:project-id/applicants', (req, res) => {
+router.post('/api/projects/:project-id/applicants', (req, res) => {
     connection.query(
         "SELECT * FROM project;", 
         (err, rows, fields) => {
@@ -120,7 +123,7 @@ router.post('/:project-id/applicants', (req, res) => {
 
 // 프로젝트 지원자 삭제
 // *진행 중*
-router.delete('/:project-id/applicants/:user-id', (req, res) => {
+router.delete('/api/projects/:project-id/applicants/:user-id', (req, res) => {
     connection.query(
         "SELECT * FROM project;", 
         (err, rows, fields) => {

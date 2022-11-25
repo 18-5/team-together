@@ -2,7 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5050;
 
 const apiRouter = require('./routes/api');
 
@@ -10,6 +10,11 @@ const apiRouter = require('./routes/api');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('/', apiRouter);
+app.get("/api", (req, res) => {
+    res.send("Hello World!");
+    console.log("hello");
+});
+
+app.use('/api', apiRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
