@@ -6,14 +6,9 @@ const port = process.env.PORT || 5050;
 
 const apiRouter = require('./routes/api');
 
-// 5000 포트로 서버 오픈
+// 5050 포트로 서버 오픈
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
-app.get("/api", (req, res) => {
-    res.send("Hello World!");
-    console.log("hello");
-});
 
 app.use('/api', apiRouter);
 

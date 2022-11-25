@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "localdb": "sudo /etc/init.d/mysql start && ifconfig", 
     "server": "pm2 start server.js --watch",
     "stop": "pm2 stop server && pm2 kill", 
     "client": "cd client && vite",
