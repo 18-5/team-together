@@ -1,7 +1,7 @@
 interface ReviewInterface {
     rating: number
     username: string
-    reviewtags: [string]
+    reviewtags: string[]
 }
 
 export default ReviewInterface
