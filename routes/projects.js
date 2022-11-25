@@ -35,7 +35,6 @@ router.post('/', (req, res) => {
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
-// *진행 중*
 router.get('/', (req, res) => {
     let { nameHas, status } = req.query;
 
