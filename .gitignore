@@ -1,6 +1,7 @@
 ## minje Ignore File ##
 /package-lock.json
 client/
+testU/
 
 # database
 /database.json
