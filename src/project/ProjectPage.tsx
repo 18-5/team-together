@@ -17,6 +17,7 @@ export async function getProfile(userid: string) {
 }
 
 const sampleProjectData: ProjectInterface = {
+  id: 1,
   name: "Teamther",
   description: "프로젝트 팀 매칭 서비스",
   status: "모집 중",
