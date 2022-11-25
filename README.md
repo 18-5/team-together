@@ -9,6 +9,6 @@
 `npm install`
 
 ### 개발 서버 구동
-### server, ui 동시 작동
+#### server, ui 동시 작동
 
 `npm run dev`
