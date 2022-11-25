@@ -1,4 +1,4 @@
-interface ProfileData {
+interface ProfileInterface {
     name: string
     username: string
     description: string
@@ -10,4 +10,4 @@ interface ProfileData {
     github: string
 }
 
-export default ProfileData
+export default ProfileInterface

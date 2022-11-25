@@ -1,7 +1,10 @@
 import React from 'react';
 import { Stack } from 'react-bootstrap';
+import { Outlet, Link } from 'react-router-dom';
+import ProjectInterface from './ProjectInterface';
 
 function ProjectEntry(data) {
+  const projectID = 1
   const projectName = "Team Together"
   const dueDate = 1
   const description = "한 문장으로 정리한 프로젝트 정의"
@@ -14,7 +17,7 @@ function ProjectEntry(data) {
     <Stack gap={3} className="py-3">
       <Stack>
         <Stack direction="horizontal" gap={2}>
-          <h3>{projectName}</h3>
+          <Link to={"/projects/" + projectID}><h3>{projectName}</h3></Link>
           <div>D-{dueDate}</div>
         </Stack>
         <div>{description}</div>

@@ -69,10 +69,9 @@ function Projects() {
   )
 }
 
-function About() {
+function AboutSection() {
   return (
     <div>
-
       <Stack gap={5}>
         <Experiences />
         <Skills />
@@ -82,4 +81,4 @@ function About() {
   )
 }
 
-export default About
+export default AboutSection

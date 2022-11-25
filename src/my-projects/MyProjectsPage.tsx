@@ -1,7 +1,7 @@
 import React from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import ProjectEntry from './ProjectEntry';
+import ProjectEntry from '../project/ProjectEntry';
 
 function MyProjectsPage() {
   return (

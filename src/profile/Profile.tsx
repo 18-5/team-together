@@ -2,7 +2,18 @@ import React from "react"
 import avatarPlaceholder from '../assets/avatar-placeholder.png'
 import Avatar from '../common/Avatar'
 import Stack from 'react-bootstrap/Stack';
-import ProfileData from './ProfileData';
+import ProfileData from './ProfileInterface';
+import axios from "axios";
+
+export async function getProfile(userid: string) {
+  await axios.get('/api/users/' + userid)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+}
 
 function Profile(props: { profileData: ProfileData }) {
   // The process of loading profile of current session is required.

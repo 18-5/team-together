@@ -1,5 +1,5 @@
 import React from "react";
-import ProjectEntry from "./ProjectEntry";
+import ProjectEntry from "../project/ProjectEntry";
 
 // Update this iterative
 function Projects() {

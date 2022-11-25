@@ -1,10 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from './App'
 import FeedPage from './FeedPage'
 import ProfilePage from './profile/ProfilePage'
@@ -14,6 +10,7 @@ import ProfileEditPage from './profile/ProfileEditPage';
 import ExplorePage from './ExplorePage';
 import ErrorPage from './ErrorPage';
 import ConnectionTestPage from './ConnectionTestPage';
+import ProjectPage from './project/ProjectPage';
 
 const router = createBrowserRouter([
   {
@@ -60,6 +57,10 @@ const router = createBrowserRouter([
           {
             path: "connection-test",
             element: <ConnectionTestPage />
+          },
+          {
+            path: "projects/:projectId",
+            element: <ProjectPage />
           }
         ]
       }

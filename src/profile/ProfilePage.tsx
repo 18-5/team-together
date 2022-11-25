@@ -4,7 +4,8 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
 import Projects from "../my-projects/Projects"
-import ProfileData from "./ProfileData";
+import ProfileData from "./ProfileInterface";
+import ReviewInterface from "./ReviewInterface";
 import Profile from "./Profile";
 import About from "./About";
 
@@ -19,6 +20,24 @@ const sampleProfileData: ProfileData = {
   email: "daeyong.jeong.18@gmail.com",
   github: "@daeyongjeong"
 }
+
+const sampleReviewData: [ReviewInterface] = [
+  {
+    rating: 3,
+    username: "dgu1234",
+    reviewtags: ["시간 약속을 잘 지켜요", "정리를 잘 해요", "연락을 잘 받지 않아요", "참여도가 저조해요"]
+  },
+  {
+    rating: 5,
+    username: "dgu1235",
+    reviewtags: ["시간 약속을 잘 지켜요", "정리를 잘 해요"]
+  },
+  {
+    rating: 1,
+    username: "dgu1236",
+    reviewtags: ["연락을 잘 받지 않아요", "참여도가 저조해요"]
+  }
+]
 
 function ProfilePage() {
   // The process of loading profile of current session is required.
@@ -38,11 +57,9 @@ function ProfilePage() {
             <About />
           </Tab>
           <Tab eventKey="profile" title="완료한 프로젝트">
-            완료한 프로젝트
             <Projects />
           </Tab>
           <Tab eventKey="contact" title="리뷰">
-            리뷰
             <Projects />
           </Tab>
         </Tabs>
