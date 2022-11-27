@@ -2,11 +2,11 @@ node {
   env.NODEJS_HOME = "${tool 'Node'}"
   env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
   stage('SCM') {
-    git 'https://github.com/18-5/team-together.git'
+    checkout scm
   }
-  stage('SonarQube analysis') {
+  stage('SonarQube Analysis') {
     def scannerHome = tool 'SonarScanner';
-    withSonarQubeEnv('SonarQube') {
+    withSonarQubeEnv() {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
