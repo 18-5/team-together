@@ -4,8 +4,11 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "localdb": "sudo /etc/init.d/mysql start && ifconfig", 
     "server": "pm2 start server.js --watch",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\"",
+    "stop": "pm2 stop server && pm2 kill", 
+    "client": "cd client && vite",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
@@ -17,9 +20,11 @@
     "express": "^4.18.2",
     "mysql": "^2.18.1",
     "react": "^18.2.0",
+    "vite": "^3.2.4",
     "yarn": "1.22.19"
   },
   "devDependencies": {
+    "@types/react": "^18.0.25",
     "concurrently": "^4.0.1"
   }
 }

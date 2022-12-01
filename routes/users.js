@@ -41,9 +41,12 @@ router.post('/', (req, res) => {
 });
 
 // :user-id 회원 프로필
-router.get('/:user-id', (req, res) => {
+router.get('/:userId', (req, res) => {
+    let { userId } = req.params;
+    console.log(userId);
+
     connection.query(
-        "SELECT * FROM user;", 
+        "SELECT * FROM user WHERE userId = ?;", userId, 
         (err, rows, fields) => {
             console.log(rows);
             res.send(rows);
@@ -52,6 +55,7 @@ router.get('/:user-id', (req, res) => {
 });
 
 // admin 회원
+// *데이터 베이스 수정 필요*
 router.get('/admin', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -63,6 +67,7 @@ router.get('/admin', (req, res) => {
 });
 
 // 회원의 모든 팔로워들
+// *데이터 베이스 테이블 추가 필요*
 router.get('/:user-id/followers', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -75,6 +80,7 @@ router.get('/:user-id/followers', (req, res) => {
 
 // 회원의 모든 프로젝트
 // 회원의 모든 프로젝트 중 현재 열린 프로젝트
+// *진행 중*
 router.get('/:user-id/projects', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -86,6 +92,7 @@ router.get('/:user-id/projects', (req, res) => {
 });
 
 // 회원의 리뷰들
+// *진행 중*
 router.get('/:user-id/reviews', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -97,6 +104,7 @@ router.get('/:user-id/reviews', (req, res) => {
 });
 
 // 회원에게 리뷰 달기
+// *진행 중*
 router.post('/:user-id/projects', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -110,6 +118,7 @@ router.post('/:user-id/projects', (req, res) => {
 //-----------------------------------Message-------------------------------------
 // 회원의 모든 알림
 // ?unread=true => 회원의 읽지 않은 알림
+// *진행 중*
 router.get('/:user-id/notifications', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -121,6 +130,7 @@ router.get('/:user-id/notifications', (req, res) => {
 });
 
 // 회원의 모든 쪽지
+// *진행 중*
 router.get('/:user-id/messages', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -132,6 +142,7 @@ router.get('/:user-id/messages', (req, res) => {
 });
 
 // 회원의 특정 쪽지
+// *진행 중*
 router.get('/:user-id/messages/:message-id', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -143,6 +154,7 @@ router.get('/:user-id/messages/:message-id', (req, res) => {
 });
 
 // 회원의 특정 쪽지 삭제
+// *진행 중*
 router.delete('/:user-id/messages/:message-id', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
@@ -154,6 +166,7 @@ router.delete('/:user-id/messages/:message-id', (req, res) => {
 });
 
 // 회원에게 쪽지 보내기
+// *진행 중*
 router.post('/:user-id/messages', (req, res) => {
     connection.query(
         "SELECT * FROM user;", 
