@@ -45,7 +45,7 @@ function ProfilePage() {
   const profileData = sampleProfileData
 
   return (
-    <div>
+    <div className="py-3">
       <Stack gap={3}>
         <Profile profileData={profileData} />
         <Button href="profile/edit" variant="outline-primary">프로필 편집</Button>

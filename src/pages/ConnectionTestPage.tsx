@@ -15,11 +15,16 @@ function ConnectionTestPage() {
       })
   })
 
+  let message = "Failure. Check if server running or match `target` in `vite.config.ts`` with api server.";
   if (connection) {
-    return <div>Success. See JavaScript console log.</div>
-  } else {
-    return <div>Failure. Check if server running or match `target` in `vite.config.ts`` with api server. </div>
+    message = "Success. See JavaScript console log."
   }
+
+  return (
+    <div className="py-3">
+      {message}
+    </div>
+  )
 }
 
 export default ConnectionTestPage;

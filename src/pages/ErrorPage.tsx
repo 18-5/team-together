@@ -2,7 +2,7 @@ import React from "react";
 
 function ErrorPage() {
   return (
-    <div>
+    <div className="py-3">
       Hi I am ERROR 👋 Please go back!
     </div>
   )

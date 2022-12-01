@@ -1,0 +1,32 @@
+.nav-pills .nav-link {
+  border-radius: 24px;
+  padding-left: 16px;
+  color: black;
+  transition: color 1s linear;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #eee;
+}
+
+.nav-pills .nav-link.active {
+  font-weight: bold;
+  color: black;
+  transition: color 1s linear;
+  background: none;
+}
+
+.nav-pills .nav-link.active:hover {
+    font-weight: bold;
+    color: black;
+    background-color: #eee;
+}
+
+.nav-pills .disabled {
+    color: gray;
+}
+
+.nav-pills a {
+    color: black;
+    text-decoration: none;
+}
