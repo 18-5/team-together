@@ -6,7 +6,7 @@ import "./index.scss"
 
 import App from './App'
 import FeedPage from './pages/FeedPage'
-import ProfilePage from './profile/ProfilePage'
+import UserProfile from './profile/UserProfile'
 import MyProjectsPage from './my-projects/MyProjectsPage';
 import ProfileEditPage from './profile/ProfileEditPage';
 import ExplorePage from './pages/ExplorePage';
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element: <ProfilePage />
+            element: <UserProfile />
           },
           {
             path: "profile/edit",
