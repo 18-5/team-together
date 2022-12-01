@@ -1,6 +1,4 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
-const express = require('express');
-const router = express.Router();
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
@@ -13,7 +11,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 // 프로젝트 생성
-router.post('/', (req, res) => {
+exports.createProject = (req, res) => {
     let sql = "INSERT INTO project VALUES (?, ?, ?, NOW(), 0);";
     let id = req.body.projectId;
     console.log(id);
@@ -28,12 +26,12 @@ router.post('/', (req, res) => {
             console.log(rows);
             res.send(rows);
         });
-});
+}
 
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
-router.get('/', (req, res) => {
+exports.allProjects = (req, res) => {
     let { nameHas, status } = req.query;
 
     if((nameHas != undefined) && (status != undefined)) {
@@ -79,10 +77,10 @@ router.get('/', (req, res) => {
             }
         );
     }
-});
+}
 
 // :project-id 프로젝트
-router.get('/:projectId', (req, res) => {
+exports.projectByprojectId = (req, res) => {
     let projectId = req.params['projectId'];
     console.log(projectId);
 
@@ -93,10 +91,10 @@ router.get('/:projectId', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // :project-id 프로젝트 수정
-router.put('/:projectId', (req, res) => {
+exports.updateProject = (req, res) => {
     let projectId = req.params['projectId'];
     console.log(projectId);
     let name = req.body.projectName;
@@ -121,10 +119,10 @@ router.put('/:projectId', (req, res) => {
             res.send("success update");
         }
     );
-});
+}
 
 // 프로젝트 멤버
-router.get('/:projectId/members', (req, res) => {
+exports.projectMember = (req, res) => {
     let projectId = req.params['projectId'];
     console.log(projectId);
 
@@ -137,10 +135,10 @@ router.get('/:projectId/members', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // 프로젝트 리더
-router.get('/:projectId/members/leader', (req, res) => {
+exports.projectLeader = (req, res) => {
     let projectId = req.params['projectId'];
     console.log(projectId);
 
@@ -154,10 +152,10 @@ router.get('/:projectId/members/leader', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // 모든 프로젝트 지원자
-router.get('/:projectId/applicants', (req, res) => {
+exports.allCandidate = (req, res) => {
     let projectId = req.params['projectId'];
     console.log(projectId);
 
@@ -170,11 +168,11 @@ router.get('/:projectId/applicants', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // 프로젝트 지원자 생성
 // userId는 body로 받아오는 것으로 가정
-router.post('/:projectId/applicants', (req, res) => {
+exports.applyCandidate = (req, res) => {
     let userId = req.body.userId;
     console.log(userId);
     let sql = "SELECT COUNT(*) FROM user WHERE userId=" + userId + ";";
@@ -196,10 +194,10 @@ router.post('/:projectId/applicants', (req, res) => {
             res.send("Not Existing User");
         }
     })
-});
+}
 
 // 프로젝트 지원자 삭제
-router.delete('/:projectId/applicants/:userId', (req, res) => {
+exports.deleteCandidate = (req, res) => {
     let projectId = req.params['projectId'];
     let userId = req.params['userId'];
     console.log(projectId);
@@ -219,6 +217,4 @@ router.delete('/:projectId/applicants/:userId', (req, res) => {
             res.send("delete success");
         }
     );
-});
-
-module.exports = router;
+}
