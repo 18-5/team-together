@@ -1,0 +1,16 @@
+// Import all of Bootstrap's CSS
+@import "node_modules/bootstrap/scss/bootstrap";
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI",
+    "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    sans-serif; 
+}
+
+#root {
+  height: 100vh;
+  @supports (-webkit-touch-callout: none) {
+    height: -webkit-fill-availiable;
+  }
+}
