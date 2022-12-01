@@ -1,16 +1,14 @@
-const fs = require('fs');
-const data = fs.readFileSync("./database.json");
-const conf = JSON.parse(data);
+const dotenv = require("dotenv").config({ path: "../.env" });
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
 
 const connection = mysql.createConnection({
-    host: conf.host, 
-    user: conf.user, 
-    password: conf.password, 
-    port: conf.port, 
-    database: conf.database
+    host: process.env.DATABASE_HOST, 
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD, 
+    port: process.env.DATABASE_PORT, 
+    database: process.env.DATABASE_DATABASE
 });
 connection.connect();
 
