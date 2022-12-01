@@ -1,8 +1,4 @@
-// BASEURL : ~~~/api/users
-
 const dotenv = require("dotenv").config({ path: "../.env" });
-const express = require('express');
-const router = express.Router();
 const mysql = require('mysql');
 const { serialize } = require('v8');
 
@@ -15,12 +11,12 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
-router.get('/', (req, res) => {
+exports.testUserPage = (req, res) => {
     res.send("test user page");
-});
+}
 
 // 회원 가입
-router.post('/', (req, res) => {
+exports.signIn = (req, res) => {
     let sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?);";
     let id = req.body.userId;
     console.log(id);
@@ -41,23 +37,23 @@ router.post('/', (req, res) => {
             console.log(rows);
             res.send(rows);
         });
-});
+}
 
 
 // 내가 리더인 프로젝트
 // *진행 중*
-router.get('/admin', (req, res) => {
+exports.whereUserIsLeader = (req, res) => {
     connection.query(
         "SELECT * FROM member WHERE leader = 1;",
         (err, rows, fields) => {
             res.send(rows);
         }
     );
-});
+}
 
 // :user-id 회원 프로필
 // *complete*
-router.get('/:userId', (req, res) => {
+exports.userProfile = (req, res) => {
     let userId = req.params['userId'];
     console.log(userId);
 
@@ -68,12 +64,12 @@ router.get('/:userId', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 
 // 회원의 모든 팔로워들
 // *데이터 베이스 테이블 추가 필요*
-router.get('/:userId/followers', (req, res) => {
+exports.allFollowers = (req, res) => {
     connection.query(
         "SELECT * FROM user;",
         (err, rows, fields) => {
@@ -81,12 +77,12 @@ router.get('/:userId/followers', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // 회원의 모든 프로젝트
 // 회원의 모든 프로젝트 중 현재 열린 프로젝트
 // *complete*
-router.get('/:userId/projects', (req, res) => {
+exports.userAllProjects = (req, res) => {
     let userId = req.params['userId'];
     console.log(userId);
 
@@ -104,11 +100,11 @@ router.get('/:userId/projects', (req, res) => {
 
         }
     );
-});
+}
 
 // 회원의 리뷰들
 // *진행 중*
-router.get('/:userId/reviews', (req, res) => {
+exports.userReviews = (req, res) => {
     connection.query(
         "SELECT * FROM user;",
         (err, rows, fields) => {
@@ -116,11 +112,11 @@ router.get('/:userId/reviews', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // 회원에게 리뷰 달기
 // *진행 중*
-router.post('/:userId/projects', (req, res) => {
+exports.writeReview = (req, res) => {
     connection.query(
         "SELECT * FROM user;",
         (err, rows, fields) => {
@@ -128,13 +124,13 @@ router.post('/:userId/projects', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 //-----------------------------------Message-------------------------------------
 // 회원의 모든 알림
 // ?unread=true => 회원의 읽지 않은 알림
 // *copmlete*
-router.get('/:userId/notifications', (req, res) => {
+exports.userAllAlram = (req, res) => {
     let userId = req.params['userId'];
     let sql = "SELECT * FROM message WHERE receiverId = " + userId + " AND unread = 1;";
 
@@ -149,11 +145,11 @@ router.get('/:userId/notifications', (req, res) => {
             }
         }
     );
-});
+}
 
 // 회원의 받은 쪽지
 // *complete*
-router.get('/:userId/received-messages', (req, res) => {
+exports.userRecievedMsg = (req, res) => {
     let userId = req.params['userId'];
     let sql = "SELECT * FROM message WHERE receiverId = " + userId + ";";
 
@@ -168,11 +164,11 @@ router.get('/:userId/received-messages', (req, res) => {
             }
         }
     );
-});
+}
 
 // 회원의 모든 쪽지
 // *complete*
-router.get('/:userId/messages', (req, res) => {
+exports.userAllMsg = (req, res) => {
     let userId = req.params['userId'];
     let sql = "SELECT * FROM message WHERE receiverId = " + userId + " OR senderId = " + userId + ";";
 
@@ -190,11 +186,11 @@ router.get('/:userId/messages', (req, res) => {
             }
         }
     )
-});
+}
 
 // 회원의 특정 쪽지
 // *진행 중*
-router.get('/:userId/messages/:message-id', (req, res) => {
+exports.userMsgByMsgId = (req, res) => {
     
     //클릭하면 sender, receiver 동시에 겹치는거 싹 긁어서 뿌리기
     //sql paging
@@ -210,11 +206,11 @@ router.get('/:userId/messages/:message-id', (req, res) => {
             }
         }
     );
-});
+}
 
 // 회원의 특정 쪽지 삭제
 // *진행 중*
-router.delete('/:userId/messages/:message-id', (req, res) => {
+exports.deleteMsg = (req, res) => {
     connection.query(
         "SELECT * FROM user;",
         (err, rows, fields) => {
@@ -222,11 +218,11 @@ router.delete('/:userId/messages/:message-id', (req, res) => {
             res.send(rows);
         }
     );
-});
+}
 
 // 회원에게 쪽지 보내기
 // *진행 중*
-router.post('/:userId/messages', (req, res) => {
+exports.sendMsg = (req, res) => {
     connection.query(
         "SELECT * FROM user;",
         (err, rows, fields) => {
@@ -240,6 +236,4 @@ router.post('/:userId/messages', (req, res) => {
 
         }
     );
-});
-
-module.exports = router;
+}
