@@ -1,7 +1,6 @@
 import React from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import ProjectEntry from '../project/ProjectEntry';
 
 function ExplorePage() {
   return (

@@ -7,7 +7,7 @@ import { ProfileLink, LoginButton } from './Account';
 import "./Navigation.scss"
 
 function Navigation() {
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const [cookies] = useCookies(["user"]);
 
   return (
     <div className="h-100 py-3">

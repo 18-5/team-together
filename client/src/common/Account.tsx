@@ -1,8 +1,6 @@
 import React from 'react';
 import { useCookies } from "react-cookie";
-import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
-import { useNavigate, redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export function ProfileLink() {
   const [cookies] = useCookies(["user"]);

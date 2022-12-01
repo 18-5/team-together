@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack } from 'react-bootstrap';
-import { Outlet, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProjectInterface from './ProjectInterface';
 
 function ProjectEntry(props: { data: ProjectInterface }) {
