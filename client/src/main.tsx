@@ -4,20 +4,25 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CookiesProvider } from 'react-cookie';
 import "./index.scss"
 
-import App from './App'
-import FeedPage from './pages/FeedPage'
-import UserProfile from './profile/UserProfile'
+import FeedPage from './components/pages/Home'
+import Profile from './profile/Profile'
 import MyProjectsPage from './my-projects/MyProjectsPage';
-import ProfileEditPage from './profile/ProfileEditPage';
-import ExplorePage from './pages/ExplorePage';
-import ErrorPage from './pages/ErrorPage';
-import ConnectionTestPage from './pages/ConnectionTestPage';
+import ProfileEditPage from './profile/ProfileEdit';
+import ExplorePage from './components/pages/ExplorePage';
+import ErrorPage from './components/pages/ErrorPage';
+import ConnectionTestPage from './components/pages/ConnectionTestPage';
 import ProjectPage from './project/ProjectPage';
+
+import DefaultLayout from './components/layout/DefaultLayout';
+import CenteredLayout from './components/layout/CenteredLayout';
+
+import Login from './components/pages/Login'
+import SignUp from "./components/pages/SignUp";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <DefaultLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -46,7 +51,7 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element: <UserProfile />
+            element: <Profile />
           },
           {
             path: "profile/edit",
@@ -67,7 +72,23 @@ const router = createBrowserRouter([
         ]
       }
     ]
-  }
+  },
+  {
+    path: "/login",
+    element: <CenteredLayout />,
+    children: [{
+      path: "/login",
+      element: <Login />
+    }]
+  },
+  {
+    path: "/sign-up",
+    element: <CenteredLayout />,
+    children: [{
+      path: "/sign-up",
+      element: <SignUp />
+    }]
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

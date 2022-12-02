@@ -2,16 +2,54 @@ import React from 'react';
 import Nav from "react-bootstrap/Nav";
 import { useCookies } from "react-cookie";
 import { LinkContainer } from "react-router-bootstrap";
-import Logo from "../assets/logo.svg"
-import { ProfileLink, LoginButton } from './Account';
-import "./Navigation.scss"
+import { useNavigate } from 'react-router-dom';
+import Logo from "../../assets/logo.svg"
+import "./Sidebar.scss"
+
+
+export function ProfileLink() {
+  const [cookies] = useCookies(["user"]);
+  if (cookies.user) {
+    return <div>프로필</div>
+  } else {
+    return null;
+  }
+}
+
+export function LoginButton() {
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  const toggleLogin = () => {
+    if (cookies.user) {
+      removeCookie("user");
+      alert("로그아웃되었습니다");
+      navigate("/"); // 작동 에러
+    } else {
+      setCookie("user", true,
+        { path: "/" })
+      alert("로그인 되었습니다.");
+    }
+  }
+
+  return (
+    <>
+      {cookies.user ? (
+        <Nav.Link onClick={toggleLogin}>로그아웃</Nav.Link>
+      ) : (
+        <LinkContainer to="login">
+          <Nav.Link eventKey="login">로그인</Nav.Link>
+        </LinkContainer>
+      )}
+    </>
+  )
+}
 
 function Navigation() {
   const [cookies] = useCookies(["user"]);
 
   return (
-    <div className="h-100 py-3">
-      <Nav variant="pills" className="h-100 pe-2 border-end flex-column justify-content-between">
+    <div className="h-100 py-4 ">
+      <Nav variant="pills" className="h-100 flex-column justify-content-between">
         <div className="d-flex flex-column gap-3">
           <LinkContainer to="/" className="bg-transparent">
             <Nav.Link><img src={Logo} alt="Team Together" /></Nav.Link>
@@ -59,9 +97,7 @@ function Navigation() {
               </Nav.Link>
             </LinkContainer>
           }
-          <Nav.Link>
-            <LoginButton />
-          </Nav.Link>
+          <LoginButton />
         </div>
       </Nav>
     </div>

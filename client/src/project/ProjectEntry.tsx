@@ -22,7 +22,7 @@ function ProjectEntry(props: { data: ProjectInterface }) {
     <Stack gap={3} className="py-3">
       <Stack>
         <Stack direction="horizontal" gap={2}>
-          <Link to={"/projects/" + props.data.id}><h3>{props.data.name}</h3></Link>
+          <Link to={"/projects/" + props.data.id}><h4>{props.data.name}</h4></Link>
           <div>D-{dday}</div>
         </Stack>
         <div>{props.data.description}</div>
