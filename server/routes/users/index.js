@@ -12,8 +12,8 @@ router.get('/', controller.testUserPage);
 router.post('/', controller.signIn);
 
 // 내가 리더인 프로젝트
-// *진행 중*
-router.get('/admin', controller.whereUserIsLeader);
+// *complete*
+router.get('/:userId/leader', controller.whereUserIsLeader);
 
 // :user-id 회원 프로필
 // *complete*
@@ -49,18 +49,20 @@ router.get('/:userId/received-messages', controller.userRecievedMsg);
 
 // 회원의 모든 쪽지
 // *complete*
-router.get('/:userId/messages', controller.userAllMsg);
+router.get('/:userId/messages/:senderId', controller.userAllMsg);
 
 // 회원의 특정 쪽지
 // *진행 중*
-router.get('/:userId/messages/:message-id', controller.userMsgByMsgId);
+router.get('/:userId/messages/:otherId', controller.userMsgByMsgId);
 
 // 회원의 특정 쪽지 삭제
 // *진행 중*
 router.delete('/:userId/messages/:message-id', controller.deleteMsg);
 
 // 회원에게 쪽지 보내기
-// *진행 중*
-router.post('/:userId/messages', controller.sendMsg);
+// senderId와 receiverId 모두 form으로 post, 화면에서는 두 아이디 모두 안보이도록 숨기기
+// messageId는 random 4자리수 * 4자리수
+// *complete*
+router.post('/:senderId/messages', controller.sendMsg);
 
 module.exports = router;
