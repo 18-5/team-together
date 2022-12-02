@@ -11,7 +11,6 @@ router.get('/', controller.testUserPage);
 // 회원 가입
 router.post('/', controller.signIn);
 
-
 // 내가 리더인 프로젝트
 // *진행 중*
 router.get('/admin', controller.whereUserIsLeader);
