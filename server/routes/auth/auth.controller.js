@@ -20,7 +20,8 @@ exports.testAuthPage = (req, res) => {
 // 로그인 확인
 // ?id,pw: 로그인 성공 여부를 확인하고 해당 id, pw를 갖는 user의 정보 반환
 exports.checkLogin = (req, res) => {
-    let {id, pw} = req.query;
+    let id = req.body.id;
+    let pw = req.body.pw;
     console.log(id);
     console.log(pw);
 
@@ -34,7 +35,7 @@ exports.checkLogin = (req, res) => {
             }
             else{
                 console.log("not exist")
-                res.send("-1");
+                res.send(err);
             }
         });
 }

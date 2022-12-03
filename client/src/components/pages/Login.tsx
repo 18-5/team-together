@@ -9,27 +9,22 @@ function Login() {
   const [validated, setValidated] = useState(false);
   const [cookie, setCookie] = useCookies(["user"]);
   const [state, setState] = useState({
-    userId: "",
-    userName: "test",
-    userPwd: "",
-    userEmail: "d",
-    userHomepage: "d",
-    userSchool: "d",
-    userBio: "d"
+    id: "",
+    pw: ""
   });
   const navigate = useNavigate();
 
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
+    e.preventDefault();
 
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     }
     setValidated(true);
-    createCookie();
-    navigate("/");
+    createSession();
   };
 
   const handleChange = (e: { target: { id: any; value: any; }; }) => {
@@ -41,20 +36,17 @@ function Login() {
   }
 
   function createCookie() {
-    setCookie("user", "test1234", { path: "/" }); // DEBUG
+    setCookie("user", state.id, { path: "/" }); // DEBUG
   }
 
   async function createSession() {
-
-    /*
     await axios.post("/api/auth", {
-      userId: state.userId,
-      userPwd: state.userPwd
+      id: state.id,
+      pw: state.pw
     })
       .then((res) => {
-        if (res.data) {
-          console.log("success")
-          alert(`${res.data.userName}님 환영합니다`)
+        if (res.data.length > 0) {
+          alert(`${res.data[0].userName}님 환영합니다`)
           createCookie();
           navigate("/");
         } else {
@@ -65,7 +57,7 @@ function Login() {
       .catch((err) => {
         console.log(err);
         alert(err);
-      })*/
+      })
   }
 
   return (
@@ -75,11 +67,11 @@ function Login() {
       </Link>
       <h3 className="mb-4">로그인</h3>
       <Form className="w-100 mx-5" noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="mb-2" controlId="userId">
-          <Form.Control required type="text" placeholder="사용자 이름" maxLength={20} value={state.userId} onChange={handleChange} />
+        <Form.Group className="mb-2" controlId="id">
+          <Form.Control required type="text" placeholder="사용자 이름" maxLength={20} value={state.id} onChange={handleChange} />
         </Form.Group>
-        <Form.Group className="mb-4" controlId="userPwd">
-          <Form.Control required type="password" placeholder="암호" maxLength={20} value={state.userPwd} onChange={handleChange} />
+        <Form.Group className="mb-4" controlId="pw">
+          <Form.Control required type="password" placeholder="암호" maxLength={20} value={state.pw} onChange={handleChange} />
         </Form.Group>
         <Form.Group className="mb-3">
           <Button className="w-100" type="submit">로그인</Button>

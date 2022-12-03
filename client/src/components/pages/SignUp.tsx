@@ -11,23 +11,19 @@ import { Link, useNavigate } from "react-router-dom";
 function SignUp() {
   const [validated, setValidated] = useState(false);
   const [state, setState] = useState({
-    userId: "",
-    userName: "test",
-    userPwd: "",
-    userEmail: "d",
-    userHomepage: "d",
-    userSchool: "d",
-    userBio: "d"
+    id: "",
+    pw: "",
+    name: "",
+    email: ""
   });
   const navigate = useNavigate();
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
-
-    if (form.checkValidity() === false) {
-      e.preventDefault();
+    e.preventDefault();
+    if (form.checkValidity() === false)
       e.stopPropagation();
-    }
+
     setValidated(true);
     createUser();
   };
@@ -42,13 +38,13 @@ function SignUp() {
 
   async function createUser() {
     await axios.post("/api/users", {
-      userId: state.userId,
-      userPwd: state.userPwd,
-      userName: state.userName,
-      userEmail: state.userEmail,
-      userHomepage: state.userHomepage,
-      userSchool: state.userSchool,
-      userBio: state.userBio
+      userId: state.id,
+      userPW: state.pw,
+      userName: state.name,
+      userEmail: state.email,
+      userHomepage: null,
+      userSchool: null,
+      userBio: null
     })
       .then((res) => {
         console.log(res)
@@ -75,17 +71,21 @@ function SignUp() {
       </Link>
       <h3 className="mb-4">계정 만들기</h3>
       <Form className="w-100 mx-5" noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group as={Row} className="mb-2" controlId="userId">
-          <Form.Label column xs={3}>사용자 이름</Form.Label>
-          <Col xs={9}>
-            <Form.Control required type="text" placeholder="사용자 이름" maxLength={20} value={state.userId} onChange={handleChange} />
-          </Col>
+        <Form.Group className="mb-3" controlId="id">
+          <Form.Label>아이디</Form.Label>
+          <Form.Control required type="text" maxLength={20} value={state.id} onChange={handleChange} />
         </Form.Group>
-        <Form.Group as={Row} className="mb-4" controlId="userPwd">
-          <Form.Label column xs={3}>암호</Form.Label>
-          <Col xs={9}>
-            <Form.Control required type="password" placeholder="암호" maxLength={20} value={state.userPwd} onChange={handleChange} />
-          </Col>
+        <Form.Group className="mb-3" controlId="pw">
+          <Form.Label>비밀번호</Form.Label>
+          <Form.Control required type="password" maxLength={20} value={state.pw} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>이름</Form.Label>
+          <Form.Control type="text" maxLength={50} value={state.name} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="email">
+          <Form.Label>이메일</Form.Label>
+          <Form.Control type="email" maxLength={200} value={state.email} onChange={handleChange} />
         </Form.Group>
         <Form.Group as={Row} className="mb-3">
           <Col xs={{ span: 9, offset: 3 }}>
