@@ -103,7 +103,7 @@ exports.updateProject = (req, res) => {
     console.log(desc);
     let state = req.body.projectState;
     console.log(state);
-    if(state == "Open") state = 0;
+    if(state == "Open") state = 0;ㅁ
     else if(state == "Closed") state = 1;
     else if(state == "Archived") state = 2;
 

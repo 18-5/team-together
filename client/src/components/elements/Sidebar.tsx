@@ -10,7 +10,7 @@ import "./Sidebar.scss"
 export function ProfileLink() {
   const [cookies] = useCookies(["user"]);
   if (cookies.user) {
-    return <div>프로필</div>
+    return <div>프로필: {cookies.user}</div>
   } else {
     return null;
   }
@@ -46,6 +46,7 @@ export function LoginButton() {
 
 function Navigation() {
   const [cookies] = useCookies(["user"]);
+  const profileURL = "/profile/" + cookies.user;
 
   return (
     <div className="h-100 py-4 ">
@@ -91,8 +92,8 @@ function Navigation() {
         </div>
         <div className="d-flex flex-column">
           {cookies.user &&
-            <LinkContainer to="profile">
-              <Nav.Link eventKey="/profile">
+            <LinkContainer to={profileURL}>
+              <Nav.Link eventKey={profileURL}>
                 <ProfileLink />
               </Nav.Link>
             </LinkContainer>

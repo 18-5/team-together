@@ -1,32 +1,32 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import "./index.scss"
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.scss";
 
-import FeedPage from './components/pages/Home'
-import Profile from './profile/Profile'
-import MyProjectsPage from './my-projects/MyProjectsPage';
-import ProfileEditPage from './profile/ProfileEdit';
+import APIConnection from './components/pages/APIConnection';
 import ExplorePage from './components/pages/ExplorePage';
-import ErrorPage from './components/pages/ErrorPage';
-import ConnectionTestPage from './components/pages/ConnectionTestPage';
-import ProjectPage from './project/ProjectPage';
+import MyProjectsPage from './my-projects/MyProjectsPage';
+import Profile from './profile/Profile';
+import ProfileEditPage from './profile/ProfileEdit';
 
-import DefaultLayout from './components/layout/DefaultLayout';
 import CenteredLayout from './components/layout/CenteredLayout';
+import DefaultLayout from './components/layout/DefaultLayout';
 
-import Login from './components/pages/Login'
+import FeedPage from './components/pages/Home';
+import Error from './components/pages/Error';
+import Login from './components/pages/Login';
 import SignUp from "./components/pages/SignUp";
+import Project from './components/pages/Project';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <DefaultLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
     children: [
       {
-        errorElement: <ErrorPage />,
+        errorElement: <Error />,
         children: [
           {
             path: "/",
@@ -35,26 +35,26 @@ const router = createBrowserRouter([
           {
             path: "explore",
             element: <ExplorePage />,
-            errorElement: <ErrorPage />
+            errorElement: <Error />
           },
           {
             path: "search",
-            element: <ErrorPage />
+            element: <Error />
           },
           {
             path: "messages",
-            element: <ErrorPage />
+            element: <Error />
           },
           {
             path: "notifications",
-            element: <ErrorPage />
+            element: <Error />
           },
           {
-            path: "profile",
+            path: "profile/:userId",
             element: <Profile />
           },
           {
-            path: "profile/edit",
+            path: "profile/:userId/edit",
             element: <ProfileEditPage />
           },
           {
@@ -63,11 +63,11 @@ const router = createBrowserRouter([
           },
           {
             path: "connection-test",
-            element: <ConnectionTestPage />
+            element: <APIConnection />
           },
           {
             path: "projects/:projectId",
-            element: <ProjectPage />
+            element: <Project />,
           }
         ]
       }

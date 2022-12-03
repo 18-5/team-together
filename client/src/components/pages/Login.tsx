@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link, redirect } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from '../../assets/logo.svg';
 
 function Login() {
   const [validated, setValidated] = useState(false);
+  const [cookie, setCookie] = useCookies(["user"]);
   const [state, setState] = useState({
     userId: "",
     userName: "test",
@@ -15,6 +17,8 @@ function Login() {
     userSchool: "d",
     userBio: "d"
   });
+  const navigate = useNavigate();
+
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
@@ -24,7 +28,8 @@ function Login() {
       e.stopPropagation();
     }
     setValidated(true);
-    createUser();
+    createCookie();
+    navigate("/");
   };
 
   const handleChange = (e: { target: { id: any; value: any; }; }) => {
@@ -35,7 +40,13 @@ function Login() {
     }))
   }
 
-  async function createUser() {
+  function createCookie() {
+    setCookie("user", "test1234", { path: "/" }); // DEBUG
+  }
+
+  async function createSession() {
+
+    /*
     await axios.post("/api/auth", {
       userId: state.userId,
       userPwd: state.userPwd
@@ -44,7 +55,8 @@ function Login() {
         if (res.data) {
           console.log("success")
           alert(`${res.data.userName}님 환영합니다`)
-          redirect("/sign-in")
+          createCookie();
+          navigate("/");
         } else {
           console.log(res);
           alert("일치하는 사용자 이름이 없거나 암호가 다릅니다.");
@@ -53,7 +65,7 @@ function Login() {
       .catch((err) => {
         console.log(err);
         alert(err);
-      })
+      })*/
   }
 
   return (

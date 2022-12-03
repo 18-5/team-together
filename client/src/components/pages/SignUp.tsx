@@ -1,13 +1,12 @@
 import React, { useState } from "react"
 import axios from "axios";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 import Logo from "../../assets/logo.svg"
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignUp() {
   const [validated, setValidated] = useState(false);
@@ -20,6 +19,7 @@ function SignUp() {
     userSchool: "d",
     userBio: "d"
   });
+  const navigate = useNavigate();
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
@@ -51,12 +51,12 @@ function SignUp() {
       userBio: state.userBio
     })
       .then((res) => {
+        console.log(res)
         if (res.data) {
-          console.log("success")
+          console.log("sign up success")
           alert("계정이 생성되었습니다.")
-          redirect("/sign-in")
+          navigate("/login")
         } else {
-          console.log(res);
           alert("계정 생성 중 문제가 발생했습니다.");
         }
       })
