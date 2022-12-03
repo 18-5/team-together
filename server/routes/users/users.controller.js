@@ -14,14 +14,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 exports.testUserPage = (req, res) => {
-    let sql = "SELECT * FROM users;";
-
-    connection.query(
-        sql,
-        (err, rows, fields) => {
-            res.send(rows);
-        }
-    );
+    res.send("test user page");
 }
 
 // 회원 가입
@@ -29,8 +22,7 @@ exports.signIn = (req, res) => {
     let sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?);";
     let id = req.body.userId;
     console.log(id);
-    let pwd = req.body.userPwd;
-    console.log(pwd);
+    let pw = req.body.userPW;
     let name = req.body.userName;
     console.log(name);
     let email = req.body.userEmail;
@@ -42,11 +34,16 @@ exports.signIn = (req, res) => {
     let bio = req.body.userBio;
     console.log(bio);
 
-    let params = [id, pwd, name, email, home, school, bio];
+    let params = [id, pw, name, email, home, school, bio];
     connection.query(sql, params,
         (err, rows, fields) => {
-            console.log(rows);
-            res.send(rows);
+            if(err){
+                res.send(err);
+            }
+            else {
+                console.log(rows);
+                res.send(rows);
+            }
         });
 }
 
