@@ -9,7 +9,7 @@ function DefaultLayout() {
   return (
     <Container fluid className="h-100">
       <Row className="h-100">
-        <Col xs={3} className="h-100 overflow-auto border-end bg-light" as="header">
+        <Col xs={3} className="h-100 overflow-scroll border-end bg-light" as="header">
           <Sidebar />
         </Col>
         <Col xs={9} className="h-100 overflow-scroll" as="main">
