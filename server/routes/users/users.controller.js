@@ -19,9 +19,10 @@ exports.testUserPage = (req, res) => {
 
 // 회원 가입
 exports.signIn = (req, res) => {
-    let sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?);";
+    let sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?);";
     let id = req.body.userId;
     console.log(id);
+    let pw = req.body.userPW;
     let name = req.body.userName;
     console.log(name);
     let email = req.body.userEmail;
@@ -33,11 +34,16 @@ exports.signIn = (req, res) => {
     let bio = req.body.userBio;
     console.log(bio);
 
-    let params = [id, name, email, home, school, bio];
+    let params = [id, pw, name, email, home, school, bio];
     connection.query(sql, params,
         (err, rows, fields) => {
-            console.log(rows);
-            res.send(rows);
+            if(err){
+                res.send(err);
+            }
+            else {
+                console.log(rows);
+                res.send(rows);
+            }
         });
 }
 
