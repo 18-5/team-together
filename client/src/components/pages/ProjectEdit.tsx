@@ -3,8 +3,6 @@ import axios from "axios";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import Logo from "../../assets/logo.svg";
-
 function ProjectEdit() {
   const { projectId } = useParams();
   const [validated, setValidated] = useState(false);
@@ -45,6 +43,7 @@ function ProjectEdit() {
 
     setValidated(true);
     updateProject();
+    navigate(-1);
   };
 
   const handleChange = (e: { target: { id: string; value: string; }; }) => {

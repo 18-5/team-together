@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
-
-import Logo from "../../assets/logo.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 function ProjectEdit() {
-  const { projectId } = useParams();
   const [validated, setValidated] = useState(false);
   const [state, setState] = useState({
     id: "",
@@ -25,6 +22,7 @@ function ProjectEdit() {
 
     setValidated(true);
     createProject();
+    navigate(-1);
   };
 
   const handleChange = (e: { target: { id: string; value: string; }; }) => {

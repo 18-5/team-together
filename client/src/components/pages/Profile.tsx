@@ -5,8 +5,6 @@ import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
 
 function ProfilePage() {
-  // The process of loading profile of current session is required.
-  const profileData = sampleProfileData
 
   return (
     <div className="py-3">
@@ -18,13 +16,10 @@ function ProfilePage() {
           className="mb-3"
         >
           <Tab eventKey="home" title="개요">
-            <About />
           </Tab>
           <Tab eventKey="profile" title="완료한 프로젝트">
-            <Projects />
           </Tab>
           <Tab eventKey="contact" title="리뷰">
-            <Review data={sampleReviewData} />
           </Tab>
         </Tabs>
       </Stack>
