@@ -1,12 +1,51 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Projects from '../../project/Projects';
+import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function FeedPage() {
+  // 데이터 로딩
+  const [data, setData] = useState<any>();
+  useEffect(() => {
+    async function ProjectsLoader() {
+      await axios.get('/api/projects')
+        .then(function (response) {
+          console.dir(response.data);
+          setData(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+    ProjectsLoader()
+  }, [])
+
+  function AllProjects() {
+    if (data)
+      return (<>
+        {data.map((project, index) => (
+          <div key={index}>
+            <Link to={`projects/${project.projectId}`}>
+              <h4>{project.projectName}</h4>
+            </Link>
+            <p>{project.description}</p>
+          </div>
+
+        ))
+        }
+      </>
+      )
+    else return <></>
+  }
+
   return (
     <div className="py-4">
+      <div className="mb-3">
+        <Link to="/projects/new">
+          <Button>새 프로젝트</Button>
+        </Link>
+      </div>
       <Form>
         <Form.Select aria-label="Default select example">
           <option value="1">추천순</option>
@@ -19,7 +58,7 @@ function FeedPage() {
           label="모집 중만 보기"
         />
       </Form>
-      <Projects />
+      <AllProjects />
     </div>
   )
 }

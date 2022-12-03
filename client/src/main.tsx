@@ -18,6 +18,8 @@ import Error from './components/pages/Error';
 import Login from './components/pages/Login';
 import SignUp from "./components/pages/SignUp";
 import Project from './components/pages/Project';
+import ProjectEdit from './components/pages/ProjectEdit';
+import ProjectNew from './components/pages/ProjectNew';
 
 const router = createBrowserRouter([
   {
@@ -66,8 +68,16 @@ const router = createBrowserRouter([
             element: <APIConnection />
           },
           {
+            path: "projects/new",
+            element: <ProjectNew />,
+          },
+          {
             path: "projects/:projectId",
             element: <Project />,
+          },
+          {
+            path: "projects/:projectId/edit",
+            element: <ProjectEdit />,
           }
         ]
       }
