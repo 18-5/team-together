@@ -179,12 +179,11 @@ exports.userRecievedMsg = (req, res) => {
 
 // 회원의 모든 쪽지
 // 카톡방 리스트
+// 보내거나 받은 메시지 중 최상한 하나만 표시
 // *complete*
 exports.userAllMsg = (req, res) => {
     let userId = req.params['userId'];
-    let sql = "SELECT * FROM message WHERE receiverId = " + userId + " OR senderId = " + userId + ";";
-
-    //receiver 다 받아와서 그중에서 sender 받아와서 시간순 정렬
+    let sql = "SELECT * FROM message WHERE senderId = " + userId + " GROUP BY receiverId UNION SELECT * FROM message WHERE receiverId = " + userId + " GROUP BY senderId;";
 
     connection.query(
         sql,
@@ -202,8 +201,8 @@ exports.userAllMsg = (req, res) => {
 
 // 회원의 특정 쪽지
 // 특정 카톡방 들어가면 나오는 쪽지 리스트
-// ORDER BY 수정 필요
-// *진행 중*
+// ORDER BY 수정 필요 -> 수정 완료
+// *complete*
 exports.userMsgByMsgId = (req, res) => {
     let userId = req.params['userId'];
     let otherId = req.params['otherId'];
