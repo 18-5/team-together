@@ -63,7 +63,7 @@ function Login() {
   return (
     <>
       <Link to={"/"} className="mb-4">
-        <img width="80" src={Logo} alt="Team Together" />
+        <img src={Logo} alt="Team Together" />
       </Link>
       <h3 className="mb-4">로그인</h3>
       <Form className="w-100 mx-5" noValidate validated={validated} onSubmit={handleSubmit}>

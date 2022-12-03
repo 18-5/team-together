@@ -67,12 +67,13 @@ function SignUp() {
   return (
     <>
       <Link to={"/"} className="mb-4">
-        <img width="80" src={Logo} alt="Team Together" />
+        <img src={Logo} alt="Team Together" />
       </Link>
       <h3 className="mb-4">계정 만들기</h3>
       <Form className="w-100 mx-5" noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="id">
-          <Form.Label>아이디</Form.Label>
+          <Form.Label>아이디
+          </Form.Label>
           <Form.Control required type="text" maxLength={20} value={state.id} onChange={handleChange} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="pw">
@@ -84,13 +85,11 @@ function SignUp() {
           <Form.Control type="text" maxLength={50} value={state.name} onChange={handleChange} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="email">
-          <Form.Label>이메일</Form.Label>
+          <Form.Label>이메일 (선택)</Form.Label>
           <Form.Control type="email" maxLength={200} value={state.email} onChange={handleChange} />
         </Form.Group>
-        <Form.Group as={Row} className="mb-3">
-          <Col xs={{ span: 9, offset: 3 }}>
+        <Form.Group className="mb-3">
             <Button type="submit">완료</Button>
-          </Col>
         </Form.Group>
       </Form>
     </>

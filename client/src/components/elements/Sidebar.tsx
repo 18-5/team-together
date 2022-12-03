@@ -7,16 +7,16 @@ import Logo from "../../assets/logo.svg"
 import "./Sidebar.scss"
 
 
-export function ProfileLink() {
+function ProfileLink() {
   const [cookies] = useCookies(["user"]);
   if (cookies.user) {
-    return <div>프로필: {cookies.user}</div>
+    return <div>{cookies.user}</div>
   } else {
     return null;
   }
 }
 
-export function LoginButton() {
+function LoginButton() {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const toggleLogin = () => {
@@ -44,7 +44,7 @@ export function LoginButton() {
   )
 }
 
-function Navigation() {
+function Sidebar() {
   const [cookies] = useCookies(["user"]);
   const profileURL = "/profile/" + cookies.user;
 
@@ -103,4 +103,4 @@ function Navigation() {
   )
 }
 
-export default Navigation
+export default Sidebar
