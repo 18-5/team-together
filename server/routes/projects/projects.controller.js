@@ -42,13 +42,17 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_a_cnt = "SELECT COUNT(*) FROM applicant a "
         + "WHERE a.projectId = "
         + "(SELECT projectId FROM project p ";
-    let sql_order = " ORDER BY projectCreated DESC"
+    let sql_created_order = " ORDER BY projectCreated DESC"
+    let sql_duedate_order = " ORDER BY duedate DESC"
 
     if((pName != undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName
              + "%' AND projectState = " + pStatus;
         if(pView == "newest"){
-            sql_all += sql_order;
+            sql_all += sql_created_order;
+        }
+        else if(pView == "timesensitive"){
+            sql_all += sql_duedate_order;
         }
         sql_all += ";\n";
 
@@ -73,6 +77,9 @@ function projectSearch(res, pName, pStatus, pView, ppage){
         if(pView == "newest"){
             sql_all += sql_order;
         }
+        else if(pView == "timesensitive"){
+            sql_all += sql_duedate_order;
+        }
         sql_all += ";\n";
 
         sql_m_cnt += "WHERE p.projectName LIKE '%" + pName + "%');\n";
@@ -94,6 +101,9 @@ function projectSearch(res, pName, pStatus, pView, ppage){
         if(pView == "newest"){
             sql_all += sql_order;
         }
+        else if(pView == "timesensitive"){
+            sql_all += sql_duedate_order;
+        }
         sql_all += ";\n";
 
         sql_m_cnt += " WHERE p.projectState = " + pStatus + ");\n";
@@ -113,6 +123,9 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     else if((pName == undefined) && (pStatus == undefined)) {
         if(pView == "newest"){
             sql_all += sql_order;
+        }
+        else if(pView == "timesensitive"){
+            sql_all += sql_duedate_order;
         }
         sql_all += ";\n";
         let sql_getId = "SELECT projectId FROM project;";
