@@ -46,7 +46,7 @@ router.get('/:userId/notifications', controller.userAllAlram);
 
 // 회원의 받은 쪽지
 // *complete*
-router.get('/:userId/received-messages', controller.userRecievedMsg);
+router.get('/:userId/received-messages', controller.userReceivedMsg);
 
 // 회원의 모든 쪽지
 // 카톡 채팅방 리스트

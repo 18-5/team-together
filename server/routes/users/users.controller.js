@@ -143,7 +143,7 @@ exports.writeReview = (req, res) => {
 // *copmlete*
 exports.userAllAlram = (req, res) => {
     let userId = req.params['userId'];
-    let sql = "SELECT * FROM message WHERE receiverId = " + userId + " AND unread = 1;";
+    let sql = "SELECT * FROM message WHERE receiverId = " + userId + " AND unread = 1 AND sednerDelete = 0 AND receiverDelete = 0;";
 
     connection.query(
         sql,
@@ -160,7 +160,7 @@ exports.userAllAlram = (req, res) => {
 
 // 회원의 받은 쪽지
 // *complete*
-exports.userRecievedMsg = (req, res) => {
+exports.userReceivedMsg = (req, res) => {
     let userId = req.params['userId'];
     let sql = "SELECT * FROM message WHERE receiverId = " + userId + ";";
 
