@@ -33,9 +33,7 @@ exports.createProject = (req, res) => {
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
-exports.allProjects = (req, res) => {
-    let { nameHas, status, view } = req.query;
-
+function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_res = "";       // 실제 db 검색할 쿼리문
     let sql_all = "SELECT * FROM project";
     let sql_m_cnt = "SELECT COUNT(*) FROM member m ";
@@ -44,21 +42,21 @@ exports.allProjects = (req, res) => {
     let sql_a_cnt = "SELECT COUNT(*) FROM applicant a "
         + "WHERE a.projectId = "
         + "(SELECT projectId FROM project p ";
-    let sql_order = " ORDER BY projectCreated"
+    let sql_order = " ORDER BY projectCreated DESC"
 
-    if((nameHas != undefined) && (status != undefined)) {
-        sql_all += " WHERE projectName LIKE '%" + nameHas
-             + "%' AND projectState = " + status;
-        if(view == "newest"){
+    if((pName != undefined) && (pStatus != undefined)) {
+        sql_all += " WHERE projectName LIKE '%" + pName
+             + "%' AND projectState = " + pStatus;
+        if(pView == "newest"){
             sql_all += sql_order;
         }
         sql_all += ";\n";
 
-        sql_m_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%' AND "
-            + "p.projectState = " + status + ");\n";
+        sql_m_cnt += "WHERE p.projectName LIKE '%" + pName + "%' AND "
+            + "p.projectState = " + pStatus + ");\n";
 
-        sql_a_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%' AND "
-            + "p.projectState = " + status + ");";
+        sql_a_cnt += "WHERE p.projectName LIKE '%" + pName + "%' AND "
+            + "p.projectState = " + pStatus + ");";
 
         sql_res = sql_all + sql_m_cnt + sql_a_cnt;
         console.log(sql_res);
@@ -70,16 +68,16 @@ exports.allProjects = (req, res) => {
             }
         );
     }
-    else if((nameHas != undefined) && (status == undefined)) {
-        sql_all += " WHERE projectName LIKE '%" + nameHas + "%'";
-        if(view == "newest"){
+    else if((pName != undefined) && (pStatus == undefined)) {
+        sql_all += " WHERE projectName LIKE '%" + pName + "%'";
+        if(pView == "newest"){
             sql_all += sql_order;
         }
         sql_all += ";\n";
 
-        sql_m_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%');\n";
+        sql_m_cnt += "WHERE p.projectName LIKE '%" + pName + "%');\n";
 
-        sql_a_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%');";
+        sql_a_cnt += "WHERE p.projectName LIKE '%" + pName + "%');";
 
         sql_res = sql_all + sql_m_cnt + sql_a_cnt;
         console.log(sql_res);
@@ -91,16 +89,16 @@ exports.allProjects = (req, res) => {
             }
         );
     }
-    else if((nameHas == undefined) && (status != undefined)) {
-        sql_all += " WHERE projectState = ' " + status + "';";;
-        if(view == "newest"){
+    else if((pName == undefined) && (pStatus != undefined)) {
+        sql_all += " WHERE projectState = ' " + pStatus + "';";;
+        if(pView == "newest"){
             sql_all += sql_order;
         }
         sql_all += ";\n";
 
-        sql_m_cnt += " WHERE p.projectState = " + status + ");\n";
+        sql_m_cnt += " WHERE p.projectState = " + pStatus + ");\n";
 
-        sql_a_cnt += " WHERE p.projectState = " + status + ");";
+        sql_a_cnt += " WHERE p.projectState = " + pStatus + ");";
 
         sql_res = sql_all + sql_m_cnt + sql_a_cnt;
         console.log(sql_res);
@@ -112,8 +110,8 @@ exports.allProjects = (req, res) => {
             }
         );
     }
-    else if((nameHas == undefined) && (status == undefined)) {
-        if(view == "newest"){
+    else if((pName == undefined) && (pStatus == undefined)) {
+        if(pView == "newest"){
             sql_all += sql_order;
         }
         sql_all += ";\n";
@@ -131,7 +129,7 @@ exports.allProjects = (req, res) => {
                     sql_a += "SELECT COUNT(*) FROM applicant a "
                     + "WHERE a.projectId = " + rows[v].projectId + ";\n";
                 }
-                sql_res = sql_all + ";\n" + sql_m + sql_a
+                sql_res = sql_all + sql_m + sql_a
                 console.log(sql_res);
                 connection.query(
                     sql_res, 
@@ -143,6 +141,14 @@ exports.allProjects = (req, res) => {
             }
         )
     }
+}
+
+exports.allProjects = (req, res) => {
+    let { nameHas, status, view, page } = req.query;
+
+    projectSearch(res, nameHas, status, view, page);
+
+
 }
 
 // :project-id 프로젝트
