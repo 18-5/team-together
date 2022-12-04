@@ -1,73 +1,100 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import "./index.scss"
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.scss";
 
-import App from './App'
-import FeedPage from './pages/FeedPage'
-import UserProfile from './profile/UserProfile'
-import MyProjectsPage from './my-projects/MyProjectsPage';
-import ProfileEditPage from './profile/ProfileEditPage';
-import ExplorePage from './pages/ExplorePage';
-import ErrorPage from './pages/ErrorPage';
-import ConnectionTestPage from './pages/ConnectionTestPage';
-import ProjectPage from './project/ProjectPage';
+import CenteredLayout from './components/layout/CenteredLayout';
+import DefaultLayout from './components/layout/DefaultLayout';
+
+import Home from './components/pages/Home';
+import MyProjects from './components/pages/MyProjects';
+
+import Project from './components/pages/Project';
+import ProjectNew from './components/pages/ProjectNew';
+import ProjectEdit from './components/pages/ProjectEdit';
+
+import APIConnection from './components/pages/APIConnection';
+import Profile from './profile/Profile';
+import ProfileEditPage from './profile/ProfileEdit';
+
+import SignUp from "./components/pages/SignUp";
+import Login from './components/pages/Login';
+import Error from './components/pages/Error';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
+    element: <DefaultLayout />,
+    errorElement: <Error />,
     children: [
       {
-        errorElement: <ErrorPage />,
+        errorElement: <Error />,
         children: [
           {
             path: "/",
-            element: <FeedPage />
-          },
-          {
-            path: "explore",
-            element: <ExplorePage />,
-            errorElement: <ErrorPage />
+            element: <Home />
           },
           {
             path: "search",
-            element: <ErrorPage />
+            element: <Error />
           },
           {
             path: "messages",
-            element: <ErrorPage />
+            element: <Error />
           },
           {
             path: "notifications",
-            element: <ErrorPage />
+            element: <Error />
           },
           {
-            path: "profile",
-            element: <UserProfile />
+            path: "profile/:userId",
+            element: <Profile />
           },
           {
-            path: "profile/edit",
+            path: "profile/:userId/edit",
             element: <ProfileEditPage />
           },
           {
             path: "my-projects",
-            element: <MyProjectsPage />
+            element: <MyProjects />
           },
           {
             path: "connection-test",
-            element: <ConnectionTestPage />
+            element: <APIConnection />
+          },
+          {
+            path: "projects/new",
+            element: <ProjectNew />,
           },
           {
             path: "projects/:projectId",
-            element: <ProjectPage />
+            element: <Project />,
+          },
+          {
+            path: "projects/:projectId/edit",
+            element: <ProjectEdit />,
           }
         ]
       }
     ]
-  }
+  },
+  {
+    path: "/login",
+    element: <CenteredLayout />,
+    children: [{
+      path: "/login",
+      element: <Login />
+    }]
+  },
+  {
+    path: "/sign-up",
+    element: <CenteredLayout />,
+    children: [{
+      path: "/sign-up",
+      element: <SignUp />
+    }]
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
