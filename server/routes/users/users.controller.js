@@ -5,10 +5,10 @@ const { serialize } = require('v8');
 //console.log(process.env.DATABASE_HOST);
 
 const connection = mysql.createConnection({
-    host: process.env.DATABASE_HOST, 
+    host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD, 
-    port: process.env.DATABASE_PORT, 
+    password: process.env.DATABASE_PASSWORD,
+    port: process.env.DATABASE_PORT,
     database: process.env.DATABASE_DATABASE
 });
 connection.connect();
@@ -37,7 +37,7 @@ exports.signIn = (req, res) => {
     let params = [id, pw, name, email, home, school, bio];
     connection.query(sql, params,
         (err, rows, fields) => {
-            if(err){
+            if (err) {
                 res.send(err);
             }
             else {
@@ -183,12 +183,12 @@ exports.userReceivedMsg = (req, res) => {
 // *complete*
 exports.userAllMsg = (req, res) => {
     let userId = req.params['userId'];
-    let sql = "SELECT * FROM message WHERE senderId = " + userId + " GROUP BY receiverId UNION SELECT * FROM message WHERE receiverId = " + userId + " GROUP BY senderId;";
+    let sql = "SELECT * FROM message WHERE senderId = " + userId + " AND senderDelete = 0 GROUP BY receiverId UNION SELECT * FROM message WHERE receiverId = " + userId + " AND receiverDelete = 0 GROUP BY senderId;";
 
     connection.query(
         sql,
         (err, rows, fields) => {
-            if(err){
+            if (err) {
                 res.send(err);
             }
             else {
@@ -207,14 +207,15 @@ exports.userMsgByMsgId = (req, res) => {
     let userId = req.params['userId'];
     let otherId = req.params['otherId'];
 
-    let sql = "SELECT * FROM message WHERE senderId = " + userId + " OR senderId = " + otherId + " OR receiverId = " + userId + " OR receiverId = " + otherId + " ORDER BY createdAt DESC;";
-    
+    //let sql = "SELECT * FROM message WHERE (senderId = " + userId + " AND senderDelete = 0) OR (senderId = " + otherId + " AND receiverDelete = 0) OR (receiverId = " + userId + " AND receiverDelete = 0) OR (receiverId = " + otherId + " AND senderDelete = 0) ORDER BY createdAt DESC;";
+    let sql = "SELECT * FROM message WHERE (senderId = " + userId + " AND receiverId = " + otherId + " AND senderDelete = 0) OR (senderId = " + otherId + " AND receiverId = " + userId + " AND receiverDelete = 0) ORDER BY createdAt DESC";
+
     //클릭하면 sender, receiver 동시에 겹치는거 싹 긁어서 뿌리기
     //sql paging
     connection.query(
         sql,
         (err, rows, fields) => {
-            if(err){
+            if (err) {
                 res.send(err);
             }
             else {
@@ -229,12 +230,49 @@ exports.userMsgByMsgId = (req, res) => {
 // 쪽지 하나만 삭제? 대화방 전체 삭제? 나에게만 삭제? 둘 다에게 삭제?
 // *진행 중*
 exports.deleteMsg = (req, res) => {
-    
+    let userId = req.params['userId'];
+    let msgId = req.params['messageId'];
+
+    //let sql = "DELETE FROM message WHERE senderDelete = 1 AND receiverDelete = 1 AND messageId = " + msgId + ";";
+
+    let sql = "SELECT senderDelete, receiverDelete, messageId, CASE WHEN senderDelete = 0 AND receiverDelete = 0 THEN 'checkId' WHEN senderDelete = 1 AND receiverDelete = 0 THEN 'delete' WHEN senderDelete = 0 AND receiverDelete = 1 THEN 'delete' END AS result FROM teamther.message WHERE messageId = " + msgId + ";";
+
+
+    //let sql = "SELECT senderDelete, receiverDelete FROM message WHERE messageId = " + msgId + ";";
+
     connection.query(
-        "SELECT * FROM user;",
+        sql,
         (err, rows, fields) => {
-            console.log(rows);
-            res.send(rows);
+            let result = JSON.stringify(rows[0].result).toString();
+
+            if (result === "checkId") { //senderDelete or receiverDelete 업데이트
+                let sql2 = "";
+
+            } else { //그냥 delete
+                let sql2 = "DELETE FROM message WHERE messageId = " + msgId + ";";
+            }
+
+            connection.query(
+                sql2,
+                (err, rows, fields) => {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        res.send(rows);
+                    }
+                }
+            );
+
+            /*if (err) {
+                res.send(err);
+            }
+            else {
+                if (result == "checkId")
+                    res.send(result);
+                else
+                    res.send(typeof result);
+                //res.send("asdf");
+            }*/
         }
     );
 }
