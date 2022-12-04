@@ -1,56 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import ProjectList from '../elements/ProjectList';
 
-function FeedPage() {
-  // 데이터 로딩
-  const [data, setData] = useState<any>();
-  useEffect(() => {
-    async function ProjectsLoader() {
-      await axios.get('/api/projects')
-        .then(function (response) {
-          console.dir(response.data);
-          setData(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-    }
-    ProjectsLoader()
-  }, [])
-
-  function AllProjects() {
-    if (data)
-      return (<>
-        {data.map((project, index) => (
-          <div key={index}>
-            <Link to={`projects/${project.projectId}`}>
-              <h4>{project.projectName}</h4>
-            </Link>
-            <p>{project.description}</p>
-          </div>
-
-        ))
-        }
-      </>
-      )
-    else return <></>
-  }
+function Home() {
+  // TODO: option value => project list conditional rendering
 
   return (
     <div className="py-4">
-      <div className="mb-3">
+      <div className="d-flex justify-content-end mb-4 gap-2">
         <Link to="/projects/new">
-          <Button>새 프로젝트</Button>
+          <Button variant="outline-primary">딱 맞는 프로젝트 발견하기</Button>
+        </Link>
+        <Link to="/projects/new">
+          <Button variant="primary">모집 글 작성하기</Button>
         </Link>
       </div>
-      <Form>
-        <Form.Select aria-label="Default select example">
-          <option value="1">추천순</option>
-          <option value="2">어쩌구</option>
-          <option value="3">저쩌구</option>
+      <Form className="d-flex justify-content-between align-items-center">
+        <Form.Select>
+          <option value="1">최신순</option>
+          <option value="2">추천순</option>
+          <option value="2">마감임박순</option>
         </Form.Select>
         <Form.Check
           type="switch"
@@ -58,9 +29,9 @@ function FeedPage() {
           label="모집 중만 보기"
         />
       </Form>
-      <AllProjects />
+      <ProjectList APIURL="/api/projects" />
     </div>
   )
 }
 
-export default FeedPage
+export default Home

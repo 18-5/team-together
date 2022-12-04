@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import Logo from "../../assets/logo.svg"
 import "./Sidebar.scss"
 
-
 function ProfileLink() {
   const [cookies] = useCookies(["user"]);
   if (cookies.user) {
@@ -51,15 +50,12 @@ function Sidebar() {
   return (
     <Nav variant="pills" className="d-flex flex-column flex-nowrap h-100 justify-content-between py-4">
       <div className="d-flex flex-column gap-3 mb-3">
-        <LinkContainer to="/" className="bg-transparent">
+        <LinkContainer to="/" className="bg-transparent border-0">
           <Nav.Link><img src={Logo} alt="Team Together" /></Nav.Link>
         </LinkContainer>
         <div className="d-flex flex-column">
           <LinkContainer to="/">
             <Nav.Link eventKey="/">홈</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="explore">
-            <Nav.Link eventKey="/explore">둘러보기</Nav.Link>
           </LinkContainer>
           {cookies.user &&
             <LinkContainer to="my-projects">

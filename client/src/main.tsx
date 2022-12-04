@@ -4,22 +4,23 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.scss";
 
-import APIConnection from './components/pages/APIConnection';
-import ExplorePage from './components/pages/ExplorePage';
-import MyProjectsPage from './my-projects/MyProjectsPage';
-import Profile from './profile/Profile';
-import ProfileEditPage from './profile/ProfileEdit';
-
 import CenteredLayout from './components/layout/CenteredLayout';
 import DefaultLayout from './components/layout/DefaultLayout';
 
-import FeedPage from './components/pages/Home';
-import Error from './components/pages/Error';
-import Login from './components/pages/Login';
-import SignUp from "./components/pages/SignUp";
+import Home from './components/pages/Home';
+import MyProjects from './components/pages/MyProjects';
+
 import Project from './components/pages/Project';
-import ProjectEdit from './components/pages/ProjectEdit';
 import ProjectNew from './components/pages/ProjectNew';
+import ProjectEdit from './components/pages/ProjectEdit';
+
+import APIConnection from './components/pages/APIConnection';
+import Profile from './profile/Profile';
+import ProfileEditPage from './profile/ProfileEdit';
+
+import SignUp from "./components/pages/SignUp";
+import Login from './components/pages/Login';
+import Error from './components/pages/Error';
 
 const router = createBrowserRouter([
   {
@@ -32,12 +33,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/",
-            element: <FeedPage />
-          },
-          {
-            path: "explore",
-            element: <ExplorePage />,
-            errorElement: <Error />
+            element: <Home />
           },
           {
             path: "search",
@@ -61,7 +57,7 @@ const router = createBrowserRouter([
           },
           {
             path: "my-projects",
-            element: <MyProjectsPage />
+            element: <MyProjects />
           },
           {
             path: "connection-test",
