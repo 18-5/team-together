@@ -33,103 +33,6 @@ exports.createProject = (req, res) => {
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
-exports.allProjects2 = (req, res) => {
-    let { nameHas, status, view } = req.query;
-
-    if(view == newest){
-        let sql = "SELECT * FROM project;"
-    }
-    else{
-        if((nameHas != undefined) && (status != undefined)) {
-            let sql1 = "SELECT * FROM project WHERE projectName = '"
-                + nameHas + "' AND projectState = " + status + ";\n";
-            let sql2 = "SELECT COUNT(*) FROM member m "
-                + "WHERE m.projectId = "
-                + "(SELECT projectId FROM project p "
-                + "WHERE p.projectName = '" + nameHas + "' AND "
-                + "p.projectState = " + status + ");\n";
-            let sql3 = "SELECT COUNT(*) FROM applicant a "
-                + "WHERE a.projectId = "
-                + "(SELECT projectId FROM project p "
-                + "WHERE p.projectName = '" + nameHas + "' AND "
-                + "p.projectState = " + status + ");";
-            console.log(sql1 + sql2 + sql3);
-            connection.query(
-                sql1 + sql2 + sql3, 
-                (err, rows, fields) => {
-                    console.log(rows);
-                    res.send(rows);
-                }
-            );
-        }
-        else if((nameHas != undefined) && (status == undefined)) {
-            let sql1 = "SELECT * FROM project WHERE projectName = '"
-                + nameHas + "';";
-            let sql2 = "SELECT COUNT(*) FROM member m "
-                + "WHERE m.projectId = "
-                + "(SELECT projectId FROM project p "
-                + "WHERE p.projectName = '" + nameHas + "');\n";
-            let sql3 = "SELECT COUNT(*) FROM applicant a "
-                + "WHERE a.projectId = "
-                + "(SELECT projectId FROM project p "
-                + "WHERE p.projectName = '" + nameHas + "');";
-            console.log(sql1 + sql2 + sql3);
-            connection.query(
-                sql1 + sql2 + sql3, 
-                (err, rows, fields) => {
-                    console.log(rows);
-                    res.send(rows);
-                }
-            );
-        }
-        else if((nameHas == undefined) && (status != undefined)) {
-            let sql1 = "SELECT * FROM project WHERE projectState = '"
-                + status + "';";
-            let sql2 = "SELECT COUNT(*) FROM member m "
-                + "WHERE m.projectId = "
-                + "(SELECT projectId FROM project p "
-                + "WHERE p.projectState = " + status + ");\n";
-            let sql3 = "SELECT COUNT(*) FROM applicant a "
-                + "WHERE a.projectId = "
-                + "(SELECT projectId FROM project p "
-                + "WHERE p.projectState = " + status + ");";
-            console.log(sql1 + sql2 + sql3);
-            connection.query(
-                sql1 + sql2 + sql3, 
-                (err, rows, fields) => {
-                    console.log(rows);
-                    res.send(rows);
-                }
-            );
-        }
-        else if((nameHas == undefined) && (status == undefined)) {
-            let v = null;
-            let sql1 = "SELECT * FROM project;\n";
-            let sql2 = "SELECT projectId FROM project;";
-            connection.query(
-                sql2, 
-                (err, rows, fields) => {
-                    console.log(rows);
-                    let sql3 = "";
-                    for(var v in rows){
-                        console.log(rows[v].projectId);
-                        sql3 += "SELECT COUNT(*) FROM member m "
-                        + "WHERE m.projectId = " + rows[v].projectId + ";\n";
-                    }
-                    console.log(sql2);
-                    connection.query(
-                        sql1 + sql3, 
-                        (err, rows, fields) => {
-                            console.log(rows);
-                            res.send(rows);
-                        }
-                    );
-                }
-            )
-        }
-    }
-}
-
 exports.allProjects = (req, res) => {
     let { nameHas, status, view } = req.query;
 
@@ -144,17 +47,17 @@ exports.allProjects = (req, res) => {
     let sql_order = " ORDER BY projectCreated"
 
     if((nameHas != undefined) && (status != undefined)) {
-        sql_all += " WHERE projectName = '" + nameHas
-             + "' AND projectState = " + status;
+        sql_all += " WHERE projectName LIKE '%" + nameHas
+             + "%' AND projectState = " + status;
         if(view == "newest"){
             sql_all += sql_order;
         }
         sql_all += ";\n";
 
-        sql_m_cnt += "WHERE p.projectName = '" + nameHas + "' AND "
+        sql_m_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%' AND "
             + "p.projectState = " + status + ");\n";
 
-        sql_a_cnt += "WHERE p.projectName = '" + nameHas + "' AND "
+        sql_a_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%' AND "
             + "p.projectState = " + status + ");";
 
         sql_res = sql_all + sql_m_cnt + sql_a_cnt;
@@ -168,15 +71,15 @@ exports.allProjects = (req, res) => {
         );
     }
     else if((nameHas != undefined) && (status == undefined)) {
-        sql_all += " WHERE projectName = '" + nameHas;
+        sql_all += " WHERE projectName LIKE '%" + nameHas + "%'";
         if(view == "newest"){
             sql_all += sql_order;
         }
         sql_all += ";\n";
 
-        sql_m_cnt += "WHERE p.projectName = '" + nameHas + "');\n";
+        sql_m_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%');\n";
 
-        sql_a_cnt += "WHERE p.projectName = '" + nameHas + "');";
+        sql_a_cnt += "WHERE p.projectName LIKE '%" + nameHas + "%');";
 
         sql_res = sql_all + sql_m_cnt + sql_a_cnt;
         console.log(sql_res);
@@ -189,7 +92,7 @@ exports.allProjects = (req, res) => {
         );
     }
     else if((nameHas == undefined) && (status != undefined)) {
-        sql_all += " WHERE projectState = '" + status + "';";;
+        sql_all += " WHERE projectState = ' " + status + "';";;
         if(view == "newest"){
             sql_all += sql_order;
         }
