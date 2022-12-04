@@ -6,7 +6,9 @@ const connection = mysql.createConnection({
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD, 
     port: process.env.DATABASE_PORT, 
-    database: process.env.DATABASE_DATABASE
+    database: process.env.DATABASE_DATABASE, 
+
+    multipleStatements: true
 });
 connection.connect();
 
@@ -35,10 +37,21 @@ exports.allProjects = (req, res) => {
     let { nameHas, status } = req.query;
 
     if((nameHas != undefined) && (status != undefined)) {
-        let sql = "SELECT * FROM project WHERE projectName = '"
-            + nameHas + "',projectState = '" + status + "';";
+        let sql1 = "SELECT * FROM project WHERE projectName = '"
+            + nameHas + "' AND projectState = " + status + ";\n";
+        let sql2 = "SELECT COUNT(*) FROM member m "
+            + "WHERE m.projectId = "
+            + "(SELECT projectId FROM project p "
+            + "WHERE p.projectName = '" + nameHas + "' AND "
+            + "p.projectState = " + status + ");\n";
+        let sql3 = "SELECT COUNT(*) FROM applicant a "
+            + "WHERE a.projectId = "
+            + "(SELECT projectId FROM project p "
+            + "WHERE p.projectName = '" + nameHas + "' AND "
+            + "p.projectState = " + status + ");";
+        console.log(sql1 + sql2 + sql3);
         connection.query(
-            sql, 
+            sql1 + sql2 + sql3, 
             (err, rows, fields) => {
                 console.log(rows);
                 res.send(rows);
@@ -46,10 +59,19 @@ exports.allProjects = (req, res) => {
         );
     }
     else if((nameHas != undefined) && (status == undefined)) {
-        let sql = "SELECT * FROM project WHERE projectName = '"
+        let sql1 = "SELECT * FROM project WHERE projectName = '"
             + nameHas + "';";
+        let sql2 = "SELECT COUNT(*) FROM member m "
+            + "WHERE m.projectId = "
+            + "(SELECT projectId FROM project p "
+            + "WHERE p.projectName = '" + nameHas + "');\n";
+        let sql3 = "SELECT COUNT(*) FROM applicant a "
+            + "WHERE a.projectId = "
+            + "(SELECT projectId FROM project p "
+            + "WHERE p.projectName = '" + nameHas + "');";
+        console.log(sql1 + sql2 + sql3);
         connection.query(
-            sql, 
+            sql1 + sql2 + sql3, 
             (err, rows, fields) => {
                 console.log(rows);
                 res.send(rows);
@@ -57,10 +79,19 @@ exports.allProjects = (req, res) => {
         );
     }
     else if((nameHas == undefined) && (status != undefined)) {
-        let sql = "SELECT * FROM project WHERE projectState = '"
+        let sql1 = "SELECT * FROM project WHERE projectState = '"
             + status + "';";
+        let sql2 = "SELECT COUNT(*) FROM member m "
+            + "WHERE m.projectId = "
+            + "(SELECT projectId FROM project p "
+            + "WHERE p.projectState = " + status + ");\n";
+        let sql3 = "SELECT COUNT(*) FROM applicant a "
+            + "WHERE a.projectId = "
+            + "(SELECT projectId FROM project p "
+            + "WHERE p.projectState = " + status + ");";
+        console.log(sql1 + sql2 + sql3);
         connection.query(
-            sql, 
+            sql1 + sql2 + sql3, 
             (err, rows, fields) => {
                 console.log(rows);
                 res.send(rows);
@@ -68,14 +99,29 @@ exports.allProjects = (req, res) => {
         );
     }
     else if((nameHas == undefined) && (status == undefined)) {
-        let sql = "SELECT * FROM project;";
+        let v = null;
+        let sql1 = "SELECT * FROM project;\n";
+        let sql2 = "SELECT projectId FROM project;";
         connection.query(
-            sql, 
+            sql2, 
             (err, rows, fields) => {
                 console.log(rows);
-                res.send(rows);
+                let sql3 = "";
+                for(var v in rows){
+                    console.log(rows[v].projectId);
+                    sql3 += "SELECT COUNT(*) FROM member m "
+                    + "WHERE m.projectId = " + rows[v].projectId + ";\n";
+                }
+                console.log(sql2);
+                connection.query(
+                    sql1 + sql3, 
+                    (err, rows, fields) => {
+                        console.log(rows);
+                        res.send(rows);
+                    }
+                );
             }
-        );
+        )
     }
 }
 
