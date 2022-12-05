@@ -109,12 +109,87 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     }
 }
 
+// :userid가 지원한 프로젝트 리스트
+function appliedProjects(res, userid){
+    let sql = "SELECT * FROM project p "
+    + "WHERE p.projectId IN "
+    + "(SELECT a.projectId FROM applicant a "
+    + "WHERE a.userId = ?);";
+    connection.query(
+        sql, userid, 
+        (err, rows, fields) => {
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    )
+}
+
+// :userid가 진행 중인 프로젝트 리스트
+function ongoingProjects(res, userid){
+    let sql = "SELECT p.* FROM project p "
+    + "WHERE p.projectId IN "
+    + "(SELECT m.projectId FROM member m "
+    + "WHERE m.userId = ?) "
+    + "AND p.projectState=2;";
+    connection.query(
+        sql, userid, 
+        (err, rows, fields) => {
+            console.log(sql);
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    )
+}
+
+// :userid가 완료한 프로젝트 리스트
+function completedProjects(res, userid){
+    let sql = "SELECT p.* FROM project p "
+    + "WHERE p.projectId IN "
+    + "(SELECT m.projectId FROM member m "
+    + "WHERE m.userId = ?) "
+    + "AND p.projectState=3;";
+    connection.query(
+        sql, userid, 
+        (err, rows, fields) => {
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    )
+}
+
 exports.allProjects = (req, res) => {
-    let { nameHas, status, view, page } = req.query;
-
-    projectSearch(res, nameHas, status, view, page);
-
-
+    let { userid } = req.query;
+    if(userid == undefined){
+        let { nameHas, status, view, page } = req.query;
+        projectSearch(res, nameHas, status, view, page);
+    }
+    else if(userid != undefined){
+        let { filter } = req.query;
+        if(filter == "applied"){
+            appliedProjects(res, userid);
+        }
+        else if(filter == "ongoing"){
+            ongoingProjects(res, userid)
+        }
+        else if(filter == "completed"){
+            completedProjects(res, userid)
+        }
+    }
 }
 
 // :project-id 프로젝트
