@@ -114,7 +114,8 @@ function appliedProjects(res, userid){
     let sql = "SELECT * FROM project p "
     + "WHERE p.projectId IN "
     + "(SELECT a.projectId FROM applicant a "
-    + "WHERE a.userId = ?);";
+    + "WHERE a.userId = ?)"
+    + " AND NOT p.projectState=3;";
     connection.query(
         sql, userid, 
         (err, rows, fields) => {
@@ -184,10 +185,10 @@ exports.allProjects = (req, res) => {
             appliedProjects(res, userid);
         }
         else if(filter == "ongoing"){
-            ongoingProjects(res, userid)
+            ongoingProjects(res, userid);
         }
         else if(filter == "completed"){
-            completedProjects(res, userid)
+            completedProjects(res, userid);
         }
     }
 }
