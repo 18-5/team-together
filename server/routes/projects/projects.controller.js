@@ -12,10 +12,52 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
+function checkProjectId(new_id){
+    let sql = "SELECT COUNT(*) AS cnt FROM project WHERE projectId=?;";
+    connection.query(sql, new_id, 
+        (err, rows, fields) => {
+            if(err){
+                console.log("query error occured");
+                throw err;
+            }
+            else{
+                if(rows != 0){
+                    console.log("id not exist");
+                    return 0;
+                }
+                else{
+                    console.log("id exist");
+                    return 1;
+                }
+            }
+        });
+}
+
+// projectId 랜덤 생성
+function createId(){
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let date = today.getDate();
+    let day = today.getDay();
+
+    let min = Math.ceil(1);
+    let max = Math.floor(1000000);
+
+    let r = year*month*date*day + Math.floor(Math.random() * (max - min)) + min;
+    if(checkProjectId(r) == 1){
+        r = year*month*date*day + Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    return r;
+}
+
 // 프로젝트 생성
 exports.createProject = (req, res) => {
-    let sql = "INSERT INTO project VALUES (?, ?, ?, NOW(), 0, ?);";
-    let id = req.body.projectId;
+    let sql = "INSERT INTO project(projectId, projectName, description, projectCreated, projectState)"
+        + " VALUES (?, ?, ?, NOW(), 0);";
+
+    let id = createId();
     console.log(id);
     let name = req.body.projectName;
     console.log(name);
@@ -26,8 +68,14 @@ exports.createProject = (req, res) => {
     let params = [id, name, desc, readme];
     connection.query(sql, params, 
         (err, rows, fields) => {
-            console.log(rows);
-            res.send(rows);
+            if(err){
+                res.send("query error occured");
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
         });
 }
 
@@ -37,10 +85,10 @@ exports.createProject = (req, res) => {
 function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_res = "";       // 실제 db 검색할 쿼리문
     let sql_all = "SELECT * FROM project";
-    let sql_m_cnt = "SELECT COUNT(*) FROM member m ";
+    let sql_m_cnt = "SELECT COUNT(*) AS mcnt FROM member m ";
         + "WHERE m.projectId = "
         + "(SELECT projectId FROM project p ";
-    let sql_a_cnt = "SELECT COUNT(*) FROM applicant a "
+    let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
         + "WHERE a.projectId = "
         + "(SELECT projectId FROM project p ";
     let sql_created_order = " ORDER BY projectCreated DESC"
@@ -76,7 +124,7 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     else if((pName != undefined) && (pStatus == undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName + "%'";
         if(pView == "newest"){
-            sql_all += sql_order;
+            sql_all += sql_created_order;
         }
         else if(pView == "timesensitive"){
             sql_all += sql_duedate_order;
@@ -100,7 +148,7 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     else if((pName == undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectState = ' " + pStatus + "';";;
         if(pView == "newest"){
-            sql_all += sql_order;
+            sql_all += sql_created_order;
         }
         else if(pView == "timesensitive"){
             sql_all += sql_duedate_order;
@@ -123,7 +171,7 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     }
     else if((pName == undefined) && (pStatus == undefined)) {
         if(pView == "newest"){
-            sql_all += sql_order;
+            sql_all += sql_created_order;
         }
         else if(pView == "timesensitive"){
             sql_all += sql_duedate_order;
@@ -138,9 +186,9 @@ function projectSearch(res, pName, pStatus, pView, ppage){
                 let sql_a = "";
                 for(var v in rows){
                     console.log(rows[v].projectId);
-                    sql_m += "SELECT COUNT(*) FROM member m "
+                    sql_m += "SELECT COUNT(*) mcnt FROM member m "
                     + "WHERE m.projectId = " + rows[v].projectId + ";\n";
-                    sql_a += "SELECT COUNT(*) FROM applicant a "
+                    sql_a += "SELECT COUNT(*) acnt FROM applicant a "
                     + "WHERE a.projectId = " + rows[v].projectId + ";\n";
                 }
                 sql_res = sql_all + sql_m + sql_a
