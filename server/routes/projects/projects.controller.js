@@ -82,6 +82,46 @@ exports.createProject = (req, res) => {
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
+function searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt){
+    if(pView == "newest"){
+        sql_all += sql_created_order;
+    }
+    else if(pView == "timesensitive"){
+        sql_all += sql_duedate_order;
+    }
+    if(ppage != undefined){
+        sql_all += sql_paging;
+    }
+    sql_all += ";\n";
+
+    connection.query(
+        sql_all, 
+        (err, rows, fields) => {
+            console.log(rows);
+            for(var v in rows){
+                console.log(rows[v].projectId);
+                sql_res += sql_m_cnt + rows[v].projectId + ";\n";
+                sql_res += sql_a_cnt + rows[v].projectId + ";\n";
+            }
+            console.log(sql_res);
+            connection.query(
+                sql_res, 
+                (eerr, rrows, ffields) => {
+                    let size = Object.keys(rows).length
+                    console.log(size);
+                    for(var i = 0, j = 0; i < size; i++, j+=2){
+                        rows[i].numberOfMember = rrows[j][0].mcnt;
+                        rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
+                    }
+
+                    console.log(rows);
+                    res.send(rows);
+                }
+            );
+        }
+    );
+}
+
 function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_res = "";       // 실제 db 검색할 쿼리문
     let sql_all = "SELECT * FROM project";
@@ -91,139 +131,23 @@ function projectSearch(res, pName, pStatus, pView, ppage){
         + "WHERE a.projectId = ";
     let sql_created_order = " ORDER BY projectCreated DESC"
     let sql_duedate_order = " ORDER BY duedate DESC"
-    let sql_paging = " LIMIT " + ((ppage - 1) * 10) +", 10";
+    let sql_paging = " LIMIT " + ((ppage - 1) * 5) +", 5";
 
     if((pName != undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName
              + "%' AND projectState = " + pStatus;
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-
-        connection.query(
-            sql_all, 
-            (err, rows, fields) => {
-                console.log(rows);
-                for(var v in rows){
-                    console.log(rows[v].projectId);
-                    sql_res += sql_m_cnt + rows[v].projectId + ";\n";
-                    sql_res += sql_a_cnt + rows[v].projectId + ";\n";
-                }
-                console.log(sql_res);
-                connection.query(
-                    sql_res, 
-                    (eerr, rrows, ffields) => {
-                        let size = Object.keys(rows).length
-                        console.log(size);
-                        for(var i = 0, j = 0; i < size; i++, j+=2){
-                            rows[i].numberOfMember = rrows[j][0].mcnt;
-                            rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
-                        }
-
-                        console.log(rows);
-                        res.send(rows);
-                    }
-                );
-            }
-        );
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
     else if((pName != undefined) && (pStatus == undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName + "%'";
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-
-        sql_m_cnt += "WHERE p.projectName LIKE '%" + pName + "%');\n";
-
-        sql_a_cnt += "WHERE p.projectName LIKE '%" + pName + "%');";
-
-        sql_res = sql_all + sql_m_cnt + sql_a_cnt;
-        console.log(sql_res);
-        connection.query(
-            sql_res, 
-            (err, rows, fields) => {
-                console.log(rows);
-                res.send(rows);
-            }
-        );
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
     else if((pName == undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectState = ' " + pStatus + "';";;
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-
-        sql_m_cnt += " WHERE p.projectState = " + pStatus + ");\n";
-
-        sql_a_cnt += " WHERE p.projectState = " + pStatus + ");";
-
-        sql_res = sql_all + sql_m_cnt + sql_a_cnt;
-        console.log(sql_res);
-        connection.query(
-            sql_res, 
-            (err, rows, fields) => {
-                console.log(rows);
-                res.send(rows);
-            }
-        );
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
     else if((pName == undefined) && (pStatus == undefined)) {
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-        let sql_getId = "SELECT projectId FROM project;";
-        connection.query(
-            sql_getId, 
-            (err, rows, fields) => {
-                console.log(rows);
-                let sql_m = "";
-                let sql_a = "";
-                for(var v in rows){
-                    console.log(rows[v].projectId);
-                    sql_m += "SELECT COUNT(*) mcnt FROM member m "
-                    + "WHERE m.projectId = " + rows[v].projectId + ";\n";
-                    sql_a += "SELECT COUNT(*) acnt FROM applicant a "
-                    + "WHERE a.projectId = " + rows[v].projectId + ";\n";
-                }
-                sql_res = sql_all + sql_m + sql_a
-                console.log(sql_res);
-                connection.query(
-                    sql_res, 
-                    (err, rows, fields) => {
-                        console.log(rows);
-                        res.send(rows);
-                    }
-                );
-            }
-        )
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
 }
 
@@ -232,7 +156,7 @@ exports.allProjects = (req, res) => {
 
     projectSearch(res, nameHas, status, view, page);
 
-
+    
 }
 
 // :project-id 프로젝트
