@@ -1,23 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import DatePicker from 'react-datepicker';
 
-function ProjectEdit() {
-  const navigate = useNavigate();
+function ProfileEdit() {
+  const { userId } = useParams();
   const [validated, setValidated] = useState(false);
   const [state, setState] = useState({
     id: "",
     name: "",
-    description: "",
-    status: "",
-    readme: "",
-    post: "",
-    intake: "",
-    tag: ""
+    pwd: "",
+    bio: "",
+    email: "",
+    homepage: "",
+    school: "",
+    experiences: "",
+    skills: ""
   });
   const [dueDate, setDueDate] = useState(new Date());
+
+  useEffect(() => {
+    async function UserLoader() {
+      await axios.get(`/api/users/${userId}`)
+        .then(function (response) {
+          console.log(response.data[0]);
+          setState({
+            id: response.data[0].userId,
+            name: response.data[0].userName,
+            pwd: response.data[0].userPwd,
+            bio: response.data[0].userBio,
+            email: response.data[0].userEmail,
+            homepage: response.data[0].userHomepage,
+            school: response.data[0].userSchool,
+            experiences: "",
+            skills: ""
+          })
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+    UserLoader()
+  }, [])
+
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
@@ -26,7 +54,7 @@ function ProjectEdit() {
       e.stopPropagation();
 
     setValidated(true);
-    createProject();
+    updateUser();
     navigate(-1);
   };
 
@@ -38,12 +66,9 @@ function ProjectEdit() {
     }))
   }
 
-  async function createProject() {
-    await axios.post(`/api/projects/`, {
-      projectId: 3, // TODO: 여기 API에서 삭제되면 지우기
-      projectName: state.name,
-      description: state.description,
-      readme: state.readme
+  async function updateUser() {
+    await axios.put(`/api/users/${userId}`, {
+
     })
       .then(function (response) {
         console.log(response.data);
@@ -57,7 +82,7 @@ function ProjectEdit() {
     <div className="py-4">
       <Link to={"/"} className="mb-4">
       </Link>
-      <h1 className="h3 mb-4">새 프로젝트</h1>
+      <h1 className="h3 mb-4">프로필 편집</h1>
       <Form className="" noValidate validated={validated} onSubmit={handleSubmit}>
         <h2 className="h4 mb-3">필수 정보</h2>
         <Form.Group className="mb-3" controlId="name">
@@ -78,7 +103,6 @@ function ProjectEdit() {
             프로젝트가 모집 중일때 다른 사람들에게 보여지는 게시글입니다.
           </Form.Text>
         </Form.Group>
-
         <Form.Group className="mb-3" controlId="intake">
           <Form.Label>모집 정원</Form.Label>
           <Form.Control className="w-25" type="text" maxLength={4} value={state.intake} placeholder={"2"} onChange={handleChange} />
@@ -109,6 +133,8 @@ function ProjectEdit() {
       </Form>
     </div>
   )
+
+  return <></>
 }
 
-export default ProjectEdit
+export default ProfileEdit

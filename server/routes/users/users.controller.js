@@ -66,7 +66,7 @@ exports.whereUserIsLeader = (req, res) => {
 // *complete*
 exports.userProfile = (req, res) => {
     let userId = req.params['userId'];
-    console.log(userName);
+    console.log(userId);
 
     connection.query(
         "SELECT * FROM user WHERE userId =" + userId + ";",

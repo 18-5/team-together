@@ -14,7 +14,6 @@ function Login() {
   });
   const navigate = useNavigate();
 
-
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
     e.preventDefault();

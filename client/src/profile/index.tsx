@@ -7,7 +7,7 @@ import Projects from "../project/Projects"
 import ProfileData from "./ProfileInterface";
 import ReviewInterface from "./ReviewInterface";
 import Profile from "./Profile";
-import About from "./About";
+import About from "../components/elements/About";
 import Review from "./Review";
 
 const sampleProfileData: ProfileData = {
