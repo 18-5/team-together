@@ -12,60 +12,18 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
-function checkProjectId(new_id){
-    let sql = "SELECT COUNT(*) AS cnt FROM project WHERE projectId=?;";
-    connection.query(sql, new_id, 
-        (err, rows, fields) => {
-            if(err){
-                console.log("query error occured");
-                throw err;
-            }
-            else{
-                if(rows != 0){
-                    console.log("id not exist");
-                    return 0;
-                }
-                else{
-                    console.log("id exist");
-                    return 1;
-                }
-            }
-        });
-}
-
-// projectId 랜덤 생성
-function createId(){
-    let today = new Date();
-    let year = today.getFullYear();
-    let month = today.getMonth() + 1;
-    let date = today.getDate();
-    let day = today.getDay();
-
-    let min = Math.ceil(1);
-    let max = Math.floor(1000000);
-
-    let r = year*month*date*day + Math.floor(Math.random() * (max - min)) + min;
-    if(checkProjectId(r) == 1){
-        r = year*month*date*day + Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    return r;
-}
-
 // 프로젝트 생성
 exports.createProject = (req, res) => {
-    let sql = "INSERT INTO project(projectId, projectName, description, projectCreated, projectState)"
-        + " VALUES (?, ?, ?, NOW(), 0);";
+    let sql = "INSERT INTO project(projectName, description, projectCreated, projectState)"
+        + " VALUES (?, ?, NOW(), 0);";
 
-    let id = createId();
-    console.log(id);
     let name = req.body.projectName;
     console.log(name);
     let desc = req.body.description;
     let readme = req.body.readme;
     console.log(desc);
 
-    let params = [id, name, desc, readme];
+    let params = [name, desc, readme];
     connection.query(sql, params, 
         (err, rows, fields) => {
             if(err){
@@ -156,7 +114,7 @@ exports.allProjects = (req, res) => {
 
     projectSearch(res, nameHas, status, view, page);
 
-    
+
 }
 
 // :project-id 프로젝트
