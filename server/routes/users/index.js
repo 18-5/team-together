@@ -6,6 +6,7 @@ const router = express.Router();
 const { serialize } = require('v8');
 const controller = require('./users.controller');
 
+// test
 router.get('/', controller.testUserPage);
 
 // 회원 가입

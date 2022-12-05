@@ -82,7 +82,7 @@ function ProjectEdit() {
     <div className="py-4">
       <Link to={"/"} className="mb-4">
       </Link>
-      <h1 className="h3 mb-4">새 프로젝트</h1>
+      <h1 className="h3 mb-4">프로젝트 편집</h1>
       <Form className="" noValidate validated={validated} onSubmit={handleSubmit}>
         <h2 className="h4 mb-3">필수 정보</h2>
         <Form.Group className="mb-3" controlId="name">

@@ -15,8 +15,8 @@ import ProjectNew from './components/pages/ProjectNew';
 import ProjectEdit from './components/pages/ProjectEdit';
 
 import APIConnection from './components/pages/APIConnection';
-import Profile from './profile/Profile';
-import ProfileEditPage from './profile/ProfileEdit';
+import Profile from './components/pages/Profile';
+import ProfileEdit from './components/pages/ProfileEdit';
 
 import SignUp from "./components/pages/SignUp";
 import Login from './components/pages/Login';
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
           },
           {
             path: "profile/:userId/edit",
-            element: <ProfileEditPage />
+            element: <ProfileEdit />
           },
           {
             path: "my-projects",

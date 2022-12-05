@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Nav from "react-bootstrap/Nav";
 import { useCookies } from "react-cookie";
 import { LinkContainer } from "react-router-bootstrap";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from "../../assets/logo.svg"
 import "./Sidebar.scss"
 
@@ -18,11 +18,13 @@ function ProfileLink() {
 function LoginButton() {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const toggleLogin = () => {
+  const [login, setLogin] = useState(false);
+
+  const Logout = () => {
     if (cookies.user) {
       removeCookie("user");
-      alert("로그아웃되었습니다");
-      navigate("/"); // 작동 에러
+      setLogin(true);
+      navigate("/");
     } else {
       setCookie("user", true,
         { path: "/" })
@@ -33,7 +35,7 @@ function LoginButton() {
   return (
     <>
       {cookies.user ? (
-        <Nav.Link onClick={toggleLogin}>로그아웃</Nav.Link>
+        <Nav.Link onClick={Logout}>로그아웃</Nav.Link>
       ) : (
         <LinkContainer to="login">
           <Nav.Link eventKey="login">로그인</Nav.Link>
@@ -46,6 +48,8 @@ function LoginButton() {
 function Sidebar() {
   const [cookies] = useCookies(["user"]);
   const profileURL = "/profile/" + cookies.user;
+  const location = useLocation();
+  useEffect(() => {}, [location]);
 
   return (
     <Nav variant="pills" className="d-flex flex-column flex-nowrap h-100 justify-content-between py-4">
