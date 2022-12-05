@@ -34,7 +34,7 @@ function ProjectList(props: { APIURL: string }) {
 
   return (
     <>
-      {data[0].map((project: any, index: number) => (
+      {data.map((project: any, index: number) => (
         <div className="py-4 border-bottom" key={index}>
           <Link to={`/projects/${project.projectId}`}>
             <h2 className="h4 mb-1 text-dark">{project.projectName}</h2>
