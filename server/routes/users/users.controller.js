@@ -183,7 +183,10 @@ exports.userReceivedMsg = (req, res) => {
 // *complete*
 exports.userAllMsg = (req, res) => {
     let userId = req.params['userId'];
-    let sql = "SELECT * FROM message WHERE senderId = " + userId + " AND senderDelete = 0 GROUP BY receiverId UNION SELECT * FROM message WHERE receiverId = " + userId + " AND receiverDelete = 0 GROUP BY senderId;";
+    let sql = "SELECT * FROM message "
+        + "WHERE senderId = " + userId + " AND senderDelete = 0 GROUP BY receiverId "
+        + "UNION "
+        + "SELECT * FROM message WHERE receiverId = " + userId + " AND receiverDelete = 0 GROUP BY senderId;";
 
     connection.query(
         sql,
@@ -208,7 +211,9 @@ exports.userMsgByMsgId = (req, res) => {
     let otherId = req.params['otherId'];
 
     //let sql = "SELECT * FROM message WHERE (senderId = " + userId + " AND senderDelete = 0) OR (senderId = " + otherId + " AND receiverDelete = 0) OR (receiverId = " + userId + " AND receiverDelete = 0) OR (receiverId = " + otherId + " AND senderDelete = 0) ORDER BY createdAt DESC;";
-    let sql = "SELECT * FROM message WHERE (senderId = " + userId + " AND receiverId = " + otherId + " AND senderDelete = 0) OR (senderId = " + otherId + " AND receiverId = " + userId + " AND receiverDelete = 0) ORDER BY createdAt DESC";
+    let sql = "SELECT * FROM message WHERE "
+        + "(senderId = " + userId + " AND receiverId = " + otherId + " AND senderDelete = 0) "
+        + "OR (senderId = " + otherId + " AND receiverId = " + userId + " AND receiverDelete = 0) ORDER BY createdAt DESC";
 
     //클릭하면 sender, receiver 동시에 겹치는거 싹 긁어서 뿌리기
     //sql paging
@@ -233,23 +238,35 @@ exports.deleteMsg = (req, res) => {
     let userId = req.params['userId'];
     let msgId = req.params['messageId'];
 
-    //let sql = "DELETE FROM message WHERE senderDelete = 1 AND receiverDelete = 1 AND messageId = " + msgId + ";";
-
-    let sql = "SELECT senderDelete, receiverDelete, messageId, CASE WHEN senderDelete = 0 AND receiverDelete = 0 THEN 'checkId' WHEN senderDelete = 1 AND receiverDelete = 0 THEN 'delete' WHEN senderDelete = 0 AND receiverDelete = 1 THEN 'delete' END AS result FROM teamther.message WHERE messageId = " + msgId + ";";
-
-
-    //let sql = "SELECT senderDelete, receiverDelete FROM message WHERE messageId = " + msgId + ";";
+    let sql = "SELECT senderId, receiverId, senderDelete, receiverDelete, messageId, "
+        + "CASE WHEN senderDelete = 0 AND receiverDelete = 0 AND receiverId = " + userId + " THEN 'receiverDelete' "
+        + "WHEN senderDelete = 0 AND receiverDelete = 0 AND senderId = " + userId + " THEN 'senderDelete' "
+        + "WHEN senderDelete = 1 AND receiverDelete = 0 THEN 'delete' "
+        + "WHEN senderDelete = 0 AND receiverDelete = 1 THEN 'delete' "
+        + "END AS result "
+        + "FROM teamther.message WHERE messageId = " + msgId + ";";
+    //messageId 탐색, 아무도 delete하지 않은 경우 -> 내가 sender인지 receiver인지 판단 -> senderDelete = 1 OR receiverDelete = 1
+    //senderDelete = 1인 경우 -> 내가 receiver라는 의미 -> delete row
+    //receiverDelete = 1인 경우 -> 내가 sender라는 의미 -> delete row
 
     connection.query(
         sql,
         (err, rows, fields) => {
             let result = JSON.stringify(rows[0].result).toString();
-
-            if (result === "checkId") { //senderDelete or receiverDelete 업데이트
-                let sql2 = "";
-
-            } else { //그냥 delete
-                let sql2 = "DELETE FROM message WHERE messageId = " + msgId + ";";
+            let sql2 = "";
+            if (err) {
+                res.send(err);
+            } else {
+                if (result === "\"receiverDelete\"") {// 아직 아무도 delete하지 않은 경우 -> 내가 receiver인 경우
+                    sql2 = sql2 + "UPDATE message SET receiverDelete = 1 WHERE messageId = " + msgId + ";";
+                    res.send(result);
+                }
+                else if (result === "\"senderDelete\"") { // 아직 아무도 delete하지 않은 경우 -> 내가 sender인 경우
+                    sql2 = sql2 + "UPDATE message SET senderDelete = 1 WHERE messageId = " + msgId + ";";
+                    res.send(result);
+                } else {
+                    sql2 = sql2 + "DELETE FROM message WHERE messageId = " + msgId + ";";
+                }
             }
 
             connection.query(
@@ -262,17 +279,6 @@ exports.deleteMsg = (req, res) => {
                     }
                 }
             );
-
-            /*if (err) {
-                res.send(err);
-            }
-            else {
-                if (result == "checkId")
-                    res.send(result);
-                else
-                    res.send(typeof result);
-                //res.send("asdf");
-            }*/
         }
     );
 }
