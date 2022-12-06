@@ -5,10 +5,10 @@ const { serialize } = require('v8');
 //console.log(process.env.DATABASE_HOST);
 
 const connection = mysql.createConnection({
-    host: process.env.DATABASE_HOST, 
+    host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD, 
-    port: process.env.DATABASE_PORT, 
+    password: process.env.DATABASE_PASSWORD,
+    port: process.env.DATABASE_PORT,
     database: process.env.DATABASE_DATABASE
 });
 connection.connect();
@@ -37,7 +37,7 @@ exports.signIn = (req, res) => {
     let params = [id, pw, name, email, home, school, bio];
     connection.query(sql, params,
         (err, rows, fields) => {
-            if(err){
+            if (err) {
                 res.send(err);
             }
             else {
