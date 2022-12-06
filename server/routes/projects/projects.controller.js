@@ -14,16 +14,17 @@ connection.connect();
 
 // 프로젝트 생성
 exports.createProject = (req, res) => {
-    let sql = "INSERT INTO project(projectName, description, projectCreated, projectState)"
-        + " VALUES (?, ?, NOW(), 0);";
+    let sql = "INSERT INTO project(projectName, description, post, intake, projectCreated, projectState)"
+        + " VALUES (?, ?, ?, ?, NOW(), 0);";
 
     let name = req.body.projectName;
     console.log(name);
     let desc = req.body.description;
-    let readme = req.body.readme;
+    let post = req.body.post;
+    let intake = req.body.intake;
     console.log(desc);
 
-    let params = [name, desc, readme];
+    let params = [name, desc, post, intake];
     connection.query(sql, params, 
         (err, rows, fields) => {
             if(err){
