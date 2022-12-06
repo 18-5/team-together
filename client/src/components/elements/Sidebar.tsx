@@ -49,7 +49,7 @@ function Sidebar() {
   const [cookies] = useCookies(["user"]);
   const profileURL = "/profile/" + cookies.user;
   const location = useLocation();
-  useEffect(() => {}, [location]);
+  useEffect(() => { return }, [location]);
 
   return (
     <Nav variant="pills" className="d-flex flex-column flex-nowrap h-100 justify-content-between py-4">
@@ -71,12 +71,12 @@ function Sidebar() {
           </LinkContainer>
           {cookies.user &&
             <LinkContainer to="messages">
-              <Nav.Link eventKey="/messages" disabled>쪽지</Nav.Link>
+              <Nav.Link eventKey="/messages">쪽지</Nav.Link>
             </LinkContainer>
           }
           {cookies.user &&
             <LinkContainer to="notifications">
-              <Nav.Link eventKey="/notifications" disabled>알림</Nav.Link>
+              <Nav.Link eventKey="/notifications">알림</Nav.Link>
             </LinkContainer>
           }
         </div>

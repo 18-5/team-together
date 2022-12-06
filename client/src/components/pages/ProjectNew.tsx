@@ -40,10 +40,11 @@ function ProjectEdit() {
 
   async function createProject() {
     await axios.post(`/api/projects/`, {
-      projectId: 3, // TODO: 여기 API에서 삭제되면 지우기
       projectName: state.name,
       description: state.description,
-      readme: state.readme
+      readme: state.readme,
+      post: state.post,
+      intake: state.intake
     })
       .then(function (response) {
         console.log(response.data);

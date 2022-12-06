@@ -68,7 +68,9 @@ function ProjectEdit() {
     await axios.put(`/api/projects/${projectId}`, {
       projectName: state.name,
       description: state.description,
-      state: "Open"
+      readme: state.readme,
+      post: state.post,
+      intake: state.intake
     })
       .then(function (response) {
         console.log(response.data);

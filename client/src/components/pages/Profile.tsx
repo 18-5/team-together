@@ -3,11 +3,12 @@ import Button from 'react-bootstrap/Button'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
-import AboutSection from "../elements/About";
+
 import ProfileAbout from "../elements/ProfileAbout";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import ProjectList from "../elements/ProjectList";
 
 function Profile() {
   const { userId } = useParams();
@@ -15,7 +16,7 @@ function Profile() {
 
   const [data, setData] = useState<any>();
   useEffect(() => {
-    async function ProjectLoader() {
+    async function ProfileLoader() {
       await axios.get(`/api/users/${userId}`)
         .then(function (response) {
           console.log(response.data[0]);
@@ -25,32 +26,27 @@ function Profile() {
           console.log(error);
         })
     }
-    ProjectLoader()
-  }, [data])
+    ProfileLoader()
+  }, [])
 
   if (!data)
     return null;
 
   return (
     <div className="py-4">
-      <ProfileAbout profileData={data[0]} />
-      {userId == cookie.user ?
-        <div className="d-flex justify-content-end mb-4 gap-2">
-          <Button href="profile/edit" variant="outline-primary" className="mb-3">프로필 편집</Button>
-        </div> : null}
-      <Stack gap={3}>
-        <Tabs
-          defaultActiveKey="home"
-          id="uncontrolled-tab-example"
-          className="mb-3"
-        >
-          <Tab eventKey="home" title="개요">
-            <AboutSection />
-          </Tab>
-          <Tab eventKey="profile" title="완료한 프로젝트">
-          </Tab>
-        </Tabs>
-      </Stack>
+      <ProfileAbout data={data[0]} />
+      <div className="d-flex justify-content-end gap-2 buttons-pulldown-to-tab">
+        <Button href="/messages/new" variant="primary">쪽지 작성하기</Button>
+        {userId == cookie.user ?
+          <Button href={userId + "/edit"} variant="outline-primary">프로필 편집</Button> : null}
+      </div>
+      <Tabs defaultActiveKey="home">
+        <Tab eventKey="home" title="개요">
+        </Tab>
+        <Tab eventKey="profile" title="완료한 프로젝트">
+          <ProjectList APIURL={`/api/projects?userid=${cookie.user}&filter=completed`} />
+        </Tab>
+      </Tabs>
     </div >
   )
 }

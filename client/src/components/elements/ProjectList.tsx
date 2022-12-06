@@ -26,7 +26,7 @@ function ProjectList(props: { APIURL: string }) {
         })
     }
     ProjectsLoader()
-  }, [data])
+  }, [])
 
   if (!data) {
     return null;
