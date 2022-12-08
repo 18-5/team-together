@@ -1,0 +1,29 @@
+@import "token.scss";
+
+.nav-tabs {
+  border-bottom: 1px solid $border-subtle;
+}
+
+/* Line tabs */
+
+.nav-tabs .nav-link {
+  border: none;
+  border-radius: 0;
+
+  height: 40px;
+  border-bottom: 2px solid;
+  margin-left: 1px;
+  padding: 8px 16px;
+  font-size: 14px;
+
+  border-color: $border-subtle;
+  color: $text-secondary;
+}
+.nav-tabs .nav-link:hover {
+  border-color: $border-strong;
+}
+
+.nav-tabs .nav-link.active {
+  color: $text-primary;
+  border-color: $border-interactive;
+}

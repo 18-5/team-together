@@ -1,0 +1,19 @@
+@import "token.scss";
+
+a {
+  font-size: $body-compact-01;
+  color: $link-primary;
+  text-decoration: none;
+  text-underline-position: under;
+}
+a:hover {
+  color: $link-primary-hover;
+  text-decoration: underline;
+  text-underline-position: under;
+}
+a:active {
+  color: $text-primary;
+}
+a:hover:active {
+  color: $text-primary;
+}

@@ -8,7 +8,7 @@ function CenteredLayout() {
   return (
     <Container className="h-100">
       <Row className="align-items-center justify-content-center h-100">
-        <Col xs={"auto"} className="d-flex flex-column align-items-center shadow border rounded-3 p-5 bg-light">
+        <Col xs={"auto"} className="d-flex flex-column align-items-center shadow border rounded-3 p-5 layer-1">
           <Outlet />
         </Col>
       </Row>

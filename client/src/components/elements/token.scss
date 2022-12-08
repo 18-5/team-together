@@ -1,0 +1,78 @@
+@import "color.scss";
+
+/* Background */
+$background: $white;
+$background-hover: rgba($gray-50, 0.12);
+$background-active: rgba($gray-50, 0.5);
+$background-selected: rgba($gray-50, 0.2);
+
+$background--gray: $gray-10;
+
+/* Layer */
+$layer-01: $gray-10;
+
+/* Layer accent */
+
+/* Field */
+$field-01: $gray-10;
+$field-02: $white;
+
+/* Border */
+$border-interactive: $blue-60;
+$border-subtle: $gray-20;
+$border-strong: $gray-50;
+
+/* Text */
+$text-primary: $gray-100;
+$text-secondary: $gray-70;
+$text-placeholder: $gray-40;
+$text-on-color: $white;
+$text-helper: $gray-60;
+$text-inverse: $white;
+
+/* Link */
+$link-primary: $blue-60;
+$link-primary-hover: $blue-70;
+
+/* Icon */
+$icon-primary: $gray-100;
+$icon-secondary: $gray-70;
+
+/* Button */
+$button-primary: $blue-60;
+$button-primary-hover: $blue-60-hover;
+$button-primary-active: $blue-80;
+$button-secondary: $gray-80;
+$button-secondary-hover: $gray-80-hover;
+$button-secondary-active: $gray-60;
+$button-tertiary: $blue-60;
+$button-tertiary-hover: $blue-60-hover;
+$button-tertiary-active: $blue-80;
+
+/* Support */
+
+/* Focus */
+$focus: $blue-60;
+
+/* Type */
+$label-01: 0.75rem;
+$body-compact-01: 0.875rem;
+$helper-text-01: 0.75rem;
+
+/* Spacing */
+
+$spacing-01: 1rem;
+$spacing-02: 0.25rem;
+$spacing-03: 0.5rem;
+$spacing-04: 0.75rem;
+$spacing-05: 1rem;
+
+$spacing-07: 2rem;
+
+.mb-02 {
+  margin-bottom: $spacing-02 !important;
+}
+
+.mb-07 {
+  margin-bottom: $spacing-07 !important;
+}

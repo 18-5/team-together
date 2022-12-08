@@ -35,10 +35,10 @@ function Profile() {
   return (
     <div className="py-4">
       <ProfileAbout data={data[0]} />
-      <div className="d-flex justify-content-end gap-2 buttons-pulldown-to-tab">
-        <Button href="/messages/new" variant="primary">쪽지 작성하기</Button>
+      <div className="d-flex justify-content-end buttons-pulldown-to-tab">
+        <Button href="/messages/new" variant="link">쪽지 작성하기</Button>
         {userId == cookie.user ?
-          <Button href={userId + "/edit"} variant="outline-primary">프로필 편집</Button> : null}
+          <Button href={userId + "/edit"} variant="link">프로필 편집</Button> : null}
       </div>
       <Tabs defaultActiveKey="home">
         <Tab eventKey="home" title="개요">

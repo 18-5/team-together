@@ -1,0 +1,82 @@
+@import "token.scss";
+
+.btn {
+  border-radius: 4px;
+  font-size: 14px;
+  height: 40px;
+  padding: 8px 16px;
+  border-color: transparent;
+}
+
+/* Primary button */
+.btn-primary {
+  color: $text-on-color;
+  background-color: $button-primary;
+}
+.btn-primary:hover {
+  text-decoration: none;
+  background-color: $button-primary-hover;
+}
+.btn-primary:active {
+  background-color: $button-primary-active;
+}
+.btn-primary:hover:active {
+  background-color: $button-primary-active;
+}
+
+/* Secondary button */
+.btn-secondary {
+  color: $text-on-color;
+  background-color: $button-secondary;
+}
+.btn-secondary:hover {
+  text-decoration: none;
+  color: $text-on-color;
+  background-color: $button-secondary-hover;
+}
+.btn-secondary:active {
+  color: $text-on-color;
+  background-color: $button-secondary-active;
+}
+.btn-secondary:hover:active {
+  color: $text-on-color;
+  background-color: $button-secondary-active;
+}
+
+/* Tertiary button */
+.btn-outline-primary {
+  color: $button-tertiary;
+  background-color: transparent;
+  border-color: $button-tertiary;
+}
+.btn-outline-primary:hover {
+  text-decoration: none;
+  color: $text-inverse;
+  background-color: $button-tertiary-hover;
+  border-color: transparent;
+}
+.btn-outline-primary:active {
+  color: $text-inverse;
+  background-color: $button-tertiary-active;
+  border-color: transparent;
+}
+.btn-outline-primary:hover:active {
+  color: $text-inverse;
+  background-color: $button-tertiary-active;
+  border-color: transparent;
+}
+
+/* Ghost button */
+.btn-link {
+  text-decoration: none;
+  color: $link-primary;
+}
+.btn-link:hover {
+  text-decoration: none;
+  color: $link-primary-hover;
+  background-color: $background-hover;
+}
+.btn-link:active,
+.btn-link:hover:active {
+  background-color: $background-active;
+}

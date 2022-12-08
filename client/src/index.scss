@@ -1,6 +1,14 @@
 // Import all of Bootstrap's CSS
 @import "node_modules/bootstrap/scss/bootstrap";
 @import "react-datepicker/dist/react-datepicker.css";
+@import "./components/elements/button.scss";
+@import "./components/elements/link.scss";
+@import "./components/elements/tabs.scss";
+@import "./components/elements/textinput.scss";
+
+html {
+  font-size: 17px;
+}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
@@ -14,105 +22,6 @@ body {
   @supports (-webkit-touch-callout: none) {
     height: -webkit-fill-availiable;
   }
-}
-
-a {
-  color: black;
-  text-decoration: none;
-}
-
-.nav-tabs {
-  --bs-nav-tabs-link-active-color: #005cc5;
-}
-
-.nav-tabs .nav-link {
-  font-size: 14px;
-  border: none;
-  border-bottom: 2px solid transparent;
-  border-radius: 0;
-  color: #444d56;
-  margin-left: 1px;
-  margin-right: 1px;
-}
-
-.nav-tabs .nav-link:hover {
-  border-bottom: 2px solid #8d8d8d;
-}
-
-.nav-tabs .nav-link.active {
-  color: black;
-  border-bottom: 2px solid #005cc5;
-}
-
-.btn {
-  border-radius: 4px;
-  font-size: 14px;
-  height: 40px;
-  padding: 8px 16px;
-}
-
-.btn-primary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #005cc5;
-  --bs-btn-border-color: #005cc5;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #044289;
-  --bs-btn-hover-border-color: #044289;
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #032f62;
-  --bs-btn-active-border-color: #032f62;
-}
-
-.btn-outline-primary {
-  --bs-btn-color: #005cc5;
-  --bs-btn-bg: transparent;
-  --bs-btn-border-color: #005cc5;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #044289;
-  --bs-btn-hover-border-color: #044289;
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #032f62;
-  --bs-btn-active-border-color: #032f62;
-}
-
-.btn-secondary {
-  --bs-btn-bg: #2f363d;
-  --bs-btn-border-color: #2f363d;
-  --bs-btn-hover-bg: #444d56;
-  --bs-btn-hover-border-color: #444d56;
-}
-
-.form-control {
-  border-radius: 4px;
-}
-
-.form-select {
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  height: 40px;
-  width: auto;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  margin-left: -16px;
-  padding: 0.375rem 2.5rem 0.375rem 1rem;
-}
-
-.form-select:focus {
-  border: none;
-}
-
-.form-check-label {
-  font-size: 14px;
-}
-
-.form-check-input {
-  margin-top: 0.27em;
-}
-
-.form-check-input:checked {
-  background-color: #005cc5;
-  border-color: #005cc5;
 }
 
 #my-projects .nav-tabs {
@@ -178,5 +87,5 @@ a {
 }
 
 .buttons-pulldown-to-tab {
-  margin-bottom: -35px;
+  margin-bottom: -40px;
 }
