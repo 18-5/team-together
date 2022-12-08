@@ -73,7 +73,7 @@ function Login() {
           <Form.Control required type="password" placeholder="암호" maxLength={20} value={state.pw} onChange={handleChange} />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Button className="w-100" type="submit">로그인</Button>
+          <Button className="w-100 center" type="submit">로그인</Button>
         </Form.Group>
       </Form>
       <Link to={"/sign-up"}>

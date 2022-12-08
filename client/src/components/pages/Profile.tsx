@@ -6,9 +6,10 @@ import Stack from 'react-bootstrap/Stack';
 
 import ProfileAbout from "../elements/ProfileAbout";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import ProjectList from "../elements/ProjectList";
+import { PencilIcon } from "@primer/octicons-react";
 
 function Profile() {
   const { userId } = useParams();
@@ -33,12 +34,19 @@ function Profile() {
     return null;
 
   return (
-    <div className="py-4">
-      <ProfileAbout data={data[0]} />
+    <div>
+      <div className="tile">
+        <ProfileAbout data={data[0]} />
+      </div>
       <div className="d-flex justify-content-end buttons-pulldown-to-tab">
-        <Button href="/messages/new" variant="link">쪽지 작성하기</Button>
+        <Link to="/messages/new">
+          <Button variant="link" className="btn-medium">쪽지 작성하기</Button>
+        </Link>
         {userId == cookie.user ?
-          <Button href={userId + "/edit"} variant="link">프로필 편집</Button> : null}
+          <Link to={"edit"}>
+            <Button variant="link" className="icon-only btn-medium"><PencilIcon /></Button>
+          </Link>
+          : null}
       </div>
       <Tabs defaultActiveKey="home">
         <Tab eventKey="home" title="개요">

@@ -5,6 +5,10 @@
 @import "./components/elements/link.scss";
 @import "./components/elements/tabs.scss";
 @import "./components/elements/textinput.scss";
+@import "./components/elements/datepicker.scss";
+@import "./components/elements/tile.scss";
+@import "./components/elements/select.scss";
+@import "./components/elements/tag.scss";
 
 html {
   font-size: 17px;
@@ -31,59 +35,6 @@ body {
 .tab-content {
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-
-.datepicker-control {
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-}
-
-.react-datepicker {
-  font-family: inherit;
-  font-size: 0.8rem;
-  background-color: #fff;
-  color: #000;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  transition: all 0.15s ease-in-out;
-}
-
-.react-datepicker__header {
-  background-color: #f6f8fa;
-  border-color: #ced4da;
-}
-
-.react-datepicker__navigation-icon::before {
-  top: 12px;
-}
-
-.react-datepicker__day:hover {
-  background-color: #e1e4e8;
-}
-
-.react-datepicker__day--selected {
-  background-color: #005cc5;
-}
-
-.react-datepicker__day--selected:hover {
-  background-color: #044289;
-}
-
-.react-datepicker__day--keyboard-selected {
-  background-color: #2188ff;
-}
-
-.react-datepicker-ignore-onclickoutside {
-  color: #212529;
-  border: 1px solid #ced4da;
-  border-radius: 0.375rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .buttons-pulldown-to-tab {

@@ -9,19 +9,16 @@ function DefaultLayout() {
   return (
     <Container fluid className="h-100">
       <Row className="h-100">
-        <Col xs={3} className="h-100 overflow-auto border-end panel" as="header">
+        <Col className="h-100 overflow-auto border-end panel" as="header">
           <Sidebar />
         </Col>
-        <Col xs={9} className="h-100 overflow-auto" as="main">
-          <Row>
-            <Col xs={{ span: 10, offset: 1 }}>
-              <Outlet />
-            </Col>
-          </Row>
+        <Col className="h-100 overflow-auto" as="main">
+          <Outlet />
         </Col>
-      </Row>
-    </Container>
+      </Row >
+    </Container >
   );
 }
 
 export default DefaultLayout
+

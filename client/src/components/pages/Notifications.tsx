@@ -43,31 +43,33 @@ function Notifications() {
     )
 
   return (
-    <div className="py-4">
-      <h1 className="h3 mb-3">알림함</h1>
-      {data.map((message: any, index: number) => (
-        <div className="py-4 border-bottom" key={index}>
-          <Row className="mb-1">
-            <Col xs={2}>
-              보낸 사람
-            </Col>
-            <Col>
-              <Link to={`/profile/${message.senderId}`}>
-                {message.senderId}
-              </Link>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={2}>
-              내용
-            </Col>
-            <Col>
-              <div className="mb-1 text-body">{message.content}</div>
-            </Col>
-          </Row>
-        </div>
-      ))
-      }
+    <div>
+      <div className="tile">
+        <h1 className="fluid-heading-04 mb-3">알림함</h1>
+        {data.map((message: any, index: number) => (
+          <div className="py-4 border-bottom" key={index}>
+            <Row className="mb-1">
+              <Col xs={2}>
+                보낸 사람
+              </Col>
+              <Col>
+                <Link to={`/profile/${message.senderId}`}>
+                  {message.senderId}
+                </Link>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={2}>
+                내용
+              </Col>
+              <Col>
+                <div className="mb-1 text-body">{message.content}</div>
+              </Col>
+            </Row>
+          </div>
+        ))
+        }
+      </div>
     </div>
   )
 }

@@ -4,8 +4,6 @@ import { Row, Col, Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
 
-
-
 function Messages() {
   const { userId } = useParams();
   const [cookie] = useCookies(["user"]);
@@ -36,9 +34,9 @@ function Messages() {
 
   if (!data)
     return (
-      <div className="py-4">
+      <div className="tile">
         <div className="d-flex justify-content-between mb-3">
-          <h1 className="h3">받은 메시지함</h1>
+          <h1 className="fluid-heading-04">받은 메시지함</h1>
           <Link to="/messages/new">
             <Button variant="primary">쪽지 작성하기</Button>
           </Link>
@@ -48,15 +46,15 @@ function Messages() {
     )
 
   return (
-    <div className="py-4">
+    <div className="tile">
       <div className="d-flex justify-content-between mb-3">
-        <h1 className="h3">받은 메시지함</h1>
+        <h1 className="fluid-heading-04">받은 메시지함</h1>
         <Link to="/messages/new">
-          <Button variant="primary">쪽지 작성하기</Button>
+          <Button variant="primary" className="center">쪽지 작성하기</Button>
         </Link>
       </div>
       {data.map((message: any, index: number) => (
-        <div className="py-4 border-bottom" key={index}>
+        <div className="tile-02" key={index}>
           <Row className="mb-1">
             <Col xs={2}>
               보낸 사람

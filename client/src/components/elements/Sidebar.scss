@@ -3,17 +3,22 @@
 /* Left Panel */
 
 .panel {
+  flex: 0 0 16rem;
   background-color: $background--gray;
 }
 
 /* Link */
 .nav-pills .nav-link {
   text-decoration: none;
-
-  padding: 10px 16px;
-  min-height: 44px;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-  border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  padding: 0;
+  border: 0;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  line-height: 48px;
+  min-height: 48px;
+  transition: all 0.07s cubic-bezier(0.2, 0, 0.38, 0.9);
+  font-weight: 600;
+  font-size: $heading-compact-01;
   color: $text-secondary;
 }
 

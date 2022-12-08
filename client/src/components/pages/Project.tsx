@@ -1,3 +1,4 @@
+import { PasteIcon, PencilIcon } from "@primer/octicons-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Badge, Button, Col, Row, Tab, Tabs } from "react-bootstrap";
@@ -27,6 +28,8 @@ function Project() {
     async function LeaderLoader() {
       await axios.get(`/api/projects/${projectId}/members/leader`)
         .then(function (response) {
+          console.log("leader");
+          console.log(response.data[0]);
           setLeader(response.data[0]);
         })
         .catch(function (error) {
@@ -62,31 +65,37 @@ function Project() {
     intake: 4,
     applicant_length: 9,
     tags: ["태그1"],
-    readme: ""
+    readme: "",
+    post: data[0].post
   }
 
   if (project.status == 0)
     project.status = "모집 중"
 
   return (
-    <div className="py-4">
-      <h1 className="h3 mb-1 text-dark">{project.projectName}</h1>
-      <div className="mb-2 text-body">{project.description}</div>
-      <Badge className="mb-4" bg="secondary">{project.status}</Badge>
-      <div className="small text-muted mb-3">
-        <div>지원 마감 {project.dday}일 전</div>
-        <div>총 {project.intake}명 모집</div>
-        <div>현재 {project.applicant_length}명 지원 중</div>
+    <>
+      <div className="tile">
+        <div className="label-02 text-secondary mb-02">{project.description}</div>
+        <h1 className="fluid-heading-04 text-primary">{project.projectName}</h1>
+        <Badge className="mb-05" bg="success">{project.status}</Badge>
+        {project.status == "모집 중" &&
+          <div className="body-01 text-primary mb-05">{project.post}</div>
+        }
+        <div className="small text-muted mb-3">
+          <div>지원 마감 {project.dday}일 전</div>F
+          <div>총 {project.intake}명 모집</div>
+          <div>현재 {project.applicant_length}명 지원 중</div>
+        </div>
+        <div className="small text-muted d-flex gap-2 mb-5">
+          {project.tags ? project.tags.map((tag: any, index: number) => (
+            <span key={index}>{tag}</span>
+          )) : null}
+        </div>
       </div>
-      <div className="small text-muted d-flex gap-2 mb-5">
-        {project.tags ? project.tags.map((tag: any, index: number) => (
-          <span key={index}>{tag}</span>
-        )) : null}
-      </div>
-      <div className="d-flex justify-content-end gap-2 buttons-pulldown-to-tab">
-        <Button variant="primary">지원하기</Button>
+      <div className="d-flex justify-content-end buttons-pulldown-to-tab">
+        <Button variant="link" className="btn-medium">지원하기<PasteIcon className="ml-03" /></Button>
         <Link to={"edit"}>
-          <Button variant="outline-primary">편집하기</Button>
+          <Button variant="link" className="icon-only btn-medium"><PencilIcon /></Button>
         </Link>
       </div>
       <Tabs id="project">
@@ -102,7 +111,7 @@ function Project() {
           </Row>
         </Tab>
       </Tabs>
-    </div>
+    </>
   )
 }
 

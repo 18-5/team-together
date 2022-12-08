@@ -4,20 +4,23 @@ import { Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from 'react-datepicker';
 
-function ProjectEdit() {
-  const navigate = useNavigate();
-  const [validated, setValidated] = useState(false);
-  const [state, setState] = useState({
-    id: "",
-    name: "",
-    description: "",
-    status: "",
-    readme: "",
-    post: "",
-    intake: "",
-    tag: ""
-  });
-  const [dueDate, setDueDate] = useState(new Date());
+function MessageEdit() {
+  const { userId } = useParams();
+  const [cookie] = useCookies(["user"]);
+  const [data, setData] = useState<any>();
+  useEffect(() => {
+    async function MessagesLoader() {
+      await axios.get(`/api/message/${cookie.user}/messages/all`)
+        .then(function (response) {
+          console.log(response.data);
+          setData(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+    MessagesLoader()
+  }, [])
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;

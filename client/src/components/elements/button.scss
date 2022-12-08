@@ -1,11 +1,17 @@
 @import "token.scss";
 
 .btn {
+  padding: 0;
   border-radius: 4px;
   font-size: 14px;
-  height: 40px;
-  padding: 8px 16px;
+  height: 3rem;
+  padding-left: $spacing-05;
+  padding-right: 4rem;
   border-color: transparent;
+}
+
+.btn.btn-medium {
+  height: 2.5rem;
 }
 
 /* Primary button */
@@ -68,6 +74,7 @@
 
 /* Ghost button */
 .btn-link {
+  padding-right: $spacing-05;
   text-decoration: none;
   color: $link-primary;
 }
@@ -79,4 +86,14 @@
 .btn-link:active,
 .btn-link:hover:active {
   background-color: $background-active;
+}
+
+/* Ghost button - Icon only */
+.btn-link.icon-only {
+  padding-right: $spacing-05;
+  color: $icon-primary;
+}
+
+.btn.center {
+  padding-right: $spacing-05;
 }

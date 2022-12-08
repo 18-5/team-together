@@ -1,0 +1,49 @@
+.clickable-tile {
+  min-height: 4rem;
+  min-width: 8rem;
+  padding-top: $spacing-05;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  padding-bottom: $spacing-09;
+}
+.clickable-tile {
+  background-color: $background;
+}
+
+.clickable-tile:hover {
+  background-color: $background-hover;
+  text-decoration: none !important;
+}
+
+.clickable-tile *:hover {
+  text-decoration: none !important;
+}
+
+.tile {
+  min-height: 4rem;
+  min-width: 8rem;
+  padding: $spacing-05;
+}
+
+// structure
+.tile-02 {
+  min-height: 4rem;
+  min-width: 8rem;
+  padding-top: $spacing-05;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  padding-bottom: $spacing-09;
+}
+.tile-02 {
+  background-color: $background;
+  border-top: 1px solid $border-subtle;
+}
+
+.tile-02:hover {
+  background-color: $background-hover;
+  text-decoration: none !important;
+}
+
+.tile-02 *:hover {
+  text-decoration: none !important;
+}

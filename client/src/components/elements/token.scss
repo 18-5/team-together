@@ -5,17 +5,21 @@ $background: $white;
 $background-hover: rgba($gray-50, 0.12);
 $background-active: rgba($gray-50, 0.5);
 $background-selected: rgba($gray-50, 0.2);
-
+$background-brand: $blue-60;
 $background--gray: $gray-10;
 
 /* Layer */
 $layer-01: $gray-10;
+$layer-hover-01: $gray-10-hover;
+$layer-02: $white;
+$layer-hover-02: $gray-10;
 
 /* Layer accent */
 
 /* Field */
 $field-01: $gray-10;
 $field-02: $white;
+$field-hover-01: $gray-10-hover;
 
 /* Border */
 $border-interactive: $blue-60;
@@ -29,6 +33,19 @@ $text-placeholder: $gray-40;
 $text-on-color: $white;
 $text-helper: $gray-60;
 $text-inverse: $white;
+
+.text-primary {
+  color: $text-primary !important;
+}
+.text-secondary {
+  color: $text-secondary;
+}
+.text-placeholder {
+  color: $text-primary;
+}
+.text-helper {
+  color: $text-helper;
+}
 
 /* Link */
 $link-primary: $blue-60;
@@ -54,25 +71,103 @@ $button-tertiary-active: $blue-80;
 /* Focus */
 $focus: $blue-60;
 
+/* Miscellaneous */
+$highlight: $blue-20;
+
 /* Type */
 $label-01: 0.75rem;
 $body-compact-01: 0.875rem;
 $helper-text-01: 0.75rem;
+$heading-compact-01: 0.875rem;
+
+.label-01 {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.32px;
+}
+
+.label-02 {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  letter-spacing: 0.16px;
+}
+
+.body-01 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.16px;
+}
+
+.body-02 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.fluid-heading-03 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.fluid-heading-04 {
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+}
 
 /* Spacing */
 
-$spacing-01: 1rem;
+$spacing-01: 0.125rem;
 $spacing-02: 0.25rem;
 $spacing-03: 0.5rem;
 $spacing-04: 0.75rem;
 $spacing-05: 1rem;
-
+$spacing-06: 1.5rem;
 $spacing-07: 2rem;
+$spacing-08: 2.5rem;
+$spacing-09: 3rem;
+$spacing-11: 5rem;
 
 .mb-02 {
   margin-bottom: $spacing-02 !important;
 }
+.mr-03 {
+  margin-right: $spacing-03 !important;
+}
+.mr-06 {
+  margin-right: $spacing-06 !important;
+}
+
+.mb-05 {
+  margin-bottom: $spacing-05 !important;
+}
 
 .mb-07 {
   margin-bottom: $spacing-07 !important;
+}
+
+.ml-03 {
+  margin-left: $spacing-03 !important;
+}
+
+.ml-07 {
+  margin-left: $spacing-07 !important;
+}
+
+.mb-08 {
+  margin-bottom: $spacing-08 !important;
+}
+.mb-09 {
+  margin-bottom: $spacing-09 !important;
+}
+
+.py-05 {
+  padding-top: $spacing-05 !important;
+  padding-bottom: $spacing-05 !important;
+}
+.pt-05 {
+  padding-top: $spacing-05 !important;
+}
+
+.py-07 {
+  padding-top: $spacing-07 !important;
+  padding-bottom: $spacing-07 !important;
 }
