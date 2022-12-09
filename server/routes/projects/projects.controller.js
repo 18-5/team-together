@@ -14,8 +14,8 @@ connection.connect();
 
 // 프로젝트 생성
 exports.createProject = (req, res) => {
-    let sql = "INSERT INTO project(projectName, description, post, intake, projectCreated, projectState, readme)"
-        + " VALUES (?, ?, ?, ?, NOW(), 0, ?);";
+    let sql = "INSERT INTO project(createrId, projectName, description, post, intake, projectCreated, projectState, readme)"
+        + " VALUES (?, ?, ?, ?, ?, NOW(), 0, ?);";
 
     let leaderid = req.body.leaderid;
     let name = req.body.projectName;
@@ -26,7 +26,7 @@ exports.createProject = (req, res) => {
     let readme = req.body.readme;
     console.log(desc);
 
-    let params = [name, desc, post, intake, readme];
+    let params = [leaderid, name, desc, post, intake, readme];
     connection.query(sql, params, 
         (err, rows, fields) => {
             if(err){
@@ -36,6 +36,33 @@ exports.createProject = (req, res) => {
             else{
                 console.log(rows);
                 res.send(rows);
+
+                sql = "SELECT projectId FROM project WHERE createrId=? AND projectName=? AND description=? AND post=? AND intake=? AND readme=?;"
+                connection.query(sql, params, 
+                    (eerr, rrows, ffields) => {
+                        if(eerr){
+                            res.send("query error occured at getting projectId");
+                            throw err;
+                        }
+                        else{
+                            console.log(rrows[0].projectId);
+                            sql = "INSERT INTO member(projectId, userId, leader) VALUES (?, ?, ?);";
+                            params = [rrows[0].projectId, leaderid, 1];
+    
+                            connection.query(sql, params, 
+                                (eeerr, rrrows, fffields) => {
+                                    if(eeerr){
+                                        res.send("query error occured at member insertion")
+                                    }
+                                    else{
+                                        console.log(rrrows);
+                                        res.send(rrrows);
+                                    }
+                                }
+                                );
+                        }
+                    }
+                    );
             }
         });
 }
@@ -74,7 +101,7 @@ function searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate
                         rows[i].numberOfMember = rrows[j][0].mcnt;
                         rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
                     }
-
+                    
                     console.log(rows);
                     res.send(rows);
                 }
