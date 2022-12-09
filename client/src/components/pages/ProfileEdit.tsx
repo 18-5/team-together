@@ -79,39 +79,37 @@ function ProfileEdit() {
   }
 
   return (
-    <div>
-      <div className="tile">
-        <Link to={"/"} className="mb-4">
-        </Link>
-        <h1 className="fluid-heading-04 mb-4">프로필 편집</h1>
-        <Form className="" noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Group className="mb-07" controlId="name">
-            <Form.Label>이름</Form.Label>
-            <Form.Control required type="text" maxLength={20} value={state.name || ""} disabled />
-          </Form.Group>
-          <Form.Group className="mb-07" controlId="bio">
-            <Form.Label>소개</Form.Label>
-            <Form.Control type="text" maxLength={50} value={state.bio || ""} onChange={handleChange} />
-            <Form.Text>나를 나타내는 소개글입니다.</Form.Text>
-          </Form.Group>
-          <Form.Group className="mb-07" controlId="email">
-            <Form.Label>이메일</Form.Label>
-            <Form.Control type="email" maxLength={200} value={state.email || ""} onChange={handleChange} />
-          </Form.Group>
-          <Form.Group className="mb-07" controlId="homepage">
-            <Form.Label>홈페이지</Form.Label>
-            <Form.Control type="url" maxLength={100} value={state.homepage || ""} onChange={handleChange} />
-          </Form.Group>
-          <Form.Group className="mb-09" controlId="school">
-            <Form.Label>학교</Form.Label>
-            <Form.Control type="email" maxLength={200} value={state.school || ""} onChange={handleChange} />
-          </Form.Group>
-          <Form.Group>
-            <Button className="me-2" variant="secondary">취소</Button>
-            <Button type="submit">완료</Button>
-          </Form.Group>
-        </Form>
-      </div>
+    <div className="tile-03">
+      <Link to={"/"} className="mb-4">
+      </Link>
+      <h1 className="fluid-heading-04 mb-4">프로필 편집</h1>
+      <Form className="" noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form.Group className="mb-07" controlId="name">
+          <Form.Label>이름</Form.Label>
+          <Form.Control required type="text" maxLength={20} value={state.name || ""} disabled />
+        </Form.Group>
+        <Form.Group className="mb-07" controlId="bio">
+          <Form.Label>소개</Form.Label>
+          <Form.Control type="text" maxLength={50} value={state.bio || ""} onChange={handleChange} />
+          <Form.Text>나를 나타내는 소개글입니다.</Form.Text>
+        </Form.Group>
+        <Form.Group className="mb-07" controlId="email">
+          <Form.Label>이메일</Form.Label>
+          <Form.Control type="email" maxLength={200} value={state.email || ""} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group className="mb-07" controlId="homepage">
+          <Form.Label>홈페이지</Form.Label>
+          <Form.Control type="url" maxLength={100} value={state.homepage || ""} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group className="mb-09" controlId="school">
+          <Form.Label>학교</Form.Label>
+          <Form.Control type="email" maxLength={200} value={state.school || ""} onChange={handleChange} />
+        </Form.Group>
+        <Form.Group>
+          <Button className="me-2" variant="secondary">취소</Button>
+          <Button type="submit">완료</Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }

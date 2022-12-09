@@ -33,10 +33,13 @@ body {
 }
 
 .tab-content {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  margin-top: -1px;
 }
 
 .buttons-pulldown-to-tab {
   margin-bottom: -40px;
+}
+
+.layer-01 {
+  background-color: $layer-01;
 }

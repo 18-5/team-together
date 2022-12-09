@@ -1,9 +1,11 @@
 import { PasteIcon, PencilIcon } from "@primer/octicons-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Col, Row, Tab, Tabs } from "react-bootstrap";
+import { Badge, Button, Col, Row, Stack, Tab, Tabs } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
+import Avatar from "../elements/Avatar";
+import avatarPlaceholder from '../../assets/avatar-placeholder.png'
 
 function Project() {
   const [cookie] = useCookies(["user"]);
@@ -18,13 +20,13 @@ function Project() {
   });
   useEffect(() => { loadProject() }, [])
 
-  const [leader, setLeader] = useState();
+  const [leader, setLeader] = useState<any>();
   useEffect(() => { loadLeader() }, [])
 
-  const [member, setMember] = useState();
+  const [members, setMembers] = useState<any>();
   useEffect(() => { loadMembers() }, [])
 
-  const [applicants, setApplicants] = useState();
+  const [applicants, setApplicants] = useState<any>();
   useEffect(() => { loadApplicants() }, [])
 
   const [canApply, setCanApply] = useState(true);
@@ -68,6 +70,8 @@ function Project() {
           readme: data.readMe,
           post: data.post
         })
+
+
       })
 
   }
@@ -85,7 +89,7 @@ function Project() {
     await axios.get(`/api/projects/${projectId}/members`)
       .then(function (response) {
         console.log(response.data);
-        setMember(response.data);
+        setMembers(response.data);
       })
   }
 
@@ -116,24 +120,43 @@ function Project() {
   if (!project)
     return null;
 
-  if (project.status == 0)
-    project.status = "모집 중"
+  function StatusBadge(props: { status: number }) {
+    let statusString = "모집 중"
+    if (project.status == 1) {
+      statusString = "프로젝트 진행 중"
+    }
+    if (project.status == 3) {
+      setCanApply(false);
+      statusString = "프로젝트 마감"
+    }
+
+  }
+
+  let statusString = "모집 중"
+  if (project.status == 1) {
+    statusString = "프로젝트 진행 중"
+  }
+  if (project.status == 3) {
+    setCanApply(false);
+    statusString = "프로젝트 마감"
+  }
 
   return (
     <>
-      <div className="tile">
+      <div className="tile-01">
         <div className="label-02 text-secondary mb-02">{project.description}</div>
         <h1 className="fluid-heading-04 text-primary">{project.projectName}</h1>
-        <Badge className="mb-05" bg="success">{project.status}</Badge>
-        {project.status == "모집 중" &&
+        <Badge className="mb-05" bg="success">{statusString}</Badge>
+        {project.status == 0 &&
           <div className="body-02 text-primary mb-05">{project.post}</div>
         }
         <div className="small text-muted mb-3">
-          <div>지원 마감 {project.dday}일 전</div>
+          {project.dday > 0 &&
+            <div>지원 마감 {project.dday}일 전</div>
+          }
           <div>총 {project.intake}명 모집</div>
           <div>현재 {totalApplicants}명 지원 중</div>
         </div>
-
 
       </div>
       <div className="d-flex justify-content-end buttons-pulldown-to-tab">
@@ -149,19 +172,74 @@ function Project() {
       </div>
       <Tabs id="project">
         <Tab eventKey="overview" title="프로젝트 개요">
-          <div className="tile">
+          <div className="tile-01">
             {project.readme}
           </div>
         </Tab>
         <Tab eventKey="members" title="팀원 및 지원자">
-          <Row className="tile d-flex justify-content-between">
-            <Col>팀장: {leader}</Col>
-            <Col>팀원:</Col>
-            <Col>지원자
-              {applicants
-                && applicants.map((a) => {
-                  <div>{a.userName}</div>
-                })}
+          <Row className="d-flex justify-content-between">
+            <Col>
+              <div className="tile-01">
+                <h2 className="fluid-heading-03 text-primary mb-05">팀장</h2>
+              </div>
+              {leader &&
+                <Link to={`/profile/${leader.userId}`}>
+                  <div className="tile-02">
+                    <Stack direction="horizontal" className="gap-3">
+                      <Avatar size={64} avatarUrl={avatarPlaceholder} name={leader.userName} />
+                      <div>
+                        <h2 className="body-02 text-body mb-02">{leader.userName}</h2>
+                        <div className="body-01 text-body mb-02">{leader.userEmail}</div>
+                        <div className="label-01 text-helper">
+                        {leader.userBio}
+                        </div>
+                      </div>
+                    </Stack>
+                  </div>
+                </Link>
+              }
+              <div className="tile-01">
+                <h2 className="fluid-heading-03 text-primary mb-05">팀원</h2>
+              </div>
+              {members &&
+                members.map((member: any, index: number) => (
+                  <Link to={`/profile/${member.userId}`} key={index}>
+                    <div className="tile-02">
+                      <Stack direction="horizontal" className="gap-3">
+                        <Avatar size={64} avatarUrl={avatarPlaceholder} name={member.userName} />
+                        <div>
+                          <h2 className="body-02 text-body mb-02">{member.userName}</h2>
+                          <div className="body-01 text-body mb-02">{member.userEmail}</div>
+                          <div className="label-01 text-helper">
+                          {member.userBio}
+                          </div>
+                        </div>
+                      </Stack>
+                    </div>
+                  </Link>
+                ))}
+            </Col>
+            <Col>
+              <div className="tile-01">
+                <h2 className="fluid-heading-03 text-primary">지원자</h2>
+              </div>
+              {applicants &&
+                applicants.map((applicant: any, index: number) => (
+                  <Link to={`/profile/${applicant.userId}`} key={index}>
+                    <div className="tile-02">
+                      <Stack direction="horizontal" className="gap-3">
+                        <Avatar size={64} avatarUrl={avatarPlaceholder} name={applicant.userName} />
+                        <div>
+                          <h2 className="body-02 text-body mb-02">{applicant.userName}</h2>
+                          <div className="body-01 text-body mb-02">{applicant.userEmail}</div>
+                          <div className="label-01 text-helper">
+                          {applicant.userBio}
+                          </div>
+                        </div>
+                      </Stack>
+                    </div>
+                  </Link>
+                ))}
             </Col>
           </Row>
         </Tab>

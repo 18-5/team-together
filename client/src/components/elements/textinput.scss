@@ -11,7 +11,7 @@
 
 .form-control {
   border-radius: 4px;
-  height: 48px;
+  height: 3rem;
   padding-left: $spacing-05;
   padding-right: $spacing-05;
   border: 1px solid $border-subtle;
@@ -31,6 +31,14 @@
 .form-control::placeholder {
   color: $text-placeholder;
 }
+
+textarea.form-control {
+  padding-top: 0.6875rem;
+  padding-bottom: 0.6875rem;
+  min-height: 2.5rem;
+  height: auto;
+}
+
 
 .form-label {
   font-size: $label-01;

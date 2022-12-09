@@ -4,7 +4,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
 
-import ProfileAbout from "../elements/ProfileAbout";
+import ProfileAbout, { Experiences, Skills } from "../elements/ProfileAbout";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -34,8 +34,8 @@ function Profile() {
     return null;
 
   return (
-    <div>
-      <div className="tile">
+    <>
+      <div className="tile-01">
         <ProfileAbout data={data[0]} />
       </div>
       <div className="d-flex justify-content-end buttons-pulldown-to-tab">
@@ -52,12 +52,18 @@ function Profile() {
       </div>
       <Tabs defaultActiveKey="home">
         <Tab eventKey="home" title="개요">
+          <div className="tile-03">
+            <Skills />
+          </div>
+          <div className="tile-03">
+            <Experiences />
+          </div>
         </Tab>
         <Tab eventKey="profile" title="완료한 프로젝트">
           <ProjectList APIURL={`/api/projects?userid=${cookie.user}&filter=completed`} />
         </Tab>
       </Tabs>
-    </div >
+    </ >
   )
 }
 

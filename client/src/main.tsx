@@ -18,8 +18,9 @@ import Profile from './components/pages/Profile';
 import ProfileEdit from './components/pages/ProfileEdit';
 import Project from './components/pages/Project';
 import ProjectEdit from './components/pages/ProjectEdit';
-import ProjectNew from './components/pages/ProjectNew';
 import SignUp from "./components/pages/SignUp";
+import MessageDetail from './components/pages/MessageDetail';
+import MessageEdit from './components/pages/MessageEdit';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,18 @@ const router = createBrowserRouter([
           {
             path: "messages",
             element: <Messages />
+          },
+          {
+            path: "messages/from/:senderId",
+            element: <MessageDetail />
+          },
+          {
+            path: "messages/new",
+            element: <MessageEdit />
+          },
+          {
+            path: "messages/new/:userId",
+            element: <MessageEdit />
           },
           {
             path: "notifications",

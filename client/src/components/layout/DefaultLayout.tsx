@@ -13,7 +13,11 @@ function DefaultLayout() {
           <Sidebar />
         </Col>
         <Col className="h-100 overflow-auto" as="main">
-          <Outlet />
+          <Row>
+            <Col xl={{ span: 10, offset: 1 }} xxl={{ span: 8, offset: 2 }}>
+              <Outlet />
+            </Col>
+          </Row>
         </Col>
       </Row >
     </Container >
