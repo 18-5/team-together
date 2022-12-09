@@ -34,10 +34,13 @@ router.get('/:userId/projects', controller.userAllProjects);
 // *진행 중*
 router.get('/:userId/reviews', controller.userReviews);
 
-// 회원에게 리뷰 달기
+// 상호평가
+// 필요한 데이터 form으로 보내기
+// 순서대로 개발실력(qualitative), 태도(attitude), 책임감(responsibility), 협동성(compatibility)
 // *진행 중*
-router.post('/:userId/projects', controller.writeReview);
+router.post('/:userId/evaluateUser/:otherId', controller.evaluateUser);
 
+/*
 //-----------------------------------Message-------------------------------------
 // 회원의 모든 알림
 // ?unread=true => 회원의 읽지 않은 알림
@@ -66,5 +69,6 @@ router.delete('/:userId/messages/delete/:messageId', controller.deleteMsg);
 // messageId는 random 4자리수 * 4자리수
 // *complete*
 router.post('/:senderId/messages', controller.sendMsg);
+*/
 
 module.exports = router;
