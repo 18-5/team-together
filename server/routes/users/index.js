@@ -36,8 +36,41 @@ router.get('/:userId/projects', controller.userAllProjects);
 // *진행 중*
 router.get('/:userId/reviews', controller.userReviews);
 
-// 회원에게 리뷰 달기
+// 상호평가
+// 필요한 데이터 form으로 보내기
+// 순서대로 개발실력(qualitative), 태도(attitude), 책임감(responsibility), 협동성(compatibility)
 // *진행 중*
-router.post('/:userId/projects', controller.writeReview);
+router.post('/:userId/evaluateUser/:otherId', controller.evaluateUser);
+
+/*
+//-----------------------------------Message-------------------------------------
+// 회원의 모든 알림
+// ?unread=true => 회원의 읽지 않은 알림
+// *copmlete*
+router.get('/:userId/notifications', controller.userAllAlram);
+
+// 회원의 받은 쪽지
+// *complete*
+router.get('/:userId/received-messages', controller.userReceivedMsg);
+
+// 회원의 모든 쪽지
+// 카톡 채팅방 리스트
+// *complete*
+router.get('/:userId/messages/all', controller.userAllMsg);
+
+// 회원의 특정 쪽지
+// *complete*
+router.get('/:userId/messages/:otherId', controller.userMsgByMsgId);
+
+// 회원의 특정 쪽지 삭제
+// *진행 중*
+router.delete('/:userId/messages/delete/:messageId', controller.deleteMsg);
+
+// 회원에게 쪽지 보내기
+// senderId와 receiverId 모두 form으로 post, 화면에서는 두 아이디 모두 안보이도록 숨기기
+// messageId는 random 4자리수 * 4자리수
+// *complete*
+router.post('/:senderId/messages', controller.sendMsg);
+*/
 
 module.exports = router;
