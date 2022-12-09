@@ -4,8 +4,10 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProjectList from '../elements/ProjectList';
 import { PencilIcon, PlusIcon, TelescopeIcon } from '@primer/octicons-react';
+import { useCookies } from 'react-cookie';
 
 function Home() {
+  const [cookie] = useCookies(["user"]);
   const [view, setView] = useState("newest");
   const handleView = (e: { target: { value: string; }; }) => {
     setView(e.target.value);
@@ -20,12 +22,14 @@ function Home() {
             <option value="timesensitive">마감 임박순</option>
           </Form.Select>
         </Form>
-        <div className="d-flex">
-          <Button variant="link" onClick={() => { return }}>행운의 프로젝트 발견하기<TelescopeIcon className="ml-03" /></Button>
-          <Link to="/projects/new">
-            <Button variant="link" className="icon-only"><PlusIcon /></Button>
-          </Link>
-        </div>
+        {cookie.user &&
+          <div className="d-flex">
+            <Button variant="link" onClick={() => { return }}>행운의 프로젝트 발견하기<TelescopeIcon className="ml-03" /></Button>
+            <Link to="/projects/new">
+              <Button variant="link" className="icon-only"><PlusIcon /></Button>
+            </Link>
+          </div>
+        }
       </div>
       {view === "newest" && <ProjectList APIURL={"/api/projects?view=newest"} />}
       {view === "timesensitive" && <ProjectList APIURL={"/api/projects?view=timesensitive"} />}

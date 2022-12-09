@@ -14,17 +14,19 @@ connection.connect();
 
 // 프로젝트 생성
 exports.createProject = (req, res) => {
-    let sql = "INSERT INTO project(projectName, description, post, intake, projectCreated, projectState)"
-        + " VALUES (?, ?, ?, ?, NOW(), 0);";
+    let sql = "INSERT INTO project(projectName, description, post, intake, projectCreated, projectState, readme)"
+        + " VALUES (?, ?, ?, ?, NOW(), 0, ?);";
 
+    let leaderid = req.body.leaderid;
     let name = req.body.projectName;
     console.log(name);
     let desc = req.body.description;
     let post = req.body.post;
     let intake = req.body.intake;
+    let readme = req.body.readme;
     console.log(desc);
 
-    let params = [name, desc, post, intake];
+    let params = [name, desc, post, intake, readme];
     connection.query(sql, params, 
         (err, rows, fields) => {
             if(err){
@@ -210,30 +212,31 @@ exports.projectByprojectId = (req, res) => {
 
 // :project-id 프로젝트 수정
 exports.updateProject = (req, res) => {
+    let sql = "UPDATE project SET projectName=?, description=?, post=?, intake=?, projectState=?, readme=?, duedate=? WHERE projectId = ?;";
+
     let projectId = req.params['projectId'];
-    console.log(projectId);
     let name = req.body.projectName;
     console.log(name);
     let desc = req.body.description;
+    let post = req.body.post;
+    let intake = req.body.intake;
     console.log(desc);
-    let state = req.body.projectState;
-    console.log(state);
-    if(state == "Open") state = 0;
-    else if(state == "Closed") state = 1;
-    else if(state == "Archived") state = 2;
+    let state = req.body.status;
+    let duedate = req.body.duedate;
+    let readme = req.body.readme;
 
-    let sql = "UPDATE project ";
-    sql = sql + "SET projectName = '" + name + "', ";
-    sql = sql + "description = '" + desc + "', ";
-    sql = sql + "projectState = '" + state + "' ";
-    sql = sql + "WHERE projectId = " + projectId + ";";
-    connection.query(
-        sql, 
+    let params = [name, desc, post, intake, state, readme, duedate, projectId];
+    connection.query(sql, params, 
         (err, rows, fields) => {
-            console.log("success update");
-            res.send("success update");
-        }
-    );
+            if(err){
+                res.send("query error occured");
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        });
 }
 
 // 프로젝트 멤버

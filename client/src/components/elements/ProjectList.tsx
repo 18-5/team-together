@@ -44,9 +44,7 @@ function ProjectList(props: { APIURL: string }) {
               <div className="label-01 text-helper">{project.intake}명 모집</div>
               <div className="label-01 text-helper">명 지원 중</div>
             </div>
-            <div className="d-flex gap-2 small text-muted">
-              <Tags tags={project.tags} />
-            </div>
+
           </div>
         </Link>
       ))
@@ -56,3 +54,9 @@ function ProjectList(props: { APIURL: string }) {
 }
 
 export default ProjectList
+
+/*
+            <div className="d-flex gap-2 small text-muted">
+              <Tags tags={project.tags} />
+            </div>
+*/

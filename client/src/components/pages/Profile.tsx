@@ -39,14 +39,16 @@ function Profile() {
         <ProfileAbout data={data[0]} />
       </div>
       <div className="d-flex justify-content-end buttons-pulldown-to-tab">
-        <Link to="/messages/new">
-          <Button variant="link" className="btn-medium">쪽지 작성하기</Button>
-        </Link>
-        {userId == cookie.user ?
+        {userId != cookie.user &&
+          <Link to="/messages/new">
+            <Button variant="link" className="btn-medium">쪽지 작성하기</Button>
+          </Link>
+        }
+        {userId == cookie.user &&
           <Link to={"edit"}>
             <Button variant="link" className="icon-only btn-medium"><PencilIcon /></Button>
           </Link>
-          : null}
+        }
       </div>
       <Tabs defaultActiveKey="home">
         <Tab eventKey="home" title="개요">

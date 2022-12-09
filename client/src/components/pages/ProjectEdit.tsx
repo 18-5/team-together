@@ -1,49 +1,64 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Col, Form, Row } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Button, Form } from "react-bootstrap";
+import { useCookies } from "react-cookie";
 import DatePicker from 'react-datepicker';
+import { useNavigate, useParams } from "react-router-dom";
 
-function ProjectEdit() {
+function ProjectEdit(props: { isNewProject: boolean }) {
+  const [cookie] = useCookies(["user"]);
   const { projectId } = useParams();
-  const [validated, setValidated] = useState(false);
-  const [state, setState] = useState({
+  const navigate = useNavigate();
+
+  // Fetch data
+  const [value, setValue] = useState({
     id: "",
     name: "",
     description: "",
     status: "",
     readme: "",
     post: "",
-    intake: "",
-    tag: ""
+    intake: undefined,
+    tags: "",
   });
-  const [dueDate, setDueDate] = useState(new Date());
+  const [dueDate, setDueDate] = useState(new Date())
 
-  useEffect(() => {
-    async function ProjectLoader() {
-      await axios.get(`/api/projects/${projectId}`)
-        .then(function (response) {
-          console.log(response.data[0]);
-          setState({
-            id: response.data[0].projectId,
-            name: response.data[0].projectName,
-            description: response.data[0].description,
-            status: response.data[0].status,
-            readme: response.data[0].readme,
-            post: response.data[0].post,
-            intake: response.data[0].intake,
-            tag: response.data[0].tag
-          })
+  async function ProjectLoader() {
+    await axios.get(`/api/projects/${projectId}`)
+      .then((response) => {
+        const data = response.data[0];
+        console.log(data)
+        setValue({
+          id: data.projectId,
+          name: data.projectName,
+          description: data.description,
+          status: data.ProjectState,
+          readme: data.readMe,
+          post: data.post,
+          intake: data.intake,
+          tags: data.tags
         })
-        .catch(function (error) {
-          console.log(error);
-        })
-    }
-    ProjectLoader()
-  }, [])
+        console.log(data.duedate);
+        setDueDate(new Date(Date.parse(data.duedate)))
+      })
+  }
 
+  useEffect(() => { if (projectId) ProjectLoader() }, [])
 
-  const navigate = useNavigate();
+  // Validation
+  const [validated, setValidated] = useState(false);
+
+  const handleChange = (e: {
+    target: {
+      id: string; value: string;
+    };
+  }) => {
+    const { id, value } = e.target
+    setValue(prevState => ({
+      ...prevState,
+      [id]: value
+    }))
+  }
 
   const handleSubmit = (e: { currentTarget: any; preventDefault: () => void; stopPropagation: () => void; }) => {
     const form = e.currentTarget;
@@ -52,25 +67,47 @@ function ProjectEdit() {
       e.stopPropagation();
 
     setValidated(true);
-    updateProject();
+    if (props.isNewProject)
+      createProject();
+    else
+      updateProject();
     navigate(-1);
   };
 
-  const handleChange = (e: { target: { id: string; value: string; }; }) => {
-    const { id, value } = e.target
-    setState(prevState => ({
-      ...prevState,
-      [id]: value
-    }))
+  async function createProject() {
+    const d = dueDate;
+    d.setTime(d.getTime() + 86400000);
+
+    await axios.post(`/api/projects`, {
+      leaderid: cookie.user,
+      projectName: value.name,
+      description: value.description,
+      post: value.post,
+      intake: value.intake,
+      status: value.status,
+      duedate: d.toISOString().slice(0, 10),
+      readme: value.readme,
+    })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
   }
 
   async function updateProject() {
+    const d = dueDate;
+    d.setTime(d.getTime() + 86400000);
+
     await axios.put(`/api/projects/${projectId}`, {
-      projectName: state.name,
-      description: state.description,
-      readme: state.readme,
-      post: state.post,
-      intake: state.intake
+      projectName: value.name,
+      description: value.description,
+      post: value.post,
+      intake: value.intake,
+      status: value.status,
+      duedate: d.toISOString().slice(0, 10),
+      readme: value.readme,
     })
       .then(function (response) {
         console.log(response.data);
@@ -83,34 +120,34 @@ function ProjectEdit() {
   return (
     <div>
       <div className="tile">
-        <h1 className="fluid-heading-04 mb-07">프로젝트 편집</h1>
+        <h1 className="fluid-heading-04 mb-07">{props.isNewProject ? "새 프로젝트" : "프로젝트 편집"}</h1>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <h2 className="fluid-heading-03 mb-07">필수 정보</h2>
           <Form.Group className="mb-07" controlId="name">
             <Form.Label>프로젝트 이름</Form.Label>
-            <Form.Control required type="text" maxLength={20} value={state.name} onChange={handleChange} />
+            <Form.Control required type="text" maxLength={20} value={value.name || ""} onChange={handleChange} />
           </Form.Group>
           <Form.Group className="mb-07" controlId="description">
             <Form.Label>프로젝트 주제</Form.Label>
-            <Form.Control type="text" maxLength={50} value={state.description} onChange={handleChange} />
+            <Form.Control type="text" maxLength={50} value={value.description || ""} onChange={handleChange} />
             <Form.Text>
               프로젝트 주제를 잘 나타내는 한줄 소개글입니다.
             </Form.Text>
           </Form.Group>
           <Form.Group className="mb-07" controlId="post">
             <Form.Label>게시글</Form.Label>
-            <Form.Control type="text" maxLength={50} value={state.post} onChange={handleChange} />
+            <Form.Control type="text" maxLength={50} value={value.post || ""} onChange={handleChange} />
             <Form.Text>
               프로젝트가 모집 중일때 다른 사람들에게 보여지는 게시글입니다.
             </Form.Text>
           </Form.Group>
           <Form.Group className="mb-07" controlId="intake">
             <Form.Label>모집 정원</Form.Label>
-            <Form.Control className="w-25" type="text" maxLength={4} value={state.intake} placeholder={"2"} onChange={handleChange} />
+            <Form.Control className="w-25" type="text" maxLength={4} value={value.intake} placeholder={"2"} onChange={handleChange} />
           </Form.Group>
-          <Form.Group className="mb-07" controlId="duedate">
+          <Form.Group className="mb-07" controlId="dueDate">
             <Form.Label>모집 기한</Form.Label>
-            <DatePicker className="datepicker-control" selected={dueDate} onChange={(date: Date) => setDueDate(date)} />
+            <DatePicker className="datepicker-control" selected={dueDate} onChange={(dueDate: Date) => setDueDate(dueDate)} dateFormat="yyyy/MM/dd" />
             <Form.Text>
               월/일/년
             </Form.Text>
@@ -118,14 +155,14 @@ function ProjectEdit() {
           <h2 className="fluid-heading-03 mb-09">선택 정보</h2>
           <Form.Group className="mb-07" controlId="readme">
             <Form.Label>프로젝트 상세</Form.Label>
-            <Form.Control type="text" maxLength={200} value={state.readme} onChange={handleChange} />
+            <Form.Control type="text" maxLength={200} value={value.readme || ""} onChange={handleChange} />
             <Form.Text className="text-muted">
               프로젝트 상세 페이지에서 확인할 수 있는 더 자세한 소개글입니다.
             </Form.Text>
           </Form.Group>
           <Form.Group className="mb-07" controlId="tag">
             <Form.Label>태그</Form.Label>
-            <Form.Control className="w-25" type="text" maxLength={100} value={state.tag} placeholder={"태그1, 태그2"} onChange={handleChange} />
+            <Form.Control className="w-25" type="text" maxLength={100} value={value.tags || ""} placeholder={"태그1, 태그2"} onChange={handleChange} />
             <Form.Text className="text-muted">
               프로젝트 태그를 쉼표로 구분해서 입력해주세요.
             </Form.Text>

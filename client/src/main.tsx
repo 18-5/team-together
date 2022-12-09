@@ -64,7 +64,7 @@ const router = createBrowserRouter([
           },
           {
             path: "projects/new",
-            element: <ProjectNew />,
+            element: <ProjectEdit isNewProject={true} />,
           },
           {
             path: "projects/:projectId",
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
           },
           {
             path: "projects/:projectId/edit",
-            element: <ProjectEdit />,
+            element: <ProjectEdit isNewProject={false} />,
           }
         ]
       }

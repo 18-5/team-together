@@ -76,9 +76,7 @@ function Login() {
           <Button className="w-100 center" type="submit">로그인</Button>
         </Form.Group>
       </Form>
-      <Link to={"/sign-up"}>
-        <div>계정 만들기</div>
-      </Link>
+      <Link to={"/sign-up"}>계정 만들기</Link>
     </>
   )
 }

@@ -97,3 +97,16 @@
 .btn.center {
   padding-right: $spacing-05;
 }
+
+.btn-link.danger {
+  color: $button-danger-secondary;
+}
+.btn-link.danger:hover {
+  text-decoration: none;
+  color: $text-on-color;
+  background-color: $button-danger-hover;
+}
+.btn-link.danger:active,
+.btn-link.danger:hover:active {
+  background-color: $button-danger-hover;
+}

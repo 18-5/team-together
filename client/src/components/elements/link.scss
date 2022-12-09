@@ -8,7 +8,6 @@ a {
 }
 a:hover {
   color: $link-primary-hover;
-  text-decoration: underline;
   text-underline-position: under;
 }
 a:active {
@@ -16,4 +15,10 @@ a:active {
 }
 a:hover:active {
   color: $text-primary;
+}
+
+a:not(:has(*)):hover {
+  color: $link-primary-hover;
+  text-decoration: underline;
+  text-underline-position: under;
 }
