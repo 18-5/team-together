@@ -22,6 +22,7 @@ function Home() {
       .then(function (res) {  
         setRecommendation(res.data[0]);
       })
+    
   }
 
   const handleView = (e: { target: { value: string; }; }) => {
