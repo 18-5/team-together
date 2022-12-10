@@ -223,6 +223,45 @@ exports.allProjects = (req, res) => {
     }
 }
 
+exports.recommendProject = (req, res) => {
+    let userId = req.params['userId'];
+    console.log(userId);
+    
+    let sql_random_id = "SELECT * FROM project ORDER BY RAND() LIMIT 1;";
+    let sql_res = "";
+    let sql_m_cnt = "SELECT COUNT(*) AS mcnt FROM member m "
+        + "WHERE m.projectId = ";
+    let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
+        + "WHERE a.projectId = ";
+
+    connection.query(
+        sql_random_id, 
+        (err, rows, fields) => {
+            console.log(rows);
+            for(var v in rows){
+                console.log(rows[v].projectId);
+                sql_res += sql_m_cnt + rows[v].projectId + ";\n";
+                sql_res += sql_a_cnt + rows[v].projectId + ";\n";
+            }
+            console.log(sql_res);
+            connection.query(
+                sql_res, 
+                (eerr, rrows, ffields) => {
+                    let size = Object.keys(rows).length
+                    console.log(size);
+                    for(var i = 0, j = 0; i < size; i++, j+=2){
+                        rows[i].numberOfMember = rrows[j][0].mcnt;
+                        rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
+                    }
+                    
+                    console.log(rows);
+                    res.send(rows);
+                }
+            );
+        }
+    );
+}
+
 // :project-id 프로젝트
 exports.projectByprojectId = (req, res) => {
     let projectId = req.params['projectId'];
@@ -414,5 +453,3 @@ exports.deleteMember = (req, res) => {
         }
     );
 }
-
-exports.recommendProject = (req, res) => {}

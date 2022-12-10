@@ -11,6 +11,9 @@ router.post('/', controller.createProject);
 // ?status: 모든 열린 프로젝트
 router.get('/', controller.allProjects);
 
+// 프로젝트 추천
+router.get('/recommendation/:userId', controller.recommendProject);
+
 // :project-id 프로젝트
 router.get('/:projectId', controller.projectByprojectId);
 
@@ -39,8 +42,5 @@ router.post('/:projectId/members', controller.applyMember);
 
 // 프로젝트 멤버 삭제
 router.delete('/:projectId/members/:userId', controller.deleteMember);
-
-// 프로젝트 추천
-router.get('/recommendation', controller.recommendProject);
 
 module.exports = router;
