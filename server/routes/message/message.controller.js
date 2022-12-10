@@ -19,9 +19,31 @@ exports.testMsgPage = (req, res) => {
 }
 
 //-----------------------------------Message-------------------------------------
+
+// 회원의 모든 알림
+ // ?unread=true => 회원의 읽지 않은 알림
+ // *copmlete*
+ exports.userAllAlram = (req, res) => {
+    let userId = req.params['userId'];
+    let sql = "SELECT * FROM message WHERE receiverId = " + userId + " AND unread = 1 AND sednerDelete = 0 AND receiverDelete = 0;";
+
+    connection.query(
+        sql,
+        (err, rows, fields) => {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    );
+}
+
+
 // 회원의 받은 쪽지
 // *complete*
-exports.userRecievedMsg = (req, res) => {
+exports.userReceivedMsg = (req, res) => {
     let userId = req.params['userId'];
     let sql = "SELECT * FROM message WHERE receiverId = " + userId + ";";
 
@@ -44,20 +66,24 @@ exports.userRecievedMsg = (req, res) => {
 // *complete*
 exports.userAllMsg = (req, res) => {
     let userId = req.params['userId'];
-    let sql = "SELECT * FROM message WHERE senderId = " + userId + " GROUP BY receiverId UNION SELECT * FROM message WHERE receiverId = " + userId + " GROUP BY senderId;";
+     let sql = "SELECT * FROM message "
+         + "WHERE senderId = " + userId + " AND senderDelete = 0 GROUP BY receiverId "
+         + "UNION "
+         + "SELECT * FROM message WHERE receiverId = " + userId + " AND receiverDelete = 0 GROUP BY senderId;";
 
-    connection.query(
-        sql,
-        (err, rows, fields) => {
-            if(err){
-                res.send(err);
-            }
-            else {
-                console.log(rows);
-                res.send(rows);
-            }
-        }
-    )
+     connection.query(
+         sql,
+         (err, rows, fields) => {
+             if (err) {
+                 res.send(err);
+             }
+             else {
+                 console.log(rows);
+                 res.send(rows);
+             }
+         }
+     )
+
 }
 
 // 회원의 특정 쪽지
@@ -66,24 +92,28 @@ exports.userAllMsg = (req, res) => {
 // *complete*
 exports.userMsgByMsgId = (req, res) => {
     let userId = req.params['userId'];
-    let otherId = req.params['otherId'];
+     let otherId = req.params['otherId'];
 
-    let sql = "SELECT * FROM message WHERE senderId = " + userId + " OR senderId = " + otherId + " OR receiverId = " + userId + " OR receiverId = " + otherId + " ORDER BY createdAt DESC;";
-    
-    //클릭하면 sender, receiver 동시에 겹치는거 싹 긁어서 뿌리기
-    //sql paging
-    connection.query(
-        sql,
-        (err, rows, fields) => {
-            if(err){
-                res.send(err);
-            }
-            else {
-                console.log(rows);
-                res.send(rows);
-            }
-        }
-    );
+     //let sql = "SELECT * FROM message WHERE (senderId = " + userId + " AND senderDelete = 0) OR (senderId = " + otherId + " AND receiverDelete = 0) OR (receiverId = " + userId + " AND receiverDelete = 0) OR (receiverId = " + otherId + " AND senderDelete = 0) ORDER BY createdAt DESC;";
+     let sql = "SELECT * FROM message WHERE "
+         + "(senderId = " + userId + " AND receiverId = " + otherId + " AND senderDelete = 0) "
+         + "OR (senderId = " + otherId + " AND receiverId = " + userId + " AND receiverDelete = 0) ORDER BY createdAt DESC";
+
+     //클릭하면 sender, receiver 동시에 겹치는거 싹 긁어서 뿌리기
+     //sql paging
+     connection.query(
+         sql,
+         (err, rows, fields) => {
+             if (err) {
+                 res.send(err);
+             }
+             else {
+                 console.log(rows);
+                 res.send(rows);
+             }
+         }
+     );
+
 }
 
 // 회원의 특정 쪽지 삭제
@@ -91,13 +121,53 @@ exports.userMsgByMsgId = (req, res) => {
 // *진행 중*
 exports.deleteMsg = (req, res) => {
     
-    connection.query(
-        "SELECT * FROM user;",
-        (err, rows, fields) => {
-            console.log(rows);
-            res.send(rows);
-        }
-    );
+    let userId = req.params['userId'];
+     let msgId = req.params['messageId'];
+
+     let sql = "SELECT senderId, receiverId, senderDelete, receiverDelete, messageId, "
+         + "CASE WHEN senderDelete = 0 AND receiverDelete = 0 AND receiverId = " + userId + " THEN 'receiverDelete' "
+         + "WHEN senderDelete = 0 AND receiverDelete = 0 AND senderId = " + userId + " THEN 'senderDelete' "
+         + "WHEN senderDelete = 1 AND receiverDelete = 0 THEN 'delete' "
+         + "WHEN senderDelete = 0 AND receiverDelete = 1 THEN 'delete' "
+         + "END AS result "
+         + "FROM teamther.message WHERE messageId = " + msgId + ";";
+     //messageId 탐색, 아무도 delete하지 않은 경우 -> 내가 sender인지 receiver인지 판단 -> senderDelete = 1 OR receiverDelete = 1
+     //senderDelete = 1인 경우 -> 내가 receiver라는 의미 -> delete row
+     //receiverDelete = 1인 경우 -> 내가 sender라는 의미 -> delete row
+
+     connection.query(
+         sql,
+         (err, rows, fields) => {
+             let result = JSON.stringify(rows[0].result).toString();
+             let sql2 = "";
+             if (err) {
+                 res.send(err);
+             } else {
+                 if (result === "\"receiverDelete\"") {// 아직 아무도 delete하지 않은 경우 -> 내가 receiver인 경우
+                     sql2 = sql2 + "UPDATE message SET receiverDelete = 1 WHERE messageId = " + msgId + ";";
+                     res.send(result);
+                 }
+                 else if (result === "\"senderDelete\"") { // 아직 아무도 delete하지 않은 경우 -> 내가 sender인 경우
+                     sql2 = sql2 + "UPDATE message SET senderDelete = 1 WHERE messageId = " + msgId + ";";
+                     res.send(result);
+                 } else {
+                     sql2 = sql2 + "DELETE FROM message WHERE messageId = " + msgId + ";";
+                 }
+             }
+
+             connection.query(
+                 sql2,
+                 (err, rows, fields) => {
+                     if (err) {
+                         res.send(err);
+                     } else {
+                         res.send(rows);
+                     }
+                 }
+             );
+         }
+     );
+
 }
 
 // 회원에게 쪽지 보내기

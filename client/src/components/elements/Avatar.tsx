@@ -1,9 +1,9 @@
 import React from 'react';
 import './Avatar.scss'
 
-function Avatar(props: { avatarUrl: string; name: string; }) {
+function Avatar(props: { avatarUrl: string; name: string; size: number }) {
   return (
-    <img className="avatar" src={props.avatarUrl} alt={props.name} />
+    <img className="avatar" width={props.size} src={props.avatarUrl} alt={props.name} />
   )
 }
 

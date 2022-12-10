@@ -15,13 +15,13 @@ function ProjectEdit(props: { isNewProject: boolean }) {
     id: "",
     name: "",
     description: "",
-    status: "",
     readme: "",
     post: "",
     intake: undefined,
     tags: "",
   });
   const [dueDate, setDueDate] = useState(new Date())
+  const [status, setStatus] = useState(0);
 
   async function ProjectLoader() {
     await axios.get(`/api/projects/${projectId}`)
@@ -32,7 +32,6 @@ function ProjectEdit(props: { isNewProject: boolean }) {
           id: data.projectId,
           name: data.projectName,
           description: data.description,
-          status: data.ProjectState,
           readme: data.readMe,
           post: data.post,
           intake: data.intake,
@@ -40,6 +39,8 @@ function ProjectEdit(props: { isNewProject: boolean }) {
         })
         console.log(data.duedate);
         setDueDate(new Date(Date.parse(data.duedate)))
+        console.log(data.projectState)
+        setStatus(data.projectState)
       })
   }
 
@@ -84,7 +85,7 @@ function ProjectEdit(props: { isNewProject: boolean }) {
       description: value.description,
       post: value.post,
       intake: value.intake,
-      status: value.status,
+      status: status,
       duedate: d.toISOString().slice(0, 10),
       readme: value.readme,
     })
@@ -105,7 +106,7 @@ function ProjectEdit(props: { isNewProject: boolean }) {
       description: value.description,
       post: value.post,
       intake: value.intake,
-      status: value.status,
+      status: status,
       duedate: d.toISOString().slice(0, 10),
       readme: value.readme,
     })
@@ -119,7 +120,7 @@ function ProjectEdit(props: { isNewProject: boolean }) {
 
   return (
     <div>
-      <div className="tile">
+      <div className="tile-03">
         <h1 className="fluid-heading-04 mb-07">{props.isNewProject ? "새 프로젝트" : "프로젝트 편집"}</h1>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <h2 className="fluid-heading-03 mb-07">필수 정보</h2>
@@ -127,35 +128,42 @@ function ProjectEdit(props: { isNewProject: boolean }) {
             <Form.Label>프로젝트 이름</Form.Label>
             <Form.Control required type="text" maxLength={20} value={value.name || ""} onChange={handleChange} />
           </Form.Group>
+
           <Form.Group className="mb-07" controlId="description">
             <Form.Label>프로젝트 주제</Form.Label>
             <Form.Control type="text" maxLength={50} value={value.description || ""} onChange={handleChange} />
-            <Form.Text>
-              프로젝트 주제를 잘 나타내는 한줄 소개글입니다.
-            </Form.Text>
+            <Form.Text>프로젝트 주제를 잘 나타내는 한줄 소개글입니다.</Form.Text>
           </Form.Group>
+
           <Form.Group className="mb-07" controlId="post">
             <Form.Label>게시글</Form.Label>
             <Form.Control type="text" maxLength={50} value={value.post || ""} onChange={handleChange} />
-            <Form.Text>
-              프로젝트가 모집 중일때 다른 사람들에게 보여지는 게시글입니다.
-            </Form.Text>
+            <Form.Text>프로젝트가 모집 중일때 다른 사람들에게 보여지는 게시글입니다.</Form.Text>
           </Form.Group>
+
           <Form.Group className="mb-07" controlId="intake">
             <Form.Label>모집 정원</Form.Label>
             <Form.Control className="w-25" type="text" maxLength={4} value={value.intake} placeholder={"2"} onChange={handleChange} />
           </Form.Group>
+
           <Form.Group className="mb-07" controlId="dueDate">
             <Form.Label>모집 기한</Form.Label>
             <DatePicker className="datepicker-control" selected={dueDate} onChange={(dueDate: Date) => setDueDate(dueDate)} dateFormat="yyyy/MM/dd" />
-            <Form.Text>
-              월/일/년
-            </Form.Text>
           </Form.Group>
-          <h2 className="fluid-heading-03 mb-09">선택 정보</h2>
+
+          <Form.Group className="mb-09" controlId="status">
+            <Form.Label>프로젝트 진행 상태</Form.Label>
+            <div>
+              <Form.Check inline label="모집 중" name="status" type="radio" id="0" checked={status == 0} value={0} onChange={() => setStatus(0)} />
+              <Form.Check inline label="프로젝트 진행 중" name="status" type="radio" id="1" checked={status == 1} value={1} onChange={() => setStatus(1)} />
+              <Form.Check inline label="프로젝트 완료" name="status" type="radio" id="2" checked={status == 2} value={2} onChange={() => setStatus(2)} />
+            </div>
+          </Form.Group>
+
+          <h2 className="fluid-heading-03 mb-07">선택 정보</h2>
           <Form.Group className="mb-07" controlId="readme">
             <Form.Label>프로젝트 상세</Form.Label>
-            <Form.Control type="text" maxLength={200} value={value.readme || ""} onChange={handleChange} />
+            <Form.Control type="text" maxLength={500} value={value.readme || ""} onChange={handleChange} />
             <Form.Text className="text-muted">
               프로젝트 상세 페이지에서 확인할 수 있는 더 자세한 소개글입니다.
             </Form.Text>
@@ -167,10 +175,14 @@ function ProjectEdit(props: { isNewProject: boolean }) {
               프로젝트 태그를 쉼표로 구분해서 입력해주세요.
             </Form.Text>
           </Form.Group>
+
+
+
           <Form.Group>
             <Button className="me-2" variant="secondary" onClick={() => navigate(-1)}>취소</Button>
             <Button type="submit">완료</Button>
           </Form.Group>
+
         </Form>
       </div>
     </div >

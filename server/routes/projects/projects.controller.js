@@ -118,7 +118,7 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
         + "WHERE a.projectId = ";
     let sql_created_order = " ORDER BY projectCreated DESC"
-    let sql_duedate_order = " ORDER BY duedate DESC"
+    let sql_duedate_order = " ORDER BY duedate ASC"
     let sql_paging = " LIMIT " + ((ppage - 1) * 5) +", 5";
 
     if((pName != undefined) && (pStatus != undefined)) {

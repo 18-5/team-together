@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Stack } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
+import Avatar from "../elements/Avatar";
+import avatarPlaceholder from '../../assets/avatar-placeholder.png'
+import { PlusIcon } from "@primer/octicons-react";
 
 
 
@@ -36,41 +39,39 @@ function Notifications() {
 
   if (!data)
     return (
-      <div className="py-4">
-        <h1 className="h3">알림함</h1>
-        받은 메시지가 없습니다.
-      </div >
+      <>
+        <div className="tile-01">
+          <div className="d-flex justify-content-between align-items-end mb-3">
+            <h1 className="fluid-heading-04">알림함</h1>
+            <Link to="/messages/new">
+              <Button variant="link" className="center">새 쪽지<PlusIcon className="ml-03" /></Button>
+            </Link>
+          </div>
+        </div>
+        <div className="tile-02">
+          받은 메시지가 없습니다.
+        </div>
+      </>
     )
 
   return (
-    <div>
-      <div className="tile">
-        <h1 className="fluid-heading-04 mb-3">알림함</h1>
-        {data.map((message: any, index: number) => (
-          <div className="py-4 border-bottom" key={index}>
-            <Row className="mb-1">
-              <Col xs={2}>
-                보낸 사람
-              </Col>
-              <Col>
-                <Link to={`/profile/${message.senderId}`}>
-                  {message.senderId}
-                </Link>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={2}>
-                내용
-              </Col>
-              <Col>
-                <div className="mb-1 text-body">{message.content}</div>
-              </Col>
-            </Row>
-          </div>
-        ))
-        }
+    <>
+      <div className="tile-01">
+        <div className="d-flex justify-content-between align-items-end mb-3">
+          <h1 className="fluid-heading-04">알림함</h1>
+          <Link to="/messages/new">
+            <Button variant="link" className="center">새 쪽지<PlusIcon className="ml-03" /></Button>
+          </Link>
+        </div>
       </div>
-    </div>
+      {data.map((message: any, index: number) => (
+        <div className="tile-02" key={index}>
+          <h2 className="body-02 text-body">{message.content}</h2>
+          <div className="label-01 text-helper">{message.createdAt}</div>
+        </div>
+      ))
+      }
+    </>
   )
 }
 

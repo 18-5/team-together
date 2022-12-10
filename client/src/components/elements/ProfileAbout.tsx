@@ -9,7 +9,7 @@ function ProfileAbout(props: any) {
     <Row className="mb-3 align-items-center">
       <Col>
         <Stack direction="horizontal" className="gap-3">
-          <Avatar avatarUrl={avatarPlaceholder} name={props.data.userName} />
+          <Avatar size={100} avatarUrl={avatarPlaceholder} name={props.data.userName} />
           <div>
             <div className="h3">{props.data.userName}</div>
             <div>{props.data.userBio}</div>
@@ -18,8 +18,8 @@ function ProfileAbout(props: any) {
         </Stack>
       </Col>
       <Col>
-        <div>{(<a href="mailto:${props.data.email}">{props.data.userEmail}</a>)}</div>
-        <div>{props.data.userHomepage}</div>
+        <div><a href={`mailto:${props.data.userEmail}`}>{props.data.userEmail}</a></div>
+        <div><a href={"http://" + props.data.userHomepage}>{props.data.userHomepage}</a></div>
         <div>{props.data.userSchool}</div>
       </Col>
     </Row>
@@ -42,7 +42,7 @@ export function Experiences() {
   )
 }
 
-function Skills() {
+export function Skills() {
   return (
     <Stack gap={3}>
       <Stack direction="horizontal" gap={1}>
