@@ -14,8 +14,12 @@ function Home() {
   useEffect(() => { RecommendatedProjectLoader() }, [])
 
   async function RecommendatedProjectLoader() {
-    await axios.get(`/api/projects/recommendation/${cookie.user}`)
+    /*await axios.get(`/api/projects/recommendation/${cookie.user}`)
       .then(function (res) {
+        setRecommendation(res.data[0]);
+      })*/
+    await axios.get(`/api/projects/recommendation2/${cookie.user}`)
+      .then(function (res) {  
         setRecommendation(res.data[0]);
       })
   }

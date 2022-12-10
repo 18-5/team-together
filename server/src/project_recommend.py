@@ -12,14 +12,30 @@ import warnings
 import sys
 warnings.filterwarnings("ignore")
 
+# used at js
 member_data = pd.read_csv('src/datas/member.csv')
 project_data = pd.read_csv('src/datas/project.csv')
 
+# used at python3
+# member_data = pd.read_csv('./datas/member.csv')
+# project_data = pd.read_csv('./datas/project.csv')
+
 member_data.drop('leader', axis = 1, inplace = True)
+
+project_data.drop('createrId', axis = 1, inplace = True)
+project_data.drop('description', axis = 1, inplace = True)
+project_data.drop('projectCreated', axis = 1, inplace = True)
+project_data.drop('projectState', axis = 1, inplace = True)
+project_data.drop('readMe', axis = 1, inplace = True)
+project_data.drop('post', axis = 1, inplace = True)
+project_data.drop('intake', axis = 1, inplace = True)
+project_data.drop('duedate', axis = 1, inplace = True)
 
 member_project_data = pd.merge(member_data, project_data, on = 'projectId')
 
 member_project_rate = member_project_data.pivot_table('rate', index = 'userId', columns='projectName').fillna(0)
+
+# print(member_project_rate)
 
 # matrix는 pivot_table 값을 numpy matrix로 만든 것
 matrix = member_project_rate.to_numpy()
@@ -36,9 +52,9 @@ matrix_member_mean = matrix - member_rate_mean.reshape(-1, 1)
 
 # scipy에서 제공해주는 svd
 # U 행렬, sigma 행렬, V 전치 행렬을 반환
-# print(matrix_user_mean.shape)
+# print(matrix_member_mean.shape)
 
-U, sigma, Vt = svds(matrix_member_mean, k = 9)
+U, sigma, Vt = svds(matrix_member_mean, k = 12)
 
 '''
 print(U.shape)
@@ -65,6 +81,7 @@ def recommend_projects(df_svd_preds, user_id, ori_project_df, ori_ratings_df, nu
     user_row_number = user_id - 1 
     
     # 최종적으로 만든 pred_df에서 사용자 index에 따라 프로젝트 데이터 정렬 -> 영화 평점이 높은 순으로 정렬 됌
+    # print(df_svd_preds)
     sorted_user_predictions = df_svd_preds.iloc[user_row_number].sort_values(ascending=False)
     # print(sorted_user_predictions.head())
     
@@ -84,16 +101,19 @@ def recommend_projects(df_svd_preds, user_id, ori_project_df, ori_ratings_df, nu
     recommendations = recommendations.merge( pd.DataFrame(sorted_user_predictions).reset_index(), on = 'projectName')
     # 컬럼 이름 바꾸고 정렬해서 return
     recommendations = recommendations.rename(columns = {user_row_number: 'Predictions'}).sort_values('Predictions', ascending = False).iloc[:num_recommendations, :]
-                      
+
+    recommendations.drop('Predictions', axis = 1, inplace = True)
 
     return recommendations
 
-# already_rated, predictions = recommend_projects(svd_preds, 4, project_data, member_data, 1)
+# already_rated, predictions = recommend_projects(svd_preds, 10, project_data, member_data, 1)
 
 # print(already_rated.head(10))
 
 # print(predictions)
 
+
 if __name__ == '__main__':
-    r_list = recommend_projects(svd_preds, int(sys.argv[1]), project_data, member_data, int(sys.argv[2]))
+    r_list = recommend_projects(svd_preds, int(sys.argv[1]), project_data, member_data, int(sys.argv[2])).to_json(orient='records')
+    # r_list = recommend_projects(svd_preds, 10, project_data, member_data, 1).to_json(orient='records')
     print(r_list)

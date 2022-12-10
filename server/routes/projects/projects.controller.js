@@ -72,7 +72,7 @@ exports.createProject = (req, res) => {
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
-function searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt){
+function searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt, sql_paging){
     if(pView == "newest"){
         sql_all += sql_created_order;
     }
@@ -80,6 +80,10 @@ function searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate
         sql_all += sql_duedate_order;
     }
     if(ppage != undefined){
+        sql_all += sql_paging;
+    }
+    else{
+        ppage = 1;
         sql_all += sql_paging;
     }
     sql_all += ";\n";
@@ -121,33 +125,43 @@ function projectSearch(res, pName, pStatus, pView, ppage){
         + "WHERE a.projectId = ";
     let sql_created_order = " ORDER BY projectCreated DESC"
     let sql_duedate_order = " ORDER BY duedate ASC"
-    let sql_paging = " LIMIT " + ((ppage - 1) * 5) +", 5";
+    let sql_paging = " LIMIT " + ((ppage - 1) * 10) +", 10";
 
     if((pName != undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName
              + "%' AND projectState = " + pStatus;
-        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt, sql_paging);
     }
     else if((pName != undefined) && (pStatus == undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName + "%'";
-        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt, sql_paging);
     }
     else if((pName == undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectState = ' " + pStatus + "';";;
-        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt, sql_paging);
     }
     else if((pName == undefined) && (pStatus == undefined)) {
-        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt, sql_paging);
     }
 }
 
 // :userid가 지원한 프로젝트 리스트
-function appliedProjects(res, userid){
+function appliedProjects(res, userid, page){
     let sql = "SELECT * FROM project p "
     + "WHERE p.projectId IN "
     + "(SELECT a.projectId FROM applicant a "
     + "WHERE a.userId = ?)"
-    + " AND NOT p.projectState=3;";
+    + " AND NOT p.projectState=3";
+    let sql_paging;
+    if(page != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql += sql_paging;
+    }
+    sql += ";\n";
     connection.query(
         sql, userid, 
         (err, rows, fields) => {
@@ -163,12 +177,22 @@ function appliedProjects(res, userid){
 }
 
 // :userid가 진행 중인 프로젝트 리스트
-function ongoingProjects(res, userid){
+function ongoingProjects(res, userid, page){
     let sql = "SELECT p.* FROM project p "
     + "WHERE p.projectId IN "
     + "(SELECT m.projectId FROM member m "
     + "WHERE m.userId = ?) "
-    + "AND p.projectState=2;";
+    + "AND p.projectState=2 ";
+    let sql_paging;
+    if(page != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql += sql_paging;
+    }
+    sql += ";\n";
     connection.query(
         sql, userid, 
         (err, rows, fields) => {
@@ -185,12 +209,22 @@ function ongoingProjects(res, userid){
 }
 
 // :userid가 완료한 프로젝트 리스트
-function completedProjects(res, userid){
+function completedProjects(res, userid, page){
     let sql = "SELECT p.* FROM project p "
     + "WHERE p.projectId IN "
     + "(SELECT m.projectId FROM member m "
     + "WHERE m.userId = ?) "
-    + "AND p.projectState=3;";
+    + "AND p.projectState=3";
+    let sql_paging;
+    if(page != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql += sql_paging;
+    }
+    sql += ";\n";
     connection.query(
         sql, userid, 
         (err, rows, fields) => {
@@ -206,21 +240,20 @@ function completedProjects(res, userid){
 }
 
 exports.allProjects = (req, res) => {
-    let { userid } = req.query;
+    let { userid, nameHas, status, view, page } = req.query;
     if(userid == undefined){
-        let { nameHas, status, view, page } = req.query;
         projectSearch(res, nameHas, status, view, page);
     }
     else if(userid != undefined){
         let { filter } = req.query;
         if(filter == "applied"){
-            appliedProjects(res, userid);
+            appliedProjects(res, userid, page);
         }
         else if(filter == "ongoing"){
-            ongoingProjects(res, userid);
+            ongoingProjects(res, userid, page);
         }
         else if(filter == "completed"){
-            completedProjects(res, userid);
+            completedProjects(res, userid, page);
         }
     }
 }
@@ -271,8 +304,43 @@ exports.recommendProject2 = (req, res) => {
     
     let recommend = spawn('python3', ['src/project_recommend.py', userId.toString(), '1']);
     recommend.stdout.on('data', function(data){
-        console.log(data.toString());
-        res.send("success");
+        let recommend = JSON.parse(data.toString());
+        console.log(recommend);
+        // res.send("success");
+        sql = "SELECT * FROM project WHERE projectId=?;"
+        let sql_res = "";
+        let sql_m_cnt = "SELECT COUNT(*) AS mcnt FROM member m "
+            + "WHERE m.projectId = ";
+        let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
+            + "WHERE a.projectId = ";
+            
+        let pname = recommend[0].projectId;
+        connection.query(
+            sql, pname, 
+            (err, rows, fields) => {
+                console.log(rows);
+            for(var v in rows){
+                console.log(rows[v].projectId);
+                sql_res += sql_m_cnt + rows[v].projectId + ";\n";
+                sql_res += sql_a_cnt + rows[v].projectId + ";\n";
+            }
+            console.log(sql_res);
+            connection.query(
+                sql_res, 
+                (eerr, rrows, ffields) => {
+                    let size = Object.keys(rows).length
+                    console.log(size);
+                    for(var i = 0, j = 0; i < size; i++, j+=2){
+                        rows[i].numberOfMember = rrows[j][0].mcnt;
+                        rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
+                    }
+                    
+                    console.log(rows);
+                    res.send(rows);
+                }
+            );
+            }
+        );
     })
 
     recommend.stderr.on('data', function(data){
