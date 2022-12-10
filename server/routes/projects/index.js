@@ -33,4 +33,14 @@ router.post('/:projectId/applicants', controller.applyCandidate);
 // 프로젝트 지원자 삭제
 router.delete('/:projectId/applicants/:userId', controller.deleteCandidate);
 
+// 프로젝트 멤버 생성
+// userId는 body로 받아오는 것으로 가정
+router.post('/:projectId/members', controller.applyMember);
+
+// 프로젝트 멤버 삭제
+router.delete('/:projectId/members/:userId', controller.deleteMember);
+
+// 프로젝트 추천
+router.get('/recommendation', controller.recommendProject);
+
 module.exports = router;

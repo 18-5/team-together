@@ -363,3 +363,56 @@ exports.deleteCandidate = (req, res) => {
         }
     );
 }
+
+// 프로젝트 멤버 생성
+// userId는 body로 받아오는 것으로 가정
+exports.applyMember = (req, res) => {
+    console.log("applyMember");
+    let userId = req.body.userId;
+    console.log(userId);
+    let sql = "SELECT COUNT(*) FROM user WHERE userId=" + userId + ";";
+    connection.query(sql, (err, rows, fields) => {
+        if(rows != 0){
+            sql = "INSERT INTO member(projectId, userId, leader) VALUES (?, ?, ?);";
+            let projectId = req.params['projectId'];
+            console.log(projectId);
+        
+            let params = [projectId, userId, 0];
+            console.log(params);
+            connection.query(sql, params, 
+                (eerr, rrows, ffields) => {
+                    console.log(rrows);
+                    res.send(rrows);
+                });
+        }
+        else{
+            console.log("Not Existing User")
+            res.send("Not Existing User");
+        }
+    })
+}
+
+// 프로젝트 멤버 삭제
+exports.deleteMember = (req, res) => {
+    let projectId = req.params['projectId'];
+    let userId = req.params['userId'];
+    console.log(projectId);
+    console.log(userId);
+
+    let sql = "DELETE FROM member WHERE projectId=" + projectId
+        + " AND userId=" + userId + ";";
+
+    connection.query(
+        sql, 
+        (err, rows, fields) => {
+            if(err){
+                console.log("delete fail");
+                res.send("delete fail");    
+            }
+            console.log("delete success");
+            res.send("delete success");
+        }
+    );
+}
+
+exports.recommendProject = (req, res) => {}
