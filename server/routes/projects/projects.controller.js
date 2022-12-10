@@ -1,5 +1,7 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
 const mysql = require('mysql');
+const { resourceLimits } = require("worker_threads");
+const spawn = require('child_process').spawn;
 
 const connection = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
@@ -260,6 +262,23 @@ exports.recommendProject = (req, res) => {
             );
         }
     );
+}
+
+// recommend project with matrix factorization
+exports.recommendProject2 = (req, res) => {
+    let userId = req.params['userId'];
+    console.log(userId);
+    
+    let recommend = spawn('python3', ['src/project_recommend.py', userId.toString(), '1']);
+    recommend.stdout.on('data', function(data){
+        console.log(data.toString());
+        res.send("success");
+    })
+
+    recommend.stderr.on('data', function(data){
+        console.error(data.toString());
+        res.send("fail");
+    })
 }
 
 // :project-id 프로젝트

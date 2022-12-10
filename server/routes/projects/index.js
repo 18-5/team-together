@@ -14,6 +14,9 @@ router.get('/', controller.allProjects);
 // 프로젝트 추천
 router.get('/recommendation/:userId', controller.recommendProject);
 
+// 알고리즘을 통한 프로젝트 추천
+router.get('/recommendation2/:userId', controller.recommendProject2);
+
 // :project-id 프로젝트
 router.get('/:projectId', controller.projectByprojectId);
 

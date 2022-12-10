@@ -133,4 +133,4 @@ dist
 /server/database.json
 
 # python
-/server/routes/src
+/server/src/test
