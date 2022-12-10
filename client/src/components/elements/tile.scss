@@ -36,6 +36,7 @@
 
 // structure
 .tile-02 {
+  border-radius: 6px;
   min-height: 4rem;
   min-width: 8rem;
   padding-top: $spacing-05;
@@ -46,6 +47,10 @@
 .tile-02 {
   background-color: $background;
   border-top: 1px solid $border-subtle;
+}
+
+.tile-02.nonhover:hover {
+  background-color: transparent;
 }
 
 .tile-02:hover {
@@ -65,4 +70,3 @@ a .tile-02 :hover {
   padding-right: $spacing-05;
   padding-bottom: $spacing-09;
 }
-

@@ -6,14 +6,35 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from "../../assets/logo.svg"
 import "./Sidebar.scss"
 import { BellIcon, CommentIcon, HomeIcon, ProjectIcon, SearchIcon } from '@primer/octicons-react';
+import Avatar from './Avatar';
+import avatarPlaceholder from '../../assets/avatar-placeholder.png'
+import { Stack } from 'react-bootstrap';
+import axios from 'axios';
 
 function ProfileLink() {
-  const [cookies] = useCookies(["user"]);
-  if (cookies.user) {
-    return <div>{cookies.user}</div>
-  } else {
-    return null;
+  const [cookie] = useCookies(["user"]);
+  if (!cookie.user)
+    return null
+
+  const [data, setData] = useState<any>();
+  useEffect(() => { ProfileLoader() }, [])
+
+  async function ProfileLoader() {
+    await axios.get(`/api/users/${cookie.user}`)
+      .then(function (response) {
+        setData(response.data[0]);
+      })
   }
+
+  if (!data)
+    return null
+
+  return (
+    <Stack direction='horizontal'>
+      <Avatar size={32} avatarUrl={avatarPlaceholder} name={cookie.user} />
+      <div className="ml-06">{data.userName}</div>
+    </Stack>
+  )
 }
 
 function LoginButton() {
@@ -93,7 +114,7 @@ function Sidebar() {
       <div className="py-05">
         {cookies.user &&
           <LinkContainer to={profileURL}>
-            <Nav.Link eventKey={profileURL}>
+            <Nav.Link eventKey={profileURL} className="profile-link">
               <ProfileLink />
             </Nav.Link>
           </LinkContainer>

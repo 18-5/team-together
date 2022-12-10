@@ -20,6 +20,7 @@
   font-weight: 600;
   font-size: $heading-compact-01;
   color: $text-secondary;
+  border-radius: 6px;
 }
 
 .nav-pills .nav-link:hover {
@@ -41,3 +42,5 @@
   background-color: $background-active;
   color: $text-primary;
 }
+
+

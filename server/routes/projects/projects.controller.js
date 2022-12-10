@@ -289,7 +289,7 @@ exports.projectLeader = (req, res) => {
 
     let sql = "SELECT * FROM user WHERE userId IN "
         + "(SELECT userId FROM member WHERE projectId=" + projectId + " AND "
-        + "admin=1);";
+        + "leader=1);";
     connection.query(
         sql, 
         (err, rows, fields) => {
