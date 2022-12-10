@@ -11,6 +11,12 @@ router.post('/', controller.createProject);
 // ?status: 모든 열린 프로젝트
 router.get('/', controller.allProjects);
 
+// 프로젝트 추천
+router.get('/recommendation/:userId', controller.recommendProject);
+
+// 알고리즘을 통한 프로젝트 추천
+router.get('/recommendation2/:userId', controller.recommendProject2);
+
 // :project-id 프로젝트
 router.get('/:projectId', controller.projectByprojectId);
 
@@ -32,5 +38,12 @@ router.post('/:projectId/applicants', controller.applyCandidate);
 
 // 프로젝트 지원자 삭제
 router.delete('/:projectId/applicants/:userId', controller.deleteCandidate);
+
+// 프로젝트 멤버 생성
+// userId는 body로 받아오는 것으로 가정
+router.post('/:projectId/members', controller.applyMember);
+
+// 프로젝트 멤버 삭제
+router.delete('/:projectId/members/:userId', controller.deleteMember);
 
 module.exports = router;

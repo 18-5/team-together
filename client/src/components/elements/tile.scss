@@ -1,0 +1,47 @@
+@import "token.scss";
+
+.tile-01 {
+  min-height: 4rem;
+  min-width: 8rem;
+  padding-top: $spacing-06;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  padding-bottom: $spacing-05;
+}
+
+// structure
+.tile-02 {
+  border-radius: 6px;
+  min-height: 4rem;
+  min-width: 8rem;
+  padding-top: $spacing-05;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  padding-bottom: $spacing-09;
+}
+.tile-02 {
+  background-color: $background;
+  border-top: 1px solid $border-subtle;
+}
+
+.tile-02.nonhover:hover {
+  background-color: transparent;
+}
+
+.tile-02:hover {
+  background-color: $background-hover;
+  text-decoration: none !important;
+}
+
+a .tile-02 :hover {
+  text-decoration: none !important;
+}
+
+.tile-03 {
+  min-height: 4rem;
+  min-width: 8rem;
+  padding-top: $spacing-06;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  padding-bottom: $spacing-09;
+}

@@ -1,9 +1,32 @@
-import React from "react";
-import Stack from "react-bootstrap/Stack";
-import Badge from 'react-bootstrap/Badge';
-import { Col, Container, Row } from "react-bootstrap";
+import React from "react"
+import { Badge, Col, Container, Row, Stack } from "react-bootstrap"
+import Avatar from "./Avatar"
+import avatarPlaceholder from '../../assets/avatar-placeholder.png'
 
-function Experiences() {
+function ProfileAbout(props: any) {
+  console.log(props)
+  return (
+    <Row className="mb-3 align-items-center">
+      <Col>
+        <Stack direction="horizontal" className="gap-3">
+          <Avatar size={100} avatarUrl={avatarPlaceholder} name={props.data.userName} />
+          <div>
+            <div className="h3">{props.data.userName}</div>
+            <div>{props.data.userBio}</div>
+            <div>{props.data.userId}</div>
+          </div>
+        </Stack>
+      </Col>
+      <Col>
+        <div><a href={`mailto:${props.data.userEmail}`}>{props.data.userEmail}</a></div>
+        <div><a href={"http://" + props.data.userHomepage}>{props.data.userHomepage}</a></div>
+        <div>{props.data.userSchool}</div>
+      </Col>
+    </Row>
+  )
+}
+
+export function Experiences() {
   return (
     <Stack gap={3}>
       <Stack direction="horizontal" gap={1}>
@@ -19,7 +42,7 @@ function Experiences() {
   )
 }
 
-function Skills() {
+export function Skills() {
   return (
     <Stack gap={3}>
       <Stack direction="horizontal" gap={1}>
@@ -71,14 +94,11 @@ function Projects() {
 
 function AboutSection() {
   return (
-    <div>
-      <Stack gap={5}>
-        <Experiences />
-        <Skills />
-        <Projects />
-      </Stack>
-    </div>
+    <Stack className="py-3" gap={5}>
+      <Experiences />
+      <Skills />
+    </Stack>
   )
 }
 
-export default AboutSection
+export default ProfileAbout

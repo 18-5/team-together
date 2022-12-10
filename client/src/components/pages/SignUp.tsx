@@ -1,10 +1,9 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import axios from "axios";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-
-import Logo from "../../assets/logo.svg"
+import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../assets/logo.svg";
 
 function SignUp() {
   const [validated, setValidated] = useState(false);
@@ -21,7 +20,6 @@ function SignUp() {
     e.preventDefault();
     if (form.checkValidity() === false)
       e.stopPropagation();
-
     setValidated(true);
     createUser();
   };
@@ -60,8 +58,6 @@ function SignUp() {
       })
   }
 
-  // TODO: 서버에서 데이터 받아와서 중복 체크하기
-
   return (
     <>
       <Link to={"/"} className="mb-4">
@@ -87,7 +83,7 @@ function SignUp() {
           <Form.Control type="email" maxLength={200} value={state.email} onChange={handleChange} />
         </Form.Group>
         <Form.Group className="mb-3">
-            <Button type="submit">완료</Button>
+          <Button type="submit">완료</Button>
         </Form.Group>
       </Form>
     </>

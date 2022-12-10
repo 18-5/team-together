@@ -1,18 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { BellIcon, CommentIcon, HomeIcon, ProjectIcon, SearchIcon } from '@primer/octicons-react';
+import axios from 'axios';
+import { Stack } from 'react-bootstrap';
 import Nav from "react-bootstrap/Nav";
 import { useCookies } from "react-cookie";
 import { LinkContainer } from "react-router-bootstrap";
-import { useNavigate, useLocation } from 'react-router-dom';
-import Logo from "../../assets/logo.svg"
-import "./Sidebar.scss"
+import { useLocation, useNavigate } from 'react-router-dom';
+import avatarPlaceholder from '../../assets/avatar-placeholder.png';
+import Logo from "../../assets/logo.svg";
+import Avatar from '../patterns/Avatar';
+import "./Sidebar.scss";
 
 function ProfileLink() {
-  const [cookies] = useCookies(["user"]);
-  if (cookies.user) {
-    return <div>{cookies.user}</div>
-  } else {
-    return null;
+  const [cookie] = useCookies(["user"]);
+  if (!cookie.user)
+    return null
+
+  const [data, setData] = useState<any>();
+  useEffect(() => { ProfileLoader() }, [])
+
+  async function ProfileLoader() {
+    await axios.get(`/api/users/${cookie.user}`)
+      .then(function (response) {
+        setData(response.data[0]);
+      })
   }
+
+  if (!data)
+    return null
+
+  return (
+    <Stack direction='horizontal'>
+      <Avatar size={32} avatarUrl={avatarPlaceholder} name={cookie.user} />
+      <div className="ml-06">{data.userName}</div>
+    </Stack>
+  )
 }
 
 function LoginButton() {
@@ -49,38 +71,38 @@ function Sidebar() {
   const [cookies] = useCookies(["user"]);
   const profileURL = "/profile/" + cookies.user;
   const location = useLocation();
-  useEffect(() => {}, [location]);
+  useEffect(() => { return }, [location]);
 
   return (
-    <Nav variant="pills" className="d-flex flex-column flex-nowrap h-100 justify-content-between py-4">
-      <div className="d-flex flex-column gap-3 mb-3">
+    <Nav variant="pills" className="d-flex flex-column flex-nowrap h-100 justify-content-between">
+      <div className="pt-05">
         <LinkContainer to="/" className="bg-transparent border-0">
           <Nav.Link><img src={Logo} alt="Team Together" /></Nav.Link>
         </LinkContainer>
-        <div className="d-flex flex-column">
+        <div className="py-05 border-bottom">
           <LinkContainer to="/">
-            <Nav.Link eventKey="/">홈</Nav.Link>
+            <Nav.Link eventKey="/"><HomeIcon className="mr-06" />홈</Nav.Link>
           </LinkContainer>
           {cookies.user &&
             <LinkContainer to="my-projects">
-              <Nav.Link eventKey="/my-projects">내 프로젝트</Nav.Link>
+              <Nav.Link eventKey="/my-projects"><ProjectIcon className="mr-06" />내 프로젝트</Nav.Link>
             </LinkContainer>
           }
           <LinkContainer to="search">
-            <Nav.Link eventKey="/search" disabled>검색</Nav.Link>
+            <Nav.Link eventKey="/search" disabled><SearchIcon className="mr-06" />검색</Nav.Link>
           </LinkContainer>
           {cookies.user &&
             <LinkContainer to="messages">
-              <Nav.Link eventKey="/messages" disabled>쪽지</Nav.Link>
+              <Nav.Link eventKey="/messages"><CommentIcon className="mr-06" />쪽지</Nav.Link>
             </LinkContainer>
           }
           {cookies.user &&
             <LinkContainer to="notifications">
-              <Nav.Link eventKey="/notifications" disabled>알림</Nav.Link>
+              <Nav.Link eventKey="/notifications"><BellIcon className="mr-06" />알림</Nav.Link>
             </LinkContainer>
           }
         </div>
-        <div>
+        <div className="py-05">
           <LinkContainer to="connection-test">
             <Nav.Link eventKey="/connection-test">Connection Test</Nav.Link>
           </LinkContainer>
@@ -89,10 +111,10 @@ function Sidebar() {
           </LinkContainer>
         </div>
       </div>
-      <div className="d-flex flex-column">
+      <div className="py-05">
         {cookies.user &&
           <LinkContainer to={profileURL}>
-            <Nav.Link eventKey={profileURL}>
+            <Nav.Link eventKey={profileURL} className="profile-link">
               <ProfileLink />
             </Nav.Link>
           </LinkContainer>

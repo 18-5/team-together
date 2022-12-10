@@ -1,0 +1,33 @@
+@import "token.scss";
+
+.badge {
+  height: 1.5rem;
+  border-radius: 12px;
+  padding: 0;
+  padding-left: $spacing-03;
+  padding-right: $spacing-03;
+  line-height: 1.5rem;
+  vertical-align: middle;
+  font-size: $label-01;
+  font-weight: 400;
+}
+
+.bg-secondary {
+  background-color: $gray-20 !important;
+  color: $gray-70;
+}
+
+.bg-success {
+  background-color: $green-20 !important;
+  color: $green-70;
+}
+
+.bg-info {
+  background-color: $blue-20 !important;
+  color: $blue-70;
+}
+
+.bg-warning {
+  background-color: $yellow-20 !important;
+  color: $yellow-70;
+}

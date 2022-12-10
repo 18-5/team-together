@@ -7,20 +7,20 @@ import "./index.scss";
 import CenteredLayout from './components/layout/CenteredLayout';
 import DefaultLayout from './components/layout/DefaultLayout';
 
-import Home from './components/pages/Home';
-import MyProjects from './components/pages/MyProjects';
-
-import Project from './components/pages/Project';
-import ProjectNew from './components/pages/ProjectNew';
-import ProjectEdit from './components/pages/ProjectEdit';
-
 import APIConnection from './components/pages/APIConnection';
+import Error from './components/pages/Error';
+import Home from './components/pages/Home';
+import Login from './components/pages/Login';
+import MessageDetail from './components/pages/MessageDetail';
+import MessageEdit from './components/pages/MessageEdit';
+import Messages from './components/pages/Messages';
+import MyProjects from './components/pages/MyProjects';
+import Notifications from './components/pages/Notifications';
 import Profile from './components/pages/Profile';
 import ProfileEdit from './components/pages/ProfileEdit';
-
+import Project from './components/pages/Project';
+import ProjectEdit from './components/pages/ProjectEdit';
 import SignUp from "./components/pages/SignUp";
-import Login from './components/pages/Login';
-import Error from './components/pages/Error';
 
 const router = createBrowserRouter([
   {
@@ -41,11 +41,23 @@ const router = createBrowserRouter([
           },
           {
             path: "messages",
-            element: <Error />
+            element: <Messages />
+          },
+          {
+            path: "messages/from/:senderId",
+            element: <MessageDetail />
+          },
+          {
+            path: "messages/new",
+            element: <MessageEdit />
+          },
+          {
+            path: "messages/new/:userId",
+            element: <MessageEdit />
           },
           {
             path: "notifications",
-            element: <Error />
+            element: <Notifications />
           },
           {
             path: "profile/:userId",
@@ -65,7 +77,7 @@ const router = createBrowserRouter([
           },
           {
             path: "projects/new",
-            element: <ProjectNew />,
+            element: <ProjectEdit isNewProject={true} />,
           },
           {
             path: "projects/:projectId",
@@ -73,7 +85,7 @@ const router = createBrowserRouter([
           },
           {
             path: "projects/:projectId/edit",
-            element: <ProjectEdit />,
+            element: <ProjectEdit isNewProject={false} />,
           }
         ]
       }
