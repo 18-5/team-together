@@ -1,10 +1,9 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import axios from "axios";
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-
-import Logo from "../../assets/logo.svg"
+import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
+import Logo from "../../assets/logo.svg";
 
 function SignUp() {
   const [validated, setValidated] = useState(false);

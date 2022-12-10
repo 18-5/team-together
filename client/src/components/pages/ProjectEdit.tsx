@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import DatePicker from 'react-datepicker';
@@ -155,8 +155,8 @@ function ProjectEdit(props: { isNewProject: boolean }) {
             <Form.Label>프로젝트 진행 상태</Form.Label>
             <div>
               <Form.Check inline label="모집 중" name="status" type="radio" id="0" checked={status == 0} value={0} onChange={() => setStatus(0)} />
-              <Form.Check inline label="프로젝트 진행 중" name="status" type="radio" id="1" checked={status == 1} value={1} onChange={() => setStatus(1)} />
-              <Form.Check inline label="프로젝트 완료" name="status" type="radio" id="2" checked={status == 2} value={2} onChange={() => setStatus(2)} />
+              <Form.Check inline label="프로젝트 진행 중" name="status" type="radio" id="2" checked={status == 2} value={2} onChange={() => setStatus(2)} />
+              <Form.Check inline label="프로젝트 완료" name="status" type="radio" id="3" checked={status == 3} value={3} onChange={() => setStatus(3)} />
             </div>
           </Form.Group>
 

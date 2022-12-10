@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
-import ProjectList from '../elements/ProjectList';
+import ProjectList from '../patterns/ProjectList';
 
 function MyProjects() {
   const [cookies] = useCookies(["user"]);

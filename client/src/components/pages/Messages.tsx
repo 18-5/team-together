@@ -1,11 +1,11 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Row, Col, Button, Stack } from "react-bootstrap";
+import { PlusIcon } from "@primer/octicons-react";
+import axios from "axios";
+import { Button, Stack } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
-import Avatar from "../elements/Avatar";
-import avatarPlaceholder from '../../assets/avatar-placeholder.png'
-import { PlusIcon } from "@primer/octicons-react";
+import avatarPlaceholder from '../../assets/avatar-placeholder.png';
+import Avatar from "../patterns/Avatar";
 
 function Messages() {
   const { userId } = useParams();

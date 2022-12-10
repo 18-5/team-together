@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
@@ -49,13 +49,11 @@ function Login() {
           createCookie();
           navigate("/");
         } else {
-          console.log(res);
           alert("일치하는 사용자 이름이 없거나 암호가 다릅니다.");
         }
       })
       .catch((err) => {
-        console.log(err);
-        alert(err);
+        alert("로그인 오류가 발생했습니다: " + err);
       })
   }
 
