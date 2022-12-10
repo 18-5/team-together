@@ -15,19 +15,18 @@ function Profile() {
   const [cookie] = useCookies(["user"]);
 
   const [data, setData] = useState<any>();
-  useEffect(() => {
-    async function ProfileLoader() {
-      await axios.get(`/api/users/${userId}`)
-        .then(function (response) {
-          console.log(response.data[0]);
-          setData(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
-    }
-    ProfileLoader()
-  }, [])
+  useEffect(() => { ProfileLoader() }, [])
+
+  async function ProfileLoader() {
+    await axios.get(`/api/users/${userId}`)
+      .then(function (response) {
+        console.log(response.data[0]);
+        setData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
 
   if (!data)
     return null;
