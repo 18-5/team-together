@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { BellIcon, CommentIcon, HomeIcon, ProjectIcon, SearchIcon } from '@primer/octicons-react';
+import axios from 'axios';
+import { Stack } from 'react-bootstrap';
 import Nav from "react-bootstrap/Nav";
 import { useCookies } from "react-cookie";
 import { LinkContainer } from "react-router-bootstrap";
-import { useNavigate, useLocation } from 'react-router-dom';
-import Logo from "../../assets/logo.svg"
-import "./Sidebar.scss"
-import { BellIcon, CommentIcon, HomeIcon, ProjectIcon, SearchIcon } from '@primer/octicons-react';
-import Avatar from './Avatar';
-import avatarPlaceholder from '../../assets/avatar-placeholder.png'
-import { Stack } from 'react-bootstrap';
-import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
+import avatarPlaceholder from '../../assets/avatar-placeholder.png';
+import Logo from "../../assets/logo.svg";
+import Avatar from '../patterns/Avatar';
+import "./Sidebar.scss";
 
 function ProfileLink() {
   const [cookie] = useCookies(["user"]);

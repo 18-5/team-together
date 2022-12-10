@@ -1,11 +1,11 @@
+import React, { useEffect, useState } from "react";
 import { CheckIcon, PasteIcon, PencilIcon, TrashIcon } from "@primer/octicons-react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { Badge, Button, Col, Row, Stack, Tab, Tabs } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import { Link, useParams } from "react-router-dom";
-import Avatar from "../elements/Avatar";
-import avatarPlaceholder from '../../assets/avatar-placeholder.png'
+import avatarPlaceholder from '../../assets/avatar-placeholder.png';
+import Avatar from "../patterns/Avatar";
 
 function Project() {
   //
@@ -68,14 +68,14 @@ function Project() {
 
   const handleApplicantDeleteButton = (userId: string) => {
     deleteApplicant(userId)
-    const newApplicants = applicants.filter((data) => { return data.userId !== userId })
+    const newApplicants = applicants.filter((data: { userId: string; }) => { return data.userId !== userId })
     setApplicants(newApplicants)
     alert("지원자 삭제가 완료되었습니다.")
   }
 
   const handleApplicantAcceptButton = (userId: string) => {
-    const applicant = applicants?.find((data) => { return data.userId === userId })
-    const newApplicants = applicants?.filter((data) => { return data.userId !== userId })
+    const applicant = applicants?.find((data: { userId: string; }) => { return data.userId === userId })
+    const newApplicants = applicants?.filter((data: { userId: string; }) => { return data.userId !== userId })
     deleteApplicant(userId) // data
     addMember(userId) // data 
     setApplicants(newApplicants) // rendering
@@ -83,9 +83,9 @@ function Project() {
   }
 
   const handleMemberDeleteButton = (userId: string) => {
-    const member = members?.find((data) => { return data.userId === userId })
+    const member = members?.find((data: { userId: string; }) => { return data.userId === userId })
     applicants?.push(member)
-    const newMembers = members?.filter((data) => { return data.userId !== userId })
+    const newMembers = members?.filter((data: { userId: string; }) => { return data.userId !== userId })
     deleteMember(userId) // data
     addApplicant(userId) // data 
     setMembers(newMembers)  // rendering

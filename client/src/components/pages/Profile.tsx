@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react"
-import Button from 'react-bootstrap/Button'
+import React, { useEffect, useState } from "react";
+import { PencilIcon } from "@primer/octicons-react";
+import axios from "axios";
+import Button from 'react-bootstrap/Button';
+import Stack from 'react-bootstrap/Stack';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import Stack from 'react-bootstrap/Stack';
-
-import ProfileAbout, { Experiences, Skills } from "../elements/ProfileAbout";
-import axios from "axios";
-import { Link, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import ProjectList from "../elements/ProjectList";
-import { PencilIcon } from "@primer/octicons-react";
+import { Link, useParams } from "react-router-dom";
+import ProfileAbout, { Experiences, Skills } from "../patterns/ProfileAbout";
+import ProjectList from "../patterns/ProjectList";
 
 function Profile() {
   const { userId } = useParams();

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
+import React, { useState } from 'react';
+import { PlusIcon, TelescopeIcon } from '@primer/octicons-react';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import ProjectList from '../elements/ProjectList';
-import { PencilIcon, PlusIcon, TelescopeIcon } from '@primer/octicons-react';
+import Form from 'react-bootstrap/Form';
 import { useCookies } from 'react-cookie';
+import { Link } from 'react-router-dom';
+import ProjectList from '../patterns/ProjectList';
 
 function Home() {
   const [cookie] = useCookies(["user"]);

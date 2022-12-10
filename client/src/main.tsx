@@ -11,6 +11,8 @@ import APIConnection from './components/pages/APIConnection';
 import Error from './components/pages/Error';
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
+import MessageDetail from './components/pages/MessageDetail';
+import MessageEdit from './components/pages/MessageEdit';
 import Messages from './components/pages/Messages';
 import MyProjects from './components/pages/MyProjects';
 import Notifications from './components/pages/Notifications';
@@ -19,8 +21,6 @@ import ProfileEdit from './components/pages/ProfileEdit';
 import Project from './components/pages/Project';
 import ProjectEdit from './components/pages/ProjectEdit';
 import SignUp from "./components/pages/SignUp";
-import MessageDetail from './components/pages/MessageDetail';
-import MessageEdit from './components/pages/MessageEdit';
 
 const router = createBrowserRouter([
   {
