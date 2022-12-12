@@ -50,7 +50,7 @@ exports.testUserPage = (req, res) => {
 // 회원가입
 exports.signIn = (req, res) => {
   let id = req.body.userId;
-  let pw = req.body.userPw;
+  let pw = req.body.userPW;
   let name = req.body.userName;
   let email = req.body.userEmail;
   let sql = "INSERT INTO user(userId, userPwd, userName, userEmail) VALUES(?, ?, ?, ?);";
