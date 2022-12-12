@@ -35,12 +35,9 @@ function SignUp() {
   async function createUser() {
     await axios.post("/api/users", {
       userId: state.id,
-      userPW: state.pw,
+      userPw: state.pw,
       userName: state.name,
-      userEmail: state.email,
-      userHomepage: null,
-      userSchool: null,
-      userBio: null
+      userEmail: state.email
     })
       .then((res) => {
         console.log(res)

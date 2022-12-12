@@ -10,7 +10,7 @@ const controller = require('./users.controller');
 router.get('/', controller.testUserPage);
 
 // 회원 가입
-router.post('/sign-up', controller.signIn);
+router.post('/', controller.signIn);
 
 router.put('/:userId', controller.updateUser);
 
