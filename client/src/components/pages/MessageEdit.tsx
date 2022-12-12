@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function MessageEdit() {
     const [cookie] = useCookies(["user"]);
-    const { userId } = useParams() || undefined;
+    const { userId } = useParams();
     const navigate = useNavigate();
 
     const [value, setValue] = useState({ senderId: cookie.user, receiverId: userId, content: "" });
@@ -54,7 +54,7 @@ function MessageEdit() {
                 <h1 className="fluid-heading-04 mb-07">새 쪽지</h1>
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <h2 className="fluid-heading-03 mb-07">필수 정보</h2>
-                    <Form.Group className="mb-07" controlId="receiverID">
+                    <Form.Group className="mb-07" controlId="receiverId">
                         <Form.Label>받는 사람 ID</Form.Label>
                         <Form.Control required type="text" maxLength={50} value={value.receiverId || ""} onChange={handleChange} />
                     </Form.Group>

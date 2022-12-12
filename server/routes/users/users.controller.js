@@ -20,7 +20,7 @@ exports.testUserPage = (req, res) => {
 // 회원 가입
 exports.signIn = (req, res) => {
   let sql =
-    "INSERT INTO user(userId, userPW, userEmail, userHomepage, userSchool, userBio)" +
+    "INSERT INTO user(userId, userPwd, userEmail, userHomepage, userSchool, userBio)" +
     " VALUES (?, ?, ?, ?, ?, ?, ?);";
   let id = req.body.userId;
   console.log(id);

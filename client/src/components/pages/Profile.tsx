@@ -38,7 +38,7 @@ function Profile() {
       </div>
       <div className="d-flex justify-content-end buttons-pulldown-to-tab">
         {userId != cookie.user &&
-          <Link to="/messages/new">
+          <Link to={`/messages/new/${userId}`}>
             <Button variant="link" className="btn-medium">쪽지 작성하기</Button>
           </Link>
         }
