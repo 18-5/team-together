@@ -37,7 +37,7 @@ function Messages() {
 
   function RenderMessage() {
     if (!data)
-      return <div className="tile-02">받은 메시지가 없습니다.</div>
+      return <div className="tile-02">쪽지가 없습니다.</div>
 
     return data.map((message: any, index: number) => (
       message.senderId != cookie.user ?
@@ -76,28 +76,11 @@ function Messages() {
     ))
   }
 
-  if (!data)
-    return (
-      <>
-        <div className="tile-01">
-          <div className="d-flex justify-content-between align-items-end mb-3">
-            <h1 className="fluid-heading-04">메시지함</h1>
-            <Link to="/messages/new">
-              <Button variant="link" className="center">새 쪽지<PlusIcon className="ml-03" /></Button>
-            </Link>
-          </div>
-        </div>
-        <div className="tile-02">
-          메시지가 없습니다.
-        </div>
-      </>
-    )
-
   return (
     <>
       <div className="tile-01">
         <div className="d-flex justify-content-between align-items-end mb-3">
-          <h1 className="fluid-heading-04">받은 메시지함</h1>
+          <h1 className="fluid-heading-04">쪽지함</h1>
           <Link to="/messages/new">
             <Button variant="link" className="center">새 쪽지<PlusIcon className="ml-03" /></Button>
           </Link>
