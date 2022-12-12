@@ -1,5 +1,7 @@
 const dotenv = require("dotenv").config({ path: "../.env" });
 const mysql = require('mysql');
+const { resourceLimits } = require("worker_threads");
+const spawn = require('child_process').spawn;
 
 const connection = mysql.createConnection({
     host: process.env.DATABASE_HOST, 
@@ -12,59 +14,21 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
-function checkProjectId(new_id){
-    let sql = "SELECT COUNT(*) AS cnt FROM project WHERE projectId=?;";
-    connection.query(sql, new_id, 
-        (err, rows, fields) => {
-            if(err){
-                console.log("query error occured");
-                throw err;
-            }
-            else{
-                if(rows != 0){
-                    console.log("id not exist");
-                    return 0;
-                }
-                else{
-                    console.log("id exist");
-                    return 1;
-                }
-            }
-        });
-}
-
-// projectId 랜덤 생성
-function createId(){
-    let today = new Date();
-    let year = today.getFullYear();
-    let month = today.getMonth() + 1;
-    let date = today.getDate();
-    let day = today.getDay();
-
-    let min = Math.ceil(1);
-    let max = Math.floor(1000000);
-
-    let r = year*month*date*day + Math.floor(Math.random() * (max - min)) + min;
-    if(checkProjectId(r) == 1){
-        r = year*month*date*day + Math.floor(Math.random() * (max - min)) + min;
-    }
-
-    return r;
-}
-
 // 프로젝트 생성
 exports.createProject = (req, res) => {
-    let sql = "INSERT INTO project(projectId, projectName, description, projectCreated, projectState)"
-        + " VALUES (?, ?, ?, NOW(), 0);";
+    let sql = "INSERT INTO project(createrId, projectName, description, post, intake, projectCreated, projectState, readme)"
+        + " VALUES (?, ?, ?, ?, ?, NOW(), 0, ?);";
 
-    let id = createId();
-    console.log(id);
+    let leaderid = req.body.leaderid;
     let name = req.body.projectName;
     console.log(name);
     let desc = req.body.description;
+    let post = req.body.post;
+    let intake = req.body.intake;
+    let readme = req.body.readme;
     console.log(desc);
 
-    let params = [id, name, desc];
+    let params = [leaderid, name, desc, post, intake, readme];
     connection.query(sql, params, 
         (err, rows, fields) => {
             if(err){
@@ -74,6 +38,33 @@ exports.createProject = (req, res) => {
             else{
                 console.log(rows);
                 res.send(rows);
+
+                sql = "SELECT projectId FROM project WHERE createrId=? AND projectName=? AND description=? AND post=? AND intake=? AND readme=?;"
+                connection.query(sql, params, 
+                    (eerr, rrows, ffields) => {
+                        if(eerr){
+                            res.send("query error occured at getting projectId");
+                            throw err;
+                        }
+                        else{
+                            console.log(rrows[0].projectId);
+                            sql = "INSERT INTO member(projectId, userId, leader) VALUES (?, ?, ?);";
+                            params = [rrows[0].projectId, leaderid, 1];
+    
+                            connection.query(sql, params, 
+                                (eeerr, rrrows, fffields) => {
+                                    if(eeerr){
+                                        res.send("query error occured at member insertion")
+                                    }
+                                    else{
+                                        console.log(rrrows);
+                                        res.send(rrrows);
+                                    }
+                                }
+                                );
+                        }
+                    }
+                    );
             }
         });
 }
@@ -81,6 +72,53 @@ exports.createProject = (req, res) => {
 // 모든 프로젝트
 // ?name-has: 이름을 포함하는 프로젝트 검색
 // ?status: 모든 열린 프로젝트
+function searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt){
+    if(pView == "newest"){
+        sql_all += sql_created_order;
+    }
+    else if(pView == "timesensitive"){
+        sql_all += sql_duedate_order;
+    }
+    if(ppage != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql_all += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql_all += sql_paging;
+    }
+    sql_all += ";\n";
+    console.log(sql_all);
+
+    connection.query(
+        sql_all, 
+        (err, rows, fields) => {
+            console.log(rows);
+            for(var v in rows){
+                console.log(rows[v].projectId);
+                sql_res += sql_m_cnt + rows[v].projectId + ";\n";
+                sql_res += sql_a_cnt + rows[v].projectId + ";\n";
+            }
+            console.log(sql_res);
+            connection.query(
+                sql_res, 
+                (eerr, rrows, ffields) => {
+                    console.log(rrows);
+                    let size = Object.keys(rows).length
+                    console.log(size);
+                    for(var i = 0, j = 0; i < size; i++, j+=2){
+                        rows[i].numberOfMember = rrows[j][0].mcnt;
+                        rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
+                    }
+                    
+                    console.log(rows);
+                    res.send(rows);
+                }
+            );
+        }
+    );
+}
+
 function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_res = "";       // 실제 db 검색할 쿼리문
     let sql_all = "SELECT * FROM project";
@@ -89,149 +127,229 @@ function projectSearch(res, pName, pStatus, pView, ppage){
     let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
         + "WHERE a.projectId = ";
     let sql_created_order = " ORDER BY projectCreated DESC"
-    let sql_duedate_order = " ORDER BY duedate DESC"
+    let sql_duedate_order = " ORDER BY duedate ASC"
     let sql_paging = " LIMIT " + ((ppage - 1) * 10) +", 10";
 
     if((pName != undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName
              + "%' AND projectState = " + pStatus;
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-
-        connection.query(
-            sql_all, 
-            (err, rows, fields) => {
-                console.log(rows);
-                for(var v in rows){
-                    console.log(rows[v].projectId);
-                    sql_res += sql_m_cnt + rows[v].projectId + ";\n";
-                    sql_res += sql_a_cnt + rows[v].projectId + ";\n";
-                }
-                console.log(sql_res);
-                connection.query(
-                    sql_res, 
-                    (eerr, rrows, ffields) => {
-                        let size = Object.keys(rows).length
-                        console.log(size);
-                        for(var i = 0, j = 0; i < size; i++, j+=2){
-                            rows[i].numberOfMember = rrows[j][0].mcnt;
-                            rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
-                        }
-
-                        console.log(rows);
-                        res.send(rows);
-                    }
-                );
-            }
-        );
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
     else if((pName != undefined) && (pStatus == undefined)) {
         sql_all += " WHERE projectName LIKE '%" + pName + "%'";
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-
-        sql_m_cnt += "WHERE p.projectName LIKE '%" + pName + "%');\n";
-
-        sql_a_cnt += "WHERE p.projectName LIKE '%" + pName + "%');";
-
-        sql_res = sql_all + sql_m_cnt + sql_a_cnt;
-        console.log(sql_res);
-        connection.query(
-            sql_res, 
-            (err, rows, fields) => {
-                console.log(rows);
-                res.send(rows);
-            }
-        );
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
     else if((pName == undefined) && (pStatus != undefined)) {
         sql_all += " WHERE projectState = ' " + pStatus + "';";;
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-
-        sql_m_cnt += " WHERE p.projectState = " + pStatus + ");\n";
-
-        sql_a_cnt += " WHERE p.projectState = " + pStatus + ");";
-
-        sql_res = sql_all + sql_m_cnt + sql_a_cnt;
-        console.log(sql_res);
-        connection.query(
-            sql_res, 
-            (err, rows, fields) => {
-                console.log(rows);
-                res.send(rows);
-            }
-        );
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
     else if((pName == undefined) && (pStatus == undefined)) {
-        if(pView == "newest"){
-            sql_all += sql_created_order;
-        }
-        else if(pView == "timesensitive"){
-            sql_all += sql_duedate_order;
-        }
-        //if(ppage != undefined){
-        //    sql_all += sql_paging;
-        //}
-        sql_all += ";\n";
-        let sql_getId = "SELECT projectId FROM project;";
-        connection.query(
-            sql_getId, 
-            (err, rows, fields) => {
-                console.log(rows);
-                let sql_m = "";
-                let sql_a = "";
-                for(var v in rows){
-                    console.log(rows[v].projectId);
-                    sql_m += "SELECT COUNT(*) mcnt FROM member m "
-                    + "WHERE m.projectId = " + rows[v].projectId + ";\n";
-                    sql_a += "SELECT COUNT(*) acnt FROM applicant a "
-                    + "WHERE a.projectId = " + rows[v].projectId + ";\n";
-                }
-                sql_res = sql_all + sql_m + sql_a
-                console.log(sql_res);
-                connection.query(
-                    sql_res, 
-                    (err, rows, fields) => {
-                        console.log(rows);
-                        res.send(rows);
-                    }
-                );
-            }
-        )
+        searchModule(res, pView, ppage, sql_all, sql_created_order, sql_duedate_order, sql_res, sql_m_cnt, sql_a_cnt);
     }
 }
 
+// :userid가 지원한 프로젝트 리스트
+function appliedProjects(res, userid, page){
+    let sql = "SELECT * FROM project p "
+    + "WHERE p.projectId IN "
+    + "(SELECT a.projectId FROM applicant a "
+    + "WHERE a.userId = ?)"
+    + " AND NOT p.projectState=3";
+    let sql_paging;
+    if(page != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql += sql_paging;
+    }
+    sql += ";\n";
+    connection.query(
+        sql, userid, 
+        (err, rows, fields) => {
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    )
+}
+
+// :userid가 진행 중인 프로젝트 리스트
+function ongoingProjects(res, userid, page){
+    let sql = "SELECT p.* FROM project p "
+    + "WHERE p.projectId IN "
+    + "(SELECT m.projectId FROM member m "
+    + "WHERE m.userId = ?) "
+    + "AND p.projectState=2 ";
+    let sql_paging;
+    if(page != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql += sql_paging;
+    }
+    sql += ";\n";
+    connection.query(
+        sql, userid, 
+        (err, rows, fields) => {
+            console.log(sql);
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    )
+}
+
+// :userid가 완료한 프로젝트 리스트
+function completedProjects(res, userid, page){
+    let sql = "SELECT p.* FROM project p "
+    + "WHERE p.projectId IN "
+    + "(SELECT m.projectId FROM member m "
+    + "WHERE m.userId = ?) "
+    + "AND p.projectState=3";
+    let sql_paging;
+    if(page != undefined){
+        sql_paging = " LIMIT " + ((page - 1) * 10) +", 10";
+        sql += sql_paging;
+    }
+    else{
+        sql_paging = " LIMIT 0, 10";
+        sql += sql_paging;
+    }
+    sql += ";\n";
+    connection.query(
+        sql, userid, 
+        (err, rows, fields) => {
+            if(err){
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        }
+    )
+}
+
 exports.allProjects = (req, res) => {
-    let { nameHas, status, view, page } = req.query;
+    let { userid, nameHas, status, view, page } = req.query;
+    if(userid == undefined){
+        projectSearch(res, nameHas, status, view, page);
+    }
+    else if(userid != undefined){
+        let { filter } = req.query;
+        if(filter == "applied"){
+            appliedProjects(res, userid, page);
+        }
+        else if(filter == "ongoing"){
+            ongoingProjects(res, userid, page);
+        }
+        else if(filter == "completed"){
+            completedProjects(res, userid, page);
+        }
+    }
+}
 
-    projectSearch(res, nameHas, status, view, page);
+exports.recommendProject = (req, res) => {
+    let userId = req.params['userId'];
+    console.log(userId);
+    
+    let sql_random_id = "SELECT * FROM project ORDER BY RAND() LIMIT 1;";
+    let sql_res = "";
+    let sql_m_cnt = "SELECT COUNT(*) AS mcnt FROM member m "
+        + "WHERE m.projectId = ";
+    let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
+        + "WHERE a.projectId = ";
 
+    connection.query(
+        sql_random_id, 
+        (err, rows, fields) => {
+            console.log(rows);
+            for(var v in rows){
+                console.log(rows[v].projectId);
+                sql_res += sql_m_cnt + rows[v].projectId + ";\n";
+                sql_res += sql_a_cnt + rows[v].projectId + ";\n";
+            }
+            console.log(sql_res);
+            connection.query(
+                sql_res, 
+                (eerr, rrows, ffields) => {
+                    let size = Object.keys(rows).length
+                    console.log(size);
+                    for(var i = 0, j = 0; i < size; i++, j+=2){
+                        rows[i].numberOfMember = rrows[j][0].mcnt;
+                        rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
+                    }
+                    
+                    console.log(rows);
+                    res.send(rows);
+                }
+            );
+        }
+    );
+}
 
+// recommend project with matrix factorization
+exports.recommendProject2 = (req, res) => {
+    let userId = req.params['userId'];
+    console.log(userId);
+    
+    let recommend = spawn('python3', ['src/project_recommend.py', userId.toString(), '1']);
+    recommend.stdout.on('data', function(data){
+        let recommend = JSON.parse(data.toString());
+        console.log(recommend);
+        // res.send("success");
+        sql = "SELECT * FROM project WHERE projectId=?;"
+        let sql_res = "";
+        let sql_m_cnt = "SELECT COUNT(*) AS mcnt FROM member m "
+            + "WHERE m.projectId = ";
+        let sql_a_cnt = "SELECT COUNT(*) AS acnt FROM applicant a "
+            + "WHERE a.projectId = ";
+
+        let pname = recommend[0].projectId;
+        connection.query(
+            sql, pname, 
+            (err, rows, fields) => {
+                console.log(rows);
+            for(var v in rows){
+                console.log(rows[v].projectId);
+                sql_res += sql_m_cnt + rows[v].projectId + ";\n";
+                sql_res += sql_a_cnt + rows[v].projectId + ";\n";
+            }
+            console.log(sql_res);
+            connection.query(
+                sql_res, 
+                (eerr, rrows, ffields) => {
+                    let size = Object.keys(rows).length
+                    console.log(size);
+                    for(var i = 0, j = 0; i < size; i++, j+=2){
+                        rows[i].numberOfMember = rrows[j][0].mcnt;
+                        rows[i].numberOfApplicant = rrows[j + 1][0].acnt;
+                    }
+                    
+                    console.log(rows);
+                    res.send(rows);
+                }
+            );
+            }
+        );
+    })
+
+    recommend.stderr.on('data', function(data){
+        console.error(data.toString());
+        res.send("fail");
+    })
 }
 
 // :project-id 프로젝트
@@ -250,30 +368,31 @@ exports.projectByprojectId = (req, res) => {
 
 // :project-id 프로젝트 수정
 exports.updateProject = (req, res) => {
+    let sql = "UPDATE project SET projectName=?, description=?, post=?, intake=?, projectState=?, readme=?, duedate=? WHERE projectId = ?;";
+
     let projectId = req.params['projectId'];
-    console.log(projectId);
     let name = req.body.projectName;
     console.log(name);
     let desc = req.body.description;
+    let post = req.body.post;
+    let intake = req.body.intake;
     console.log(desc);
-    let state = req.body.projectState;
-    console.log(state);
-    if(state == "Open") state = 0;
-    else if(state == "Closed") state = 1;
-    else if(state == "Archived") state = 2;
+    let state = req.body.status;
+    let duedate = req.body.duedate;
+    let readme = req.body.readme;
 
-    let sql = "UPDATE project ";
-    sql = sql + "SET projectName = '" + name + "', ";
-    sql = sql + "description = '" + desc + "', ";
-    sql = sql + "projectState = '" + state + "' ";
-    sql = sql + "WHERE projectId = " + projectId + ";";
-    connection.query(
-        sql, 
+    let params = [name, desc, post, intake, state, readme, duedate, projectId];
+    connection.query(sql, params, 
         (err, rows, fields) => {
-            console.log("success update");
-            res.send("success update");
-        }
-    );
+            if(err){
+                res.send("query error occured");
+                throw err;
+            }
+            else{
+                console.log(rows);
+                res.send(rows);
+            }
+        });
 }
 
 // 프로젝트 멤버
@@ -299,7 +418,7 @@ exports.projectLeader = (req, res) => {
 
     let sql = "SELECT * FROM user WHERE userId IN "
         + "(SELECT userId FROM member WHERE projectId=" + projectId + " AND "
-        + "admin=1);";
+        + "leader=1);";
     connection.query(
         sql, 
         (err, rows, fields) => {
@@ -359,6 +478,57 @@ exports.deleteCandidate = (req, res) => {
     console.log(userId);
 
     let sql = "DELETE FROM applicant WHERE projectId=" + projectId
+        + " AND userId=" + userId + ";";
+
+    connection.query(
+        sql, 
+        (err, rows, fields) => {
+            if(err){
+                console.log("delete fail");
+                res.send("delete fail");    
+            }
+            console.log("delete success");
+            res.send("delete success");
+        }
+    );
+}
+
+// 프로젝트 멤버 생성
+// userId는 body로 받아오는 것으로 가정
+exports.applyMember = (req, res) => {
+    console.log("applyMember");
+    let userId = req.body.userId;
+    console.log(userId);
+    let sql = "SELECT COUNT(*) FROM user WHERE userId=" + userId + ";";
+    connection.query(sql, (err, rows, fields) => {
+        if(rows != 0){
+            sql = "INSERT INTO member(projectId, userId, leader) VALUES (?, ?, ?);";
+            let projectId = req.params['projectId'];
+            console.log(projectId);
+        
+            let params = [projectId, userId, 0];
+            console.log(params);
+            connection.query(sql, params, 
+                (eerr, rrows, ffields) => {
+                    console.log(rrows);
+                    res.send(rrows);
+                });
+        }
+        else{
+            console.log("Not Existing User")
+            res.send("Not Existing User");
+        }
+    })
+}
+
+// 프로젝트 멤버 삭제
+exports.deleteMember = (req, res) => {
+    let projectId = req.params['projectId'];
+    let userId = req.params['userId'];
+    console.log(projectId);
+    console.log(userId);
+
+    let sql = "DELETE FROM member WHERE projectId=" + projectId
         + " AND userId=" + userId + ";";
 
     connection.query(

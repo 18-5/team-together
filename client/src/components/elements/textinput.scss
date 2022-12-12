@@ -1,0 +1,56 @@
+@import "token.scss";
+
+.layer-1 {
+  background-color: $layer-01;
+}
+
+.layer-1 .form-control {
+  background-color: $field-02;
+}
+.layer-1 .form-control:focus {
+  background-color: $field-02;
+}
+
+.form-control {
+  border-radius: 4px;
+  height: 3rem;
+  padding-left: $spacing-05;
+  padding-right: $spacing-05;
+  border: 1px solid $border-subtle;
+  box-shadow: 0 -1px $border-strong inset;
+
+  font-size: $body-compact-01;
+  color: $text-primary;
+  background-color: $field-01;
+}
+.form-control:focus {
+  color: $text-primary;
+  border: 1px solid $focus;
+  box-shadow: 0 0 0 1px $focus inset;
+  background-color: $field-01;
+  transition: all 0.07s cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+.form-control::placeholder {
+  color: $text-placeholder;
+}
+
+textarea.form-control {
+  padding-top: 0.6875rem;
+  padding-bottom: 0.6875rem;
+  min-height: 2.5rem;
+  height: auto;
+}
+
+
+.form-label {
+  font-size: $label-01;
+  color: $text-secondary;
+  margin-bottom: $spacing-03;
+}
+
+.form-text {
+  display: block;
+  font-size: $label-01;
+  color: $text-helper;
+  margin-top: $spacing-03;
+}

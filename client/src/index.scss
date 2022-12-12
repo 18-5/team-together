@@ -1,11 +1,24 @@
 // Import all of Bootstrap's CSS
 @import "node_modules/bootstrap/scss/bootstrap";
+@import "react-datepicker/dist/react-datepicker.css";
+@import "./components/elements/button.scss";
+@import "./components/elements/link.scss";
+@import "./components/elements/tabs.scss";
+@import "./components/elements/textinput.scss";
+@import "./components/elements/datepicker.scss";
+@import "./components/elements/tile.scss";
+@import "./components/elements/select.scss";
+@import "./components/elements/tag.scss";
+
+html {
+  font-size: 17px;
+}
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI",
     "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    sans-serif; 
+    sans-serif;
 }
 
 #root {
@@ -13,4 +26,21 @@ body {
   @supports (-webkit-touch-callout: none) {
     height: -webkit-fill-availiable;
   }
+}
+
+#my-projects .nav-tabs {
+  justify-content: center;
+}
+
+.tab-content {
+  margin-top: -1px;
+}
+
+.buttons-pulldown-to-tab {
+  margin-bottom: -40px;
+  height: 40px;
+}
+
+.layer-01 {
+  background-color: $layer-01;
 }

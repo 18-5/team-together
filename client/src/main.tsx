@@ -1,72 +1,111 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import "./index.scss"
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.scss";
 
-import App from './App'
-import FeedPage from './pages/FeedPage'
-import UserProfile from './profile/UserProfile'
-import MyProjectsPage from './my-projects/MyProjectsPage';
-import ProfileEditPage from './profile/ProfileEditPage';
-import ExplorePage from './pages/ExplorePage';
-import ErrorPage from './pages/ErrorPage';
-import ConnectionTestPage from './pages/ConnectionTestPage';
-import ProjectPage from './project/ProjectPage';
+import CenteredLayout from './components/layout/CenteredLayout';
+import DefaultLayout from './components/layout/DefaultLayout';
+
+import APIConnection from './components/pages/APIConnection';
+import Error from './components/pages/Error';
+import Home from './components/pages/Home';
+import Login from './components/pages/Login';
+import MessageDetail from './components/pages/MessageDetail';
+import MessageEdit from './components/pages/MessageEdit';
+import Messages from './components/pages/Messages';
+import MyProjects from './components/pages/MyProjects';
+import Notifications from './components/pages/Notifications';
+import Profile from './components/pages/Profile';
+import ProfileEdit from './components/pages/ProfileEdit';
+import Project from './components/pages/Project';
+import ProjectEdit from './components/pages/ProjectEdit';
+import SignUp from "./components/pages/SignUp";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
+    element: <DefaultLayout />,
+    errorElement: <Error />,
     children: [
       {
-        errorElement: <ErrorPage />,
+        errorElement: <Error />,
         children: [
           {
             path: "/",
-            element: <FeedPage />
-          },
-          {
-            path: "explore",
-            element: <ExplorePage />,
-            errorElement: <ErrorPage />
-          },
-          {
-            path: "search",
-            element: <ErrorPage />
+            element: <Home />
           },
           {
             path: "messages",
-            element: <ErrorPage />
+            element: <Messages />
+          },
+          {
+            path: "messages/from/:senderId",
+            element: <MessageDetail />
+          },
+          {
+            path: "messages/new",
+            element: <MessageEdit />
+          },
+          {
+            path: "messages/new/:userId",
+            element: <MessageEdit />
           },
           {
             path: "notifications",
-            element: <ErrorPage />
+            element: <Notifications />
           },
           {
-            path: "profile",
-            element: <UserProfile />
+            path: "profile/:userId",
+            element: <Profile />
           },
           {
-            path: "profile/edit",
-            element: <ProfileEditPage />
+            path: "profile/:userId/edit",
+            element: <ProfileEdit />
           },
           {
             path: "my-projects",
-            element: <MyProjectsPage />
+            element: <MyProjects />
           },
           {
-            path: "connection-test",
-            element: <ConnectionTestPage />
+            path: "projects/new",
+            element: <ProjectEdit isNewProject={true} />,
           },
           {
             path: "projects/:projectId",
-            element: <ProjectPage />
+            element: <Project />,
+          },
+          {
+            path: "projects/:projectId/edit",
+            element: <ProjectEdit isNewProject={false} />,
           }
         ]
       }
     ]
+  },
+  {
+    path: "/login",
+    element: <CenteredLayout />,
+    children: [{
+      path: "/login",
+      element: <Login />
+    }]
+  },
+  {
+    path: "/sign-up",
+    element: <CenteredLayout />,
+    children: [{
+      path: "/sign-up",
+      element: <SignUp />
+    }]
+  },
+  {
+    path: "/connection-test",
+    element: <DefaultLayout />,
+    children: [{
+      path: "/connection-test",
+      element: <APIConnection />
+    }]
   }
 ])
 

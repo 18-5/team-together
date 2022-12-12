@@ -1,0 +1,112 @@
+@import "token.scss";
+
+.btn {
+  padding: 0;
+  border-radius: 6px;
+  font-size: 14px;
+  height: 3rem;
+  padding-left: $spacing-05;
+  padding-right: 4rem;
+  border-color: transparent;
+}
+
+.btn.btn-medium {
+  height: 2.5rem;
+}
+
+/* Primary button */
+.btn-primary {
+  color: $text-on-color;
+  background-color: $button-primary;
+}
+.btn-primary:hover {
+  text-decoration: none;
+  background-color: $button-primary-hover;
+}
+.btn-primary:active {
+  background-color: $button-primary-active;
+}
+.btn-primary:hover:active {
+  background-color: $button-primary-active;
+}
+
+/* Secondary button */
+.btn-secondary {
+  color: $text-on-color;
+  background-color: $button-secondary;
+}
+.btn-secondary:hover {
+  text-decoration: none;
+  color: $text-on-color;
+  background-color: $button-secondary-hover;
+}
+.btn-secondary:active {
+  color: $text-on-color;
+  background-color: $button-secondary-active;
+}
+.btn-secondary:hover:active {
+  color: $text-on-color;
+  background-color: $button-secondary-active;
+}
+
+/* Tertiary button */
+.btn-outline-primary {
+  color: $button-tertiary;
+  background-color: transparent;
+  border-color: $button-tertiary;
+}
+.btn-outline-primary:hover {
+  text-decoration: none;
+  color: $text-inverse;
+  background-color: $button-tertiary-hover;
+  border-color: transparent;
+}
+.btn-outline-primary:active {
+  color: $text-inverse;
+  background-color: $button-tertiary-active;
+  border-color: transparent;
+}
+.btn-outline-primary:hover:active {
+  color: $text-inverse;
+  background-color: $button-tertiary-active;
+  border-color: transparent;
+}
+
+/* Ghost button */
+.btn-link {
+  padding-right: $spacing-05;
+  text-decoration: none;
+  color: $link-primary;
+}
+.btn-link:hover {
+  text-decoration: none;
+  color: $link-primary-hover;
+  background-color: $background-hover;
+}
+.btn-link:active,
+.btn-link:hover:active {
+  background-color: $background-active;
+}
+
+/* Ghost button - Icon only */
+.btn-link.icon-only {
+  padding-right: $spacing-05;
+  color: $icon-primary;
+}
+
+.btn.center {
+  padding-right: $spacing-05;
+}
+
+.btn-link.danger {
+  color: $button-danger-secondary;
+}
+.btn-link.danger:hover {
+  text-decoration: none;
+  color: $text-on-color;
+  background-color: $button-danger-hover;
+}
+.btn-link.danger:active,
+.btn-link.danger:hover:active {
+  background-color: $button-danger-hover;
+}

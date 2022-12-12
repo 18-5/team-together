@@ -11,7 +11,8 @@
     "dev": "npm-run-all --parallel watch-client watch-server",
     "start": "cd server && npm start",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "localdb": "sudo /etc/init.d/mysql start && ifconfig"
+    "localdb": "sudo /etc/init.d/mysql start && ifconfig",
+    "stop": "cd server && npm run stop"
   },
   "repository": {
     "type": "git",
