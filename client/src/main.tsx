@@ -36,10 +36,6 @@ const router = createBrowserRouter([
             element: <Home />
           },
           {
-            path: "search",
-            element: <Error />
-          },
-          {
             path: "messages",
             element: <Messages />
           },
@@ -70,10 +66,6 @@ const router = createBrowserRouter([
           {
             path: "my-projects",
             element: <MyProjects />
-          },
-          {
-            path: "connection-test",
-            element: <APIConnection />
           },
           {
             path: "projects/new",
@@ -107,6 +99,14 @@ const router = createBrowserRouter([
       element: <SignUp />
     }]
   },
+  {
+    path: "/connection-test",
+    element: <DefaultLayout />,
+    children: [{
+      path: "/connection-test",
+      element: <APIConnection />
+    }]
+  }
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

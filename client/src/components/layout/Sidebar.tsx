@@ -79,7 +79,7 @@ function Sidebar() {
         <LinkContainer to="/" className="bg-transparent border-0">
           <Nav.Link><img src={Logo} alt="Team Together" /></Nav.Link>
         </LinkContainer>
-        <div className="py-05 border-bottom">
+        <div className="py-05">
           <LinkContainer to="/">
             <Nav.Link eventKey="/"><HomeIcon className="mr-06" />홈</Nav.Link>
           </LinkContainer>
@@ -88,9 +88,6 @@ function Sidebar() {
               <Nav.Link eventKey="/my-projects"><ProjectIcon className="mr-06" />내 프로젝트</Nav.Link>
             </LinkContainer>
           }
-          <LinkContainer to="search">
-            <Nav.Link eventKey="/search" disabled><SearchIcon className="mr-06" />검색</Nav.Link>
-          </LinkContainer>
           {cookies.user &&
             <LinkContainer to="messages">
               <Nav.Link eventKey="/messages"><CommentIcon className="mr-06" />쪽지</Nav.Link>
@@ -101,14 +98,6 @@ function Sidebar() {
               <Nav.Link eventKey="/notifications"><BellIcon className="mr-06" />알림</Nav.Link>
             </LinkContainer>
           }
-        </div>
-        <div className="py-05">
-          <LinkContainer to="connection-test">
-            <Nav.Link eventKey="/connection-test">Connection Test</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="projects/1">
-            <Nav.Link eventKey="/projects/1">Sample Project</Nav.Link>
-          </LinkContainer>
         </div>
       </div>
       <div className="py-05">
