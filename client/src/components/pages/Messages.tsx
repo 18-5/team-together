@@ -35,19 +35,60 @@ function Messages() {
       })
   }
 
+  function RenderMessage() {
+    if (!data)
+      return <div className="tile-02">받은 메시지가 없습니다.</div>
+
+    return data.map((message: any, index: number) => (
+      message.senderId != cookie.user ?
+        <Link to={`/messages/from/${message.senderId}`} key={index}>
+          <div className="tile-02">
+            <Stack direction="horizontal" className="gap-3">
+              <Avatar size={64} avatarUrl={avatarPlaceholder} name={message.senderId} />
+              <div>
+                <h2 className="body-02 text-body">{message.senderId}</h2>
+                <div className="body-01 text-body mb-05">{message.content}</div>
+                <div className="label-01 text-helper">
+                  {message.createdAt.charAt(0) > 0 ? new Intl.DateTimeFormat('ko-kr').format(new Date(Date.parse(message.createdAt))) : null}
+                </div>
+              </div>
+            </Stack>
+          </div>
+        </Link>
+
+        :
+
+        !data.find((element: { senderId: any; }) => (element.senderId == message.receiverId)) &&
+        <Link to={`/messages/from/${message.receiverId}`} key={index}>
+          <div className="tile-02">
+            <Stack direction="horizontal" className="gap-3">
+              <Avatar size={64} avatarUrl={avatarPlaceholder} name={message.receiverId} />
+              <div>
+                <h2 className="body-02 text-body">{message.receiverId}</h2>
+                <div className="body-01 text-body mb-05">{message.content}</div>
+                <div className="label-01 text-helper">
+                  {message.createdAt.charAt(0) > 0 ? new Intl.DateTimeFormat('ko-kr').format(new Date(Date.parse(message.createdAt))) : null}
+                </div>
+              </div>
+            </Stack>
+          </div>
+        </Link>
+    ))
+  }
+
   if (!data)
     return (
       <>
         <div className="tile-01">
           <div className="d-flex justify-content-between align-items-end mb-3">
-            <h1 className="fluid-heading-04">받은 메시지함</h1>
+            <h1 className="fluid-heading-04">메시지함</h1>
             <Link to="/messages/new">
               <Button variant="link" className="center">새 쪽지<PlusIcon className="ml-03" /></Button>
             </Link>
           </div>
         </div>
         <div className="tile-02">
-          받은 메시지가 없습니다.
+          메시지가 없습니다.
         </div>
       </>
     )
@@ -62,25 +103,7 @@ function Messages() {
           </Link>
         </div>
       </div>
-      {data.map((message: any, index: number) => (
-        <Link to={`/messages/from/${message.senderId}`} key={index}>
-          {message.senderId != cookie.user &&
-            <div className="tile-02">
-              <Stack direction="horizontal" className="gap-3">
-                <Avatar size={64} avatarUrl={avatarPlaceholder} name={message.senderId} />
-                <div>
-                  <h2 className="body-02 text-body">{message.senderId}</h2>
-                  <div className="body-01 text-body mb-05">{message.content}</div>
-                  <div className="label-01 text-helper">
-                    {message.createdAt.charAt(0) > 0 ? new Intl.DateTimeFormat('ko-kr').format(new Date(Date.parse(message.createdAt))) : null}
-                  </div>
-                </div>
-              </Stack>
-            </div>
-          }
-        </Link>
-      ))
-      }
+      <RenderMessage />
     </>
   )
 }
